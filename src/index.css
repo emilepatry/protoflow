@@ -1,0 +1,50 @@
+@import "tailwindcss";
+@import "./heron-tokens.css";
+
+@theme {
+  --color-background: #fafafa;
+  --color-foreground: #0a0a0a;
+  --color-primary: #18181b;
+  --color-primary-foreground: #fafafa;
+  --color-muted: #f4f4f5;
+  --color-muted-foreground: #71717a;
+  --color-border: #e4e4e7;
+  --color-accent: #f4f4f5;
+  --color-accent-foreground: #18181b;
+  --color-destructive: #ef4444;
+
+  --color-sticky-yellow: #fef9c3;
+  --color-sticky-blue: #dbeafe;
+  --color-sticky-green: #dcfce7;
+  --color-sticky-pink: #fce7f3;
+  --color-sticky-yellow-border: #fde047;
+  --color-sticky-blue-border: #93c5fd;
+  --color-sticky-green-border: #86efac;
+  --color-sticky-pink-border: #f9a8d4;
+
+  --color-edge-navigation: #3b82f6;
+  --color-edge-conditional: #f59e0b;
+  --color-edge-back: #8b5cf6;
+
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body,
+#app {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  font-family: var(--font-sans);
+  background: var(--color-background);
+  color: var(--color-foreground);
+}

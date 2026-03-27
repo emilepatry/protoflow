@@ -1,0 +1,246 @@
+/*
+ * Heron Design System Tokens (Fullscript Patient App)
+ * Copied as CSS variables for prototyping. Not the canonical source.
+ * Sources: colours.md + HERON_TYPOGRAPHY_SYSTEM.md
+ */
+
+:root {
+  /* ── Font Families ── */
+  --heron-font-base: "Mulish", ui-sans-serif, system-ui, sans-serif;
+  --heron-font-decorative: "Besley", ui-serif, Georgia, serif;
+
+  /* ── Font Weights ── */
+  --heron-weight-regular: 400;
+  --heron-weight-medium: 500;
+  --heron-weight-semibold: 600;
+  --heron-weight-bold: 700;
+
+  /* ── Type Scale: Heading ── */
+  --heron-heading-lg-size: 34px;
+  --heron-heading-lg-lh: 55px;
+  --heron-heading-lg-ls: -0.4px;
+
+  --heron-heading-md-size: 31px;
+  --heron-heading-md-lh: 50px;
+  --heron-heading-md-ls: -0.4px;
+
+  --heron-heading-sm-size: 27px;
+  --heron-heading-sm-lh: 43px;
+  --heron-heading-sm-ls: -0.4px;
+
+  /* ── Type Scale: Title ── */
+  --heron-title-lg-size: 24px;
+  --heron-title-lg-lh: 38px;
+  --heron-title-lg-ls: -0.4px;
+
+  --heron-title-md-size: 22px;
+  --heron-title-md-lh: 28px;
+  --heron-title-md-ls: -0.4px;
+
+  --heron-title-sm-size: 19px;
+  --heron-title-sm-lh: 24px;
+  --heron-title-sm-ls: -0.4px;
+
+  /* ── Type Scale: Body ── */
+  --heron-body-lg-size: 17px;
+  --heron-body-lg-lh: 26px;
+  --heron-body-lg-ls: -0.1px;
+
+  --heron-body-md-size: 15px;
+  --heron-body-md-lh: 23px;
+  --heron-body-md-ls: -0.1px;
+
+  --heron-body-sm-size: 13px;
+  --heron-body-sm-lh: 20px;
+  --heron-body-sm-ls: -0.1px;
+
+  --heron-body-xs-size: 11px;
+  --heron-body-xs-lh: 17px;
+  --heron-body-xs-ls: -0.1px;
+
+  /* ── Type Scale: Label ── */
+  --heron-label-lg-size: 17px;
+  --heron-label-lg-lh: 26px;
+  --heron-label-lg-ls: -0.1px;
+
+  --heron-label-md-size: 15px;
+  --heron-label-md-lh: 23px;
+  --heron-label-md-ls: -0.1px;
+
+  --heron-label-sm-size: 13px;
+  --heron-label-sm-lh: 20px;
+  --heron-label-sm-ls: -0.1px;
+
+  --heron-label-xs-size: 11px;
+  --heron-label-xs-lh: 17px;
+  --heron-label-xs-ls: -0.1px;
+
+  /* ── Text Colors ── */
+  --heron-text-primary: #2b2c30;
+  --heron-text-secondary: #484848;
+  --heron-text-tertiary: #8c8c8b;
+
+  /* ── Supplemental Text Colors ── */
+  --heron-text-critical: #a54a42;
+  --heron-text-success: #307553;
+  --heron-text-info: #305775;
+  --heron-text-discover: #756430;
+  --heron-text-recur: #5b4780;
+  --heron-text-warning: #a55f23;
+
+  /* ── Component Text Colors ── */
+  --heron-text-list-label: #36485c;
+  --heron-text-list-content: #475a70;
+  --heron-text-product-title: #2e3a47;
+  --heron-text-product-body: #475a70;
+  --heron-text-price-regular: #2e3a47;
+  --heron-text-price-discount: #275e43;
+  --heron-text-price-subtle: #475a70;
+  --heron-text-empty-heading: #2e3a47;
+  --heron-text-empty-body: #36485c;
+  --heron-text-sheet-title: #36485c;
+  --heron-text-sheet-subtitle: #475a70;
+  --heron-text-heading: #36485c;
+  --heron-text-divider: #475a70;
+
+  /* ── Backgrounds ── */
+  --heron-bg-global: #f0efec;
+  --heron-bg-card: #ffffff;
+  --heron-bg-badge: #d0655b;
+
+  /* ── Pills ── */
+  --heron-pill-critical-bg: #f0c4cd;
+  --heron-pill-critical-text: #94374b;
+  --heron-pill-discover-bg: #e9e1ce;
+  --heron-pill-discover-text: #705a29;
+  --heron-pill-warning-bg: #f3d8c0;
+  --heron-pill-warning-text: #954601;
+  --heron-pill-recur-bg: #d7cee9;
+  --heron-pill-recur-text: #5b4a7c;
+  --heron-pill-info-bg: #c0d8f0;
+  --heron-pill-info-text: #395776;
+  --heron-pill-success-bg: #d1e0d9;
+  --heron-pill-success-text: #3b5e4d;
+  --heron-pill-neutral-bg: #f0efec;
+  --heron-pill-neutral-text: #2b2c30;
+
+  /* ── Elevation ── */
+  --heron-shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
+    0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  --heron-shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --heron-shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1),
+    0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  --heron-shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+
+  /* ── Gradients ── */
+  --heron-gradient-info: linear-gradient(135deg, #88b1d9, #194673);
+  --heron-gradient-practitioner: linear-gradient(135deg, #cf8545, #4d7199);
+  --heron-gradient-wellbeing-good: linear-gradient(135deg, #298585, #29a366);
+  --heron-gradient-wellbeing-bad: linear-gradient(135deg, #3b2566, #8471ab);
+  --heron-gradient-wellbeing-avg: linear-gradient(135deg, #21588f, #8471ab);
+}
+
+/* ── Utility classes for Heron type variants ── */
+
+.heron-heading-lg {
+  font-family: var(--heron-font-base);
+  font-size: var(--heron-heading-lg-size);
+  line-height: var(--heron-heading-lg-lh);
+  letter-spacing: var(--heron-heading-lg-ls);
+  font-weight: var(--heron-weight-semibold);
+}
+.heron-heading-md {
+  font-family: var(--heron-font-base);
+  font-size: var(--heron-heading-md-size);
+  line-height: var(--heron-heading-md-lh);
+  letter-spacing: var(--heron-heading-md-ls);
+  font-weight: var(--heron-weight-semibold);
+}
+.heron-heading-sm {
+  font-family: var(--heron-font-base);
+  font-size: var(--heron-heading-sm-size);
+  line-height: var(--heron-heading-sm-lh);
+  letter-spacing: var(--heron-heading-sm-ls);
+  font-weight: var(--heron-weight-semibold);
+}
+
+.heron-title-lg {
+  font-family: var(--heron-font-base);
+  font-size: var(--heron-title-lg-size);
+  line-height: var(--heron-title-lg-lh);
+  letter-spacing: var(--heron-title-lg-ls);
+  font-weight: var(--heron-weight-semibold);
+}
+.heron-title-md {
+  font-family: var(--heron-font-base);
+  font-size: var(--heron-title-md-size);
+  line-height: var(--heron-title-md-lh);
+  letter-spacing: var(--heron-title-md-ls);
+  font-weight: var(--heron-weight-medium);
+}
+.heron-title-sm {
+  font-family: var(--heron-font-base);
+  font-size: var(--heron-title-sm-size);
+  line-height: var(--heron-title-sm-lh);
+  letter-spacing: var(--heron-title-sm-ls);
+  font-weight: var(--heron-weight-medium);
+}
+
+.heron-body-lg {
+  font-family: var(--heron-font-base);
+  font-size: var(--heron-body-lg-size);
+  line-height: var(--heron-body-lg-lh);
+  letter-spacing: var(--heron-body-lg-ls);
+  font-weight: var(--heron-weight-regular);
+}
+.heron-body-md {
+  font-family: var(--heron-font-base);
+  font-size: var(--heron-body-md-size);
+  line-height: var(--heron-body-md-lh);
+  letter-spacing: var(--heron-body-md-ls);
+  font-weight: var(--heron-weight-regular);
+}
+.heron-body-sm {
+  font-family: var(--heron-font-base);
+  font-size: var(--heron-body-sm-size);
+  line-height: var(--heron-body-sm-lh);
+  letter-spacing: var(--heron-body-sm-ls);
+  font-weight: var(--heron-weight-regular);
+}
+.heron-body-xs {
+  font-family: var(--heron-font-base);
+  font-size: var(--heron-body-xs-size);
+  line-height: var(--heron-body-xs-lh);
+  letter-spacing: var(--heron-body-xs-ls);
+  font-weight: var(--heron-weight-regular);
+}
+
+.heron-label-lg {
+  font-family: var(--heron-font-base);
+  font-size: var(--heron-label-lg-size);
+  line-height: var(--heron-label-lg-lh);
+  letter-spacing: var(--heron-label-lg-ls);
+  font-weight: var(--heron-weight-medium);
+}
+.heron-label-md {
+  font-family: var(--heron-font-base);
+  font-size: var(--heron-label-md-size);
+  line-height: var(--heron-label-md-lh);
+  letter-spacing: var(--heron-label-md-ls);
+  font-weight: var(--heron-weight-medium);
+}
+.heron-label-sm {
+  font-family: var(--heron-font-base);
+  font-size: var(--heron-label-sm-size);
+  line-height: var(--heron-label-sm-lh);
+  letter-spacing: var(--heron-label-sm-ls);
+  font-weight: var(--heron-weight-medium);
+}
+.heron-label-xs {
+  font-family: var(--heron-font-base);
+  font-size: var(--heron-label-xs-size);
+  line-height: var(--heron-label-xs-lh);
+  letter-spacing: var(--heron-label-xs-ls);
+  font-weight: var(--heron-weight-medium);
+}

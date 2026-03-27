@@ -1,0 +1,88 @@
+import { useEffect, useRef, useState, useCallback } from "react";
+import {
+  CollaborationProvider,
+  getViewerName,
+  setViewerName,
+  type Comment,
+} from "./collaboration";
+
+const PARTYKIT_HOST =
+  import.meta.env.VITE_PARTYKIT_HOST ?? "localhost:1999";
+
+export function useCollaboration(projectId: string) {
+  const providerRef = useRef<CollaborationProvider | null>(null);
+  const [comments, setComments] = useState<Comment[]>([]);
+  const [viewerName, setViewerNameState] = useState<string | null>(
+    getViewerName()
+  );
+  const [connected, setConnected] = useState(false);
+
+  useEffect(() => {
+    const collab = new CollaborationProvider(projectId);
+    providerRef.current = collab;
+
+    collab.connect(PARTYKIT_HOST);
+    setConnected(true);
+
+    const refreshComments = () => {
+      setComments(collab.getComments());
+    };
+
+    refreshComments();
+    const unsub = collab.onCommentsChange(refreshComments);
+
+    return () => {
+      unsub();
+      collab.destroy();
+      providerRef.current = null;
+      setConnected(false);
+    };
+  }, [projectId]);
+
+  const addComment = useCallback(
+    (screenId: string, anchorId: string, body: string) => {
+      if (!providerRef.current || !viewerName) return;
+      providerRef.current.addComment({
+        screenId,
+        anchorId,
+        author: viewerName,
+        body,
+      });
+    },
+    [viewerName]
+  );
+
+  const getCommentsForElement = useCallback(
+    (screenId: string, anchorId: string) => {
+      return comments.filter(
+        (c) => c.screenId === screenId && c.anchorId === anchorId
+      );
+    },
+    [comments]
+  );
+
+  const getCommentsForScreen = useCallback(
+    (screenId: string) => {
+      return comments.filter((c) => c.screenId === screenId);
+    },
+    [comments]
+  );
+
+  const promptViewerName = useCallback((name: string) => {
+    setViewerName(name);
+    setViewerNameState(name);
+  }, []);
+
+  const needsName = viewerName === null;
+
+  return {
+    comments,
+    connected,
+    viewerName,
+    needsName,
+    addComment,
+    getCommentsForElement,
+    getCommentsForScreen,
+    promptViewerName,
+  };
+}
