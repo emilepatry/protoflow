@@ -25,11 +25,12 @@ export default function CommentDot({
           setOpen(true);
         }}
         className={cn(
-          "group absolute -right-1 -top-1 z-10 flex h-5 w-5 items-center justify-center rounded-full bg-blue-500 opacity-0 shadow-sm transition-opacity hover:opacity-100 focus:opacity-100",
+          "group absolute -right-2 -top-2 z-10 flex h-7 w-7 items-center justify-center rounded-full bg-blue-500 opacity-0 shadow-sm transition-opacity hover:opacity-100 focus:opacity-100",
           className
         )}
+        aria-label="Add comment"
       >
-        <MessageCircle className="h-3 w-3 text-white" />
+        <MessageCircle className="h-3.5 w-3.5 text-white" />
       </button>
     );
   }
@@ -42,7 +43,8 @@ export default function CommentDot({
             e.stopPropagation();
             setOpen(true);
           }}
-          className="flex h-5 w-5 items-center justify-center rounded-full bg-blue-500 text-[10px] font-bold text-white shadow-sm transition-transform hover:scale-110"
+          className="flex h-7 w-7 items-center justify-center rounded-full bg-blue-500 text-xs font-bold text-white shadow-sm transition-transform hover:scale-110"
+          aria-label={`${comments.length} comment${comments.length !== 1 ? "s" : ""}`}
         >
           {comments.length}
         </button>

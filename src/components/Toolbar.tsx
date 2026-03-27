@@ -36,7 +36,7 @@ export default function Toolbar({
   ];
 
   return (
-    <div className="flex h-12 items-center justify-between border-b border-border bg-white px-4">
+    <div className="flex h-14 items-center justify-between border-b border-border bg-white px-4">
       <div className="flex items-center gap-3">
         <div className="flex items-center gap-1.5">
           <Settings className="h-4 w-4 text-muted-foreground" />
@@ -79,9 +79,9 @@ export default function Toolbar({
                 }}
                 aria-expanded={showScreenPicker}
                 aria-haspopup="menu"
-                className="flex items-center gap-1.5 rounded-md border border-border px-3 py-1.5 text-xs font-medium transition-colors hover:bg-muted"
+                className="flex items-center gap-1.5 rounded-md border border-border px-3 py-2 text-sm font-medium transition-colors hover:bg-muted"
               >
-                <Plus className="h-3.5 w-3.5" />
+                <Plus className="h-4 w-4" />
                 Screen
               </button>
               {showScreenPicker && (
@@ -102,7 +102,7 @@ export default function Toolbar({
                           });
                           setShowScreenPicker(false);
                         }}
-                        className="block w-full px-3 py-1.5 text-left text-xs hover:bg-muted"
+                        className="block w-full px-3 py-2.5 text-left text-sm hover:bg-muted"
                       >
                         {id}
                       </button>
@@ -120,9 +120,9 @@ export default function Toolbar({
                 }}
                 aria-expanded={showStickyPicker}
                 aria-haspopup="menu"
-                className="flex items-center gap-1.5 rounded-md border border-border px-3 py-1.5 text-xs font-medium transition-colors hover:bg-muted"
+                className="flex items-center gap-1.5 rounded-md border border-border px-3 py-2 text-sm font-medium transition-colors hover:bg-muted"
               >
-                <StickyNote className="h-3.5 w-3.5" />
+                <StickyNote className="h-4 w-4" />
                 Sticky
               </button>
               {showStickyPicker && (
@@ -135,7 +135,7 @@ export default function Toolbar({
                         onAddSticky(color);
                         setShowStickyPicker(false);
                       }}
-                      className="flex w-full items-center gap-2 px-3 py-1.5 text-left text-xs hover:bg-muted"
+                      className="flex w-full items-center gap-2 px-3 py-2.5 text-left text-sm hover:bg-muted"
                     >
                       <div className={cn("h-3 w-3 rounded-sm border", className)} aria-hidden="true" />
                       {label}
@@ -151,25 +151,25 @@ export default function Toolbar({
           <button
             onClick={() => onModeChange("wireflow")}
             className={cn(
-              "flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium transition-colors",
+              "flex items-center gap-1.5 px-3 py-2 text-sm font-medium transition-colors",
               mode === "wireflow"
                 ? "bg-primary text-primary-foreground"
                 : "hover:bg-muted"
             )}
           >
-            <Layers className="h-3.5 w-3.5" />
+            <Layers className="h-4 w-4" />
             Wireflow
           </button>
           <button
             onClick={() => onModeChange("prototype")}
             className={cn(
-              "flex items-center gap-1.5 border-l border-border px-3 py-1.5 text-xs font-medium transition-colors",
+              "flex items-center gap-1.5 border-l border-border px-3 py-2 text-sm font-medium transition-colors",
               mode === "prototype"
                 ? "bg-primary text-primary-foreground"
                 : "hover:bg-muted"
             )}
           >
-            <Play className="h-3.5 w-3.5" />
+            <Play className="h-4 w-4" />
             Prototype
           </button>
         </div>
