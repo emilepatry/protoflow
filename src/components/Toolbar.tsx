@@ -60,10 +60,10 @@ export default function Toolbar({
   ];
 
   return (
-    <div className="flex h-14 items-center justify-between border-b border-border bg-white px-4">
-      <div className="flex items-center gap-3">
-        <div className="flex items-center gap-1.5">
-          <Pencil className="h-3.5 w-3.5 text-muted-foreground" aria-hidden="true" />
+    <div className="flex h-14 items-center justify-between border-b border-border bg-white px-4 overflow-hidden">
+      <div className="flex min-w-0 items-center gap-3">
+        <div className="flex min-w-0 items-center gap-1.5">
+          <Pencil className="h-3.5 w-3.5 shrink-0 text-muted-foreground" aria-hidden="true" />
           {editingName ? (
             <input
               value={nameValue}
@@ -84,7 +84,7 @@ export default function Toolbar({
           ) : (
             <button
               onClick={() => setEditingName(true)}
-              className="cursor-pointer text-sm font-medium hover:text-primary"
+              className="cursor-pointer truncate text-sm font-medium hover:text-primary"
             >
               {projectName}
             </button>
@@ -92,7 +92,7 @@ export default function Toolbar({
         </div>
       </div>
 
-      <div className="flex items-center gap-2">
+      <div className="flex shrink-0 items-center gap-2">
         {mode === "wireflow" && (
           <>
             <div className="relative" ref={screenPickerRef}>
