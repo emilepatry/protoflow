@@ -9,6 +9,7 @@ import DeviceFrame from "./DeviceFrame";
 
 interface PrototypeViewProps {
   project: Project;
+  projectId: string;
   initialScreenId: ScreenId;
   onExitPrototype: () => void;
   collaboration: ReturnType<typeof useCollaboration>;
@@ -41,6 +42,7 @@ function PrototypeScreenSkeleton() {
 
 export default function PrototypeView({
   project,
+  projectId,
   initialScreenId,
   onExitPrototype,
   collaboration,
@@ -60,7 +62,7 @@ export default function PrototypeView({
   }, []);
 
   const screen = project.screens[currentScreenId];
-  const Component = screen ? getScreenComponent(screen.componentId) : undefined;
+  const Component = screen ? getScreenComponent(projectId, screen.componentId) : undefined;
 
   const outgoingEdges = Object.entries(project.edges)
     .filter(([, e]) => e.source === currentScreenId)

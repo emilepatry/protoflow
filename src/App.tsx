@@ -1,40 +1,100 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { ReactFlowProvider } from "@xyflow/react";
-import { useProjectStore } from "@/sandbox/store";
+import { WorkspaceProvider, useWorkspace } from "@/sandbox/store";
 import { useCollaboration } from "@/sandbox/useCollaboration";
-import { getAvailableScreenIds } from "@/sandbox/registry";
+import { discoverProjects, getAvailableScreenIds } from "@/sandbox/registry";
 import { computeLayout } from "@/lib/layout";
+import { parseHash, navigateTo } from "@/lib/router";
 import WireflowView from "@/components/WireflowView";
 import PrototypeView from "@/components/PrototypeView";
-import Toolbar from "@/components/Toolbar";
+import ComponentSandbox from "@/components/ComponentSandbox";
+import Sidebar from "@/components/Sidebar";
 import ViewerNamePrompt from "@/components/ViewerNamePrompt";
 import { Layers } from "lucide-react";
-import type { ScreenId, StickyColor, ViewMode } from "@/types";
+import type { ScreenId, StickyColor } from "@/types";
 
-export default function App() {
-  const store = useProjectStore();
-  const collab = useCollaboration("protoflow-default");
+function WorkspaceApp() {
+  const store = useWorkspace();
+  const activeProjectId = store.workspace.activeProjectId;
+  const collabProjectId =
+    activeProjectId && store.mode !== "component-sandbox"
+      ? `protoflow-${activeProjectId}`
+      : null;
+  const collab = useCollaboration(collabProjectId);
+
   const [promptingName, setPromptingName] = useState(false);
   const [pendingAction, setPendingAction] = useState<(() => void) | null>(null);
 
   useEffect(() => {
-    const registryIds = getAvailableScreenIds();
+    const projects = discoverProjects();
+    for (const project of projects) {
+      store.registerProject(project.id, project.screenIds);
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const [needsLayout, setNeedsLayout] = useState(false);
+
+  useEffect(() => {
+    if (!activeProjectId) return;
+    const screenIds = getAvailableScreenIds(activeProjectId);
+    const project = store.workspace.projects[activeProjectId];
+    if (!project) return;
+
     const existingComponentIds = new Set(
-      Object.values(store.project.screens).map((s) => s.componentId)
+      Object.values(project.screens).map((s) => s.componentId)
     );
     let added = false;
-    for (const componentId of registryIds) {
+    for (const componentId of screenIds) {
       if (!existingComponentIds.has(componentId)) {
-        store.addScreen(componentId, { x: 0, y: 0 });
+        store.addScreen(activeProjectId, componentId, { x: 0, y: 0 });
         added = true;
       }
     }
-    if (added) {
-      const { positions } = computeLayout(store.project.screens, store.project.edges);
-      for (const [id, pos] of Object.entries(positions)) {
-        store.updateScreenPosition(id, pos);
+    if (added) setNeedsLayout(true);
+  }, [activeProjectId]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    if (!needsLayout || !activeProjectId) return;
+    const project = store.workspace.projects[activeProjectId];
+    if (!project) return;
+    const { positions } = computeLayout(project.screens, project.edges);
+    for (const [id, pos] of Object.entries(positions)) {
+      store.updateScreenPosition(id, pos);
+    }
+    setNeedsLayout(false);
+  }, [needsLayout, activeProjectId, store]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const storeRef = useRef(store);
+  storeRef.current = store;
+
+  useEffect(() => {
+    function onHashChange() {
+      const route = parseHash(window.location.hash);
+      const s = storeRef.current;
+      switch (route.type) {
+        case "project":
+          s.setActiveProject(route.projectId);
+          if (route.mode === "prototype" && "screenId" in route) {
+            s.setMode("prototype");
+            s.setActiveScreenId(route.screenId);
+          } else {
+            s.setMode("wireflow");
+          }
+          break;
+        case "component":
+          s.setActiveComponent(route.componentId);
+          break;
+        case "none":
+          break;
       }
     }
+
+    if (window.location.hash) {
+      onHashChange();
+    }
+
+    window.addEventListener("hashchange", onHashChange);
+    return () => window.removeEventListener("hashchange", onHashChange);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const ensureName = useCallback(
@@ -80,8 +140,10 @@ export default function App() {
   const handleConnect = useCallback(
     (source: ScreenId, target: ScreenId) => {
       if (source === target) return;
-      const sourceScreen = store.project.screens[source];
-      const targetScreen = store.project.screens[target];
+      const project = activeProjectId ? store.workspace.projects[activeProjectId] : null;
+      if (!project) return;
+      const sourceScreen = project.screens[source];
+      const targetScreen = project.screens[target];
       if (!sourceScreen || !targetScreen) return;
 
       store.addEdge({
@@ -91,7 +153,7 @@ export default function App() {
         type: "navigation",
       });
     },
-    [store]
+    [store, activeProjectId]
   );
 
   const handleStickyBodyChange = useCallback(
@@ -105,21 +167,16 @@ export default function App() {
     (id: ScreenId) => {
       store.setActiveScreenId(id);
       store.setMode("prototype");
-    },
-    [store]
-  );
-
-  const handleModeChange = useCallback(
-    (mode: ViewMode) => {
-      if (mode === "prototype") {
-        const screenIds = Object.keys(store.project.screens);
-        if (screenIds.length > 0 && !store.activeScreenId) {
-          store.setActiveScreenId(screenIds[0]);
-        }
+      if (activeProjectId) {
+        navigateTo({
+          type: "project",
+          projectId: activeProjectId,
+          mode: "prototype",
+          screenId: id,
+        });
       }
-      store.setMode(mode);
     },
-    [store]
+    [store, activeProjectId]
   );
 
   const handleAddSticky = useCallback(
@@ -142,7 +199,10 @@ export default function App() {
 
   const handleExitPrototype = useCallback(() => {
     store.setMode("wireflow");
-  }, [store]);
+    if (activeProjectId) {
+      navigateTo({ type: "project", projectId: activeProjectId, mode: "wireflow" });
+    }
+  }, [store, activeProjectId]);
 
   const handleAddComment = useCallback(
     (screenId: string, anchorId: string, body: string) => {
@@ -153,64 +213,127 @@ export default function App() {
     [collab, ensureName]
   );
 
-  return (
-    <div className="flex h-full flex-col" role="application" aria-label="Protoflow">
-      <div className="flex h-full flex-col items-center justify-center gap-3 p-8 text-center md:hidden">
-        <Layers className="h-8 w-8 text-muted-foreground" aria-hidden="true" />
-        <p className="text-sm font-medium text-foreground">Best experienced on desktop</p>
-        <p className="text-xs text-muted-foreground">
-          Protoflow needs a wider viewport for the wireflow canvas.
-        </p>
-      </div>
+  const activeProject = activeProjectId
+    ? store.workspace.projects[activeProjectId] ?? null
+    : null;
 
-      <div className="hidden h-full flex-col md:flex">
-      {promptingName && <ViewerNamePrompt onSubmit={handleNameSubmit} onCancel={handleNameCancel} />}
+  const contextLabel =
+    store.mode === "component-sandbox" && store.workspace.activeComponentId
+      ? `Sandbox: ${store.workspace.activeComponentId}`
+      : store.mode === "prototype" && activeProject
+        ? `Prototype: ${activeProject.meta.name}`
+        : activeProject
+          ? `Wireflow: ${activeProject.meta.name}`
+          : "";
 
-      {store.mode === "wireflow" && (
-        <Toolbar
-          mode={store.mode}
-          onModeChange={handleModeChange}
-          onAddSticky={handleAddSticky}
-          projectName={store.project.meta.name}
-          onProjectNameChange={(name) => store.updateMeta({ name })}
-        />
-      )}
-
-      <main className="flex-1">
-        {store.mode === "wireflow" ? (
-          <ReactFlowProvider>
-            <WireflowView
-              project={store.project}
-              onNodeDragStop={handleNodeDragStop}
-              onConnect={handleConnect}
-              onStickyBodyChange={handleStickyBodyChange}
-              onScreenSelect={handleScreenSelect}
-              onDeleteSticky={handleDeleteSticky}
-            />
-          </ReactFlowProvider>
-        ) : store.activeScreenId ? (
-          <PrototypeView
-            project={store.project}
-            initialScreenId={store.activeScreenId}
-            onExitPrototype={handleExitPrototype}
-            collaboration={collab}
-            onAddComment={handleAddComment}
-          />
-        ) : (
+  const renderMainContent = (): React.ReactNode => {
+    if (store.mode === "wireflow") {
+      if (!activeProject || !activeProjectId) {
+        return (
           <div className="flex h-full flex-col items-center justify-center gap-3 text-center">
             <div className="rounded-xl bg-accent-subtle p-3">
               <Layers className="h-6 w-6 text-accent" />
             </div>
             <p className="text-sm font-medium text-foreground">
-              Create a screen component in <code className="rounded bg-muted px-1.5 py-0.5 text-xs font-mono">src/screens/</code> to get started
+              Select a project from the sidebar
             </p>
             <p className="max-w-xs text-xs text-muted-foreground">
-              Export a default React component and it will appear automatically on the wireflow canvas.
+              Or create a new project folder in{" "}
+              <code className="rounded bg-muted px-1.5 py-0.5 text-xs font-mono">
+                src/projects/
+              </code>
             </p>
           </div>
+        );
+      }
+      return (
+        <ReactFlowProvider>
+          <WireflowView
+            project={activeProject}
+            projectId={activeProjectId}
+            onNodeDragStop={handleNodeDragStop}
+            onConnect={handleConnect}
+            onStickyBodyChange={handleStickyBodyChange}
+            onScreenSelect={handleScreenSelect}
+            onDeleteSticky={handleDeleteSticky}
+            onAddSticky={handleAddSticky}
+          />
+        </ReactFlowProvider>
+      );
+    }
+
+    if (store.mode === "prototype") {
+      if (!activeProject || !activeProjectId || !store.activeScreenId) {
+        return (
+          <div className="flex h-full flex-col items-center justify-center gap-3 text-center">
+            <div className="rounded-xl bg-accent-subtle p-3">
+              <Layers className="h-6 w-6 text-accent" />
+            </div>
+            <p className="text-sm font-medium text-foreground">
+              No screen selected
+            </p>
+          </div>
+        );
+      }
+      return (
+        <PrototypeView
+          project={activeProject}
+          projectId={activeProjectId}
+          initialScreenId={store.activeScreenId}
+          onExitPrototype={handleExitPrototype}
+          collaboration={collab}
+          onAddComment={handleAddComment}
+        />
+      );
+    }
+
+    if (store.mode === "component-sandbox") {
+      return <ComponentSandbox />;
+    }
+
+    const _exhaustive: never = store.mode;
+    return _exhaustive;
+  };
+
+  return (
+    <div className="flex h-full flex-col" role="application" aria-label="Protoflow">
+      <div className="flex h-full flex-col items-center justify-center gap-3 p-8 text-center md:hidden">
+        <Layers className="h-8 w-8 text-muted-foreground" aria-hidden="true" />
+        <p className="text-sm font-medium text-foreground">
+          Best experienced on desktop
+        </p>
+        <p className="text-xs text-muted-foreground">
+          Protoflow needs a wider viewport for the wireflow canvas.
+        </p>
+      </div>
+
+      <div className="hidden h-full md:flex">
+        {promptingName && (
+          <ViewerNamePrompt
+            onSubmit={handleNameSubmit}
+            onCancel={handleNameCancel}
+          />
         )}
-      </main>
+
+        <Sidebar />
+
+        <div className="flex flex-1 flex-col overflow-hidden">
+          {contextLabel && (
+            <div className="border-b border-border px-4 py-1.5" aria-live="polite">
+              <span className="text-xs text-muted-foreground">{contextLabel}</span>
+            </div>
+          )}
+          <main className="relative flex-1">{renderMainContent()}</main>
+        </div>
       </div>
     </div>
+  );
+}
+
+export default function App() {
+  return (
+    <WorkspaceProvider>
+      <WorkspaceApp />
+    </WorkspaceProvider>
   );
 }

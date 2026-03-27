@@ -7,6 +7,7 @@ import { cn, DEVICE_WIDTH, DEVICE_HEIGHT, PREVIEW_SCALE } from "@/lib/utils";
 export interface ScreenNodeData {
   label: string;
   componentId: string;
+  projectId: string;
   [key: string]: unknown;
 }
 
@@ -65,7 +66,7 @@ function ScreenNodeSkeleton() {
 
 function ScreenNode({ data, selected }: NodeProps) {
   const nodeData = data as unknown as ScreenNodeData;
-  const Component = getScreenComponent(nodeData.componentId);
+  const Component = getScreenComponent(nodeData.projectId, nodeData.componentId);
   const [hovered, setHovered] = useState(false);
 
   return (
