@@ -56,7 +56,7 @@ export default function CatalogScreen() {
         {CATEGORIES.map((category) => (
           <div
             key={category.name}
-            className="flex items-center justify-between rounded-xl p-4"
+            className="flex cursor-pointer items-center justify-between rounded-xl p-4 transition-shadow hover:shadow-md"
             style={{
               background: "var(--heron-bg-card)",
               boxShadow: "var(--heron-shadow-xs)",

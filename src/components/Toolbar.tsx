@@ -60,7 +60,7 @@ export default function Toolbar({
           ) : (
             <button
               onClick={() => setEditingName(true)}
-              className="text-sm font-medium hover:text-primary"
+              className="cursor-pointer text-sm font-medium hover:text-primary"
             >
               {projectName}
             </button>
