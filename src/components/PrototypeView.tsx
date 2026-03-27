@@ -2,7 +2,7 @@ import { useState, useCallback, Suspense, useEffect } from "react";
 import { getScreenComponent } from "@/sandbox/registry";
 import type { Project, ScreenId, EdgeType, EdgeConfig } from "@/types";
 import type { useCollaboration } from "@/sandbox/useCollaboration";
-import { cn } from "@/lib/utils";
+import { cn, DEVICE_WIDTH, DEVICE_HEIGHT } from "@/lib/utils";
 import { ArrowLeft, ChevronRight } from "lucide-react";
 import CommentDot from "./CommentDot";
 import DeviceFrame from "./DeviceFrame";
@@ -99,7 +99,7 @@ export default function PrototypeView({
             {Component ? (
               <Suspense
                 fallback={
-                  <div className="flex h-[667px] w-[375px] items-center justify-center bg-white text-muted-foreground">
+                  <div className="flex items-center justify-center bg-white text-muted-foreground" style={{ width: DEVICE_WIDTH, height: DEVICE_HEIGHT }}>
                     Loading...
                   </div>
                 }
@@ -116,7 +116,7 @@ export default function PrototypeView({
                 </div>
               </Suspense>
             ) : (
-              <div className="flex h-[667px] w-[375px] items-center justify-center bg-white text-muted-foreground">
+              <div className="flex items-center justify-center bg-white text-muted-foreground" style={{ width: DEVICE_WIDTH, height: DEVICE_HEIGHT }}>
                 Component not found: {screen.componentId}
               </div>
             )}

@@ -5,11 +5,15 @@ const CATEGORIES = [
   { name: "Herbs", count: 28 },
 ];
 
+import { DEVICE_WIDTH, DEVICE_HEIGHT } from "@/lib/utils";
+
 export default function CatalogScreen() {
   return (
     <div
-      className="flex min-h-[667px] w-[375px] flex-col"
+      className="flex flex-col"
       style={{
+        minHeight: DEVICE_HEIGHT,
+        width: DEVICE_WIDTH,
         fontFamily: "var(--heron-font-base)",
         background: "var(--heron-bg-global)",
         color: "var(--heron-text-primary)",

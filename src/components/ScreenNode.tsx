@@ -1,7 +1,7 @@
 import { memo, Suspense } from "react";
 import { Handle, Position, type NodeProps } from "@xyflow/react";
 import { getScreenComponent } from "@/sandbox/registry";
-import { cn } from "@/lib/utils";
+import { cn, DEVICE_WIDTH, DEVICE_HEIGHT } from "@/lib/utils";
 
 export interface ScreenNodeData {
   label: string;
@@ -10,8 +10,6 @@ export interface ScreenNodeData {
 }
 
 const PREVIEW_SCALE = 0.28;
-const PREVIEW_WIDTH = 375;
-const PREVIEW_HEIGHT = 667;
 
 function ScreenNode({ data, selected }: NodeProps) {
   const nodeData = data as unknown as ScreenNodeData;
@@ -24,7 +22,7 @@ function ScreenNode({ data, selected }: NodeProps) {
         selected ? "border-primary shadow-lg" : "border-border"
       )}
       style={{
-        width: PREVIEW_WIDTH * PREVIEW_SCALE + 16,
+        width: DEVICE_WIDTH * PREVIEW_SCALE + 16,
         overflow: "hidden",
       }}
     >
@@ -39,16 +37,16 @@ function ScreenNode({ data, selected }: NodeProps) {
       <div
         className="overflow-hidden"
         style={{
-          width: PREVIEW_WIDTH * PREVIEW_SCALE,
-          height: PREVIEW_HEIGHT * PREVIEW_SCALE,
+          width: DEVICE_WIDTH * PREVIEW_SCALE,
+          height: DEVICE_HEIGHT * PREVIEW_SCALE,
           margin: "0 auto",
         }}
       >
         <div
           className="pointer-events-none origin-top-left"
           style={{
-            width: PREVIEW_WIDTH,
-            height: PREVIEW_HEIGHT,
+            width: DEVICE_WIDTH,
+            height: DEVICE_HEIGHT,
             transform: `scale(${PREVIEW_SCALE})`,
           }}
         >
