@@ -129,13 +129,16 @@ export function useProjectStore() {
 
   const updateScreenPosition = useCallback(
     (id: ScreenId, position: { x: number; y: number }) => {
-      setProject((prev) => ({
-        ...prev,
-        screens: {
-          ...prev.screens,
-          [id]: { ...prev.screens[id], position },
-        },
-      }));
+      setProject((prev) => {
+        if (!prev.screens[id]) return prev;
+        return {
+          ...prev,
+          screens: {
+            ...prev.screens,
+            [id]: { ...prev.screens[id], position },
+          },
+        };
+      });
     },
     [setProject]
   );

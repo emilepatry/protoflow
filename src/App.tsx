@@ -29,7 +29,7 @@ export default function App() {
         added = true;
       }
     }
-    if (added || Object.keys(store.project.screens).length > 0) {
+    if (added) {
       const { positions } = computeLayout(store.project.screens, store.project.edges);
       for (const [id, pos] of Object.entries(positions)) {
         store.updateScreenPosition(id, pos);

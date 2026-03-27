@@ -1,21 +1,27 @@
 import { Component, type ReactNode, type ErrorInfo } from "react";
 
+function normalizeError(error: unknown): string {
+  if (error instanceof Error) return error.message;
+  if (typeof error === "string") return error;
+  return "An unexpected error occurred";
+}
+
 export default class AppErrorBoundary extends Component<
   { children: ReactNode },
-  { error: Error | null }
+  { errorMessage: string | null }
 > {
-  state: { error: Error | null } = { error: null };
+  state: { errorMessage: string | null } = { errorMessage: null };
 
-  static getDerivedStateFromError(error: Error) {
-    return { error };
+  static getDerivedStateFromError(error: unknown) {
+    return { errorMessage: normalizeError(error) };
   }
 
-  componentDidCatch(error: Error, info: ErrorInfo) {
+  componentDidCatch(error: unknown, info: ErrorInfo) {
     console.error("Unhandled error:", error, info);
   }
 
   render() {
-    if (this.state.error) {
+    if (this.state.errorMessage) {
       return (
         <div className="flex h-screen flex-col items-center justify-center gap-4 p-8 text-center">
           <div className="rounded-full bg-red-100 p-3">
@@ -25,7 +31,7 @@ export default class AppErrorBoundary extends Component<
           </div>
           <h1 className="text-lg font-semibold text-foreground">Something went wrong</h1>
           <p className="max-w-sm text-sm text-muted-foreground">
-            {this.state.error.message.slice(0, 120)}
+            {this.state.errorMessage.slice(0, 120)}
           </p>
           <button
             onClick={() => window.location.reload()}
