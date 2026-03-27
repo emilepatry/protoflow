@@ -13,10 +13,10 @@ const edgeColors: Record<EdgeType, string> = {
   back: "var(--color-edge-back)",
 };
 
-const edgeBadgeClasses: Record<EdgeType, string> = {
-  navigation: "bg-blue-50 text-blue-700 border-blue-200",
-  conditional: "bg-amber-50 text-amber-700 border-amber-200",
-  back: "bg-violet-50 text-violet-700 border-violet-200",
+const edgeBadgeStyles: Record<EdgeType, React.CSSProperties> = {
+  navigation: { background: "color-mix(in oklch, var(--color-edge-navigation) 12%, white)", color: "color-mix(in oklch, var(--color-edge-navigation) 85%, black)", borderColor: "color-mix(in oklch, var(--color-edge-navigation) 30%, white)" },
+  conditional: { background: "color-mix(in oklch, var(--color-edge-conditional) 12%, white)", color: "color-mix(in oklch, var(--color-edge-conditional) 85%, black)", borderColor: "color-mix(in oklch, var(--color-edge-conditional) 30%, white)" },
+  back: { background: "color-mix(in oklch, var(--color-edge-back) 12%, white)", color: "color-mix(in oklch, var(--color-edge-back) 85%, black)", borderColor: "color-mix(in oklch, var(--color-edge-back) 30%, white)" },
 };
 
 export default function AnnotatedEdge({
@@ -63,10 +63,8 @@ export default function AnnotatedEdge({
             }}
           >
             <div
-              className={cn(
-                "rounded-md border px-2 py-0.5 text-[9px] font-medium leading-tight shadow-sm",
-                edgeBadgeClasses[edgeType]
-              )}
+              className="rounded-md border px-2 py-0.5 text-[9px] font-medium leading-tight shadow-sm"
+              style={edgeBadgeStyles[edgeType]}
             >
               {edgeData.trigger}
             </div>
