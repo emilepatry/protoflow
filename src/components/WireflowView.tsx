@@ -38,9 +38,9 @@ interface WireflowViewProps {
 }
 
 const edgeColors = {
-  navigation: "#3b82f6",
-  conditional: "#f59e0b",
-  back: "#8b5cf6",
+  navigation: "var(--color-edge-navigation)",
+  conditional: "var(--color-edge-conditional)",
+  back: "var(--color-edge-back)",
 };
 
 export default function WireflowView({
@@ -176,7 +176,7 @@ export default function WireflowView({
               markerHeight="6"
               orient="auto-start-reverse"
             >
-              <path d="M 0 0 L 10 5 L 0 10 z" fill="#3b82f6" />
+              <path d="M 0 0 L 10 5 L 0 10 z" style={{ fill: "var(--color-edge-navigation)" }} />
             </marker>
             <marker
               id="marker-conditional"
@@ -187,7 +187,7 @@ export default function WireflowView({
               markerHeight="6"
               orient="auto-start-reverse"
             >
-              <path d="M 0 0 L 10 5 L 0 10 z" fill="#f59e0b" />
+              <path d="M 0 0 L 10 5 L 0 10 z" style={{ fill: "var(--color-edge-conditional)" }} />
             </marker>
             <marker
               id="marker-back"
@@ -198,7 +198,7 @@ export default function WireflowView({
               markerHeight="6"
               orient="auto-start-reverse"
             >
-              <path d="M 0 0 L 10 5 L 0 10 z" fill="#8b5cf6" />
+              <path d="M 0 0 L 10 5 L 0 10 z" style={{ fill: "var(--color-edge-back)" }} />
             </marker>
           </defs>
         </svg>
