@@ -7,25 +7,27 @@ import { cn, DEVICE_WIDTH, DEVICE_HEIGHT, PREVIEW_SCALE } from "@/lib/utils";
 export interface ScreenNodeData {
   label: string;
   componentId: string;
+  projectId: string;
   [key: string]: unknown;
 }
 
 class ScreenErrorBoundary extends Component<
   { children: ReactNode; componentId: string },
-  { error: Error | null }
+  { errorMessage: string | null }
 > {
-  state: { error: Error | null } = { error: null };
+  state: { errorMessage: string | null } = { errorMessage: null };
 
-  static getDerivedStateFromError(error: Error) {
-    return { error };
+  static getDerivedStateFromError(error: unknown) {
+    if (error instanceof Error) return { errorMessage: error.message };
+    return { errorMessage: String(error ?? "Unknown error") };
   }
 
-  componentDidCatch(error: Error, info: ErrorInfo) {
+  componentDidCatch(error: unknown, info: ErrorInfo) {
     console.error(`ScreenNode error in "${this.props.componentId}":`, error, info);
   }
 
   render() {
-    if (this.state.error) {
+    if (this.state.errorMessage) {
       return (
         <div
           className="flex h-full flex-col items-center justify-center gap-2 bg-red-50 p-4 text-center"
@@ -38,7 +40,7 @@ class ScreenErrorBoundary extends Component<
           </div>
           <p className="text-xs font-medium text-red-700">Render Error</p>
           <p className="text-[10px] leading-tight text-red-500">
-            {this.state.error.message.slice(0, 80)}
+            {this.state.errorMessage.slice(0, 80)}
           </p>
         </div>
       );
@@ -64,7 +66,7 @@ function ScreenNodeSkeleton() {
 
 function ScreenNode({ data, selected }: NodeProps) {
   const nodeData = data as unknown as ScreenNodeData;
-  const Component = getScreenComponent(nodeData.componentId);
+  const Component = getScreenComponent(nodeData.projectId, nodeData.componentId);
   const [hovered, setHovered] = useState(false);
 
   return (

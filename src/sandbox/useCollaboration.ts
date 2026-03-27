@@ -9,15 +9,25 @@ import {
 const PARTYKIT_HOST: string | undefined =
   import.meta.env.VITE_PARTYKIT_HOST || undefined;
 
-export function useCollaboration(projectId: string) {
+const EMPTY_COMMENTS: Comment[] = [];
+
+export function useCollaboration(projectId: string | null) {
   const providerRef = useRef<CollaborationProvider | null>(null);
-  const [comments, setComments] = useState<Comment[]>([]);
+  const [comments, setComments] = useState<Comment[]>(EMPTY_COMMENTS);
   const [viewerName, setViewerNameState] = useState<string | null>(
     getViewerName()
   );
   const [connected, setConnected] = useState(false);
 
   useEffect(() => {
+    if (!projectId) {
+      providerRef.current?.destroy();
+      providerRef.current = null;
+      setComments(EMPTY_COMMENTS);
+      setConnected(false);
+      return;
+    }
+
     const collab = new CollaborationProvider(projectId);
     providerRef.current = collab;
 

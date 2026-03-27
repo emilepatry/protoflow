@@ -42,4 +42,22 @@ export interface Project {
   meta: ProjectMeta;
 }
 
-export type ViewMode = "wireflow" | "prototype";
+export type ViewMode = "wireflow" | "prototype" | "component-sandbox";
+
+export interface ProjectViewState {
+  mode: "wireflow" | "prototype";
+  activeScreenId: ScreenId | null;
+}
+
+export interface ComponentVariant {
+  name: string;
+  render: () => React.ReactNode;
+  description?: string;
+}
+
+export interface Workspace {
+  projects: Record<string, Project>;
+  activeProjectId: string | null;
+  activeComponentId: string | null;
+  projectViewStates: Record<string, ProjectViewState>;
+}
