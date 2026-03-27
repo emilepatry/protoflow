@@ -77,13 +77,15 @@ export default function Toolbar({
                   setShowScreenPicker(!showScreenPicker);
                   setShowStickyPicker(false);
                 }}
+                aria-expanded={showScreenPicker}
+                aria-haspopup="menu"
                 className="flex items-center gap-1.5 rounded-md border border-border px-3 py-1.5 text-xs font-medium transition-colors hover:bg-muted"
               >
                 <Plus className="h-3.5 w-3.5" />
                 Screen
               </button>
               {showScreenPicker && (
-                <div className="absolute right-0 top-full z-50 mt-1 min-w-[160px] rounded-lg border border-border bg-white py-1 shadow-lg">
+                <div role="menu" className="absolute right-0 top-full z-50 mt-1 min-w-[160px] rounded-lg border border-border bg-white py-1 shadow-lg">
                   {availableScreens.length === 0 ? (
                     <p className="px-3 py-2 text-xs text-muted-foreground">
                       No screens found in src/screens/
@@ -92,6 +94,7 @@ export default function Toolbar({
                     availableScreens.map((id) => (
                       <button
                         key={id}
+                        role="menuitem"
                         onClick={() => {
                           onAddScreen(id, {
                             x: Math.random() * 400,
@@ -115,23 +118,26 @@ export default function Toolbar({
                   setShowStickyPicker(!showStickyPicker);
                   setShowScreenPicker(false);
                 }}
+                aria-expanded={showStickyPicker}
+                aria-haspopup="menu"
                 className="flex items-center gap-1.5 rounded-md border border-border px-3 py-1.5 text-xs font-medium transition-colors hover:bg-muted"
               >
                 <StickyNote className="h-3.5 w-3.5" />
                 Sticky
               </button>
               {showStickyPicker && (
-                <div className="absolute right-0 top-full z-50 mt-1 min-w-[120px] rounded-lg border border-border bg-white py-1 shadow-lg">
+                <div role="menu" className="absolute right-0 top-full z-50 mt-1 min-w-[120px] rounded-lg border border-border bg-white py-1 shadow-lg">
                   {stickyColors.map(({ color, label, className }) => (
                     <button
                       key={color}
+                      role="menuitem"
                       onClick={() => {
                         onAddSticky(color);
                         setShowStickyPicker(false);
                       }}
                       className="flex w-full items-center gap-2 px-3 py-1.5 text-left text-xs hover:bg-muted"
                     >
-                      <div className={cn("h-3 w-3 rounded-sm border", className)} />
+                      <div className={cn("h-3 w-3 rounded-sm border", className)} aria-hidden="true" />
                       {label}
                     </button>
                   ))}

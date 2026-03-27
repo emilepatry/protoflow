@@ -125,7 +125,7 @@ export default function App() {
   );
 
   return (
-    <div className="flex h-full flex-col">
+    <div className="flex h-full flex-col" role="application" aria-label="Protoflow">
       {promptingName && <ViewerNamePrompt onSubmit={handleNameSubmit} />}
 
       {store.mode === "wireflow" && (
@@ -139,7 +139,7 @@ export default function App() {
         />
       )}
 
-      <div className="flex-1">
+      <main className="flex-1">
         {store.mode === "wireflow" ? (
           <ReactFlowProvider>
             <WireflowView
@@ -165,7 +165,7 @@ export default function App() {
             </p>
           </div>
         )}
-      </div>
+      </main>
     </div>
   );
 }
