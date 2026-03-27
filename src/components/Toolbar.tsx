@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Layers, Play, Plus, StickyNote, Settings } from "lucide-react";
+import { Layers, Play, Plus, StickyNote, Pencil } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { ViewMode, StickyColor } from "@/types";
 import { getAvailableScreenIds } from "@/sandbox/registry";
@@ -39,7 +39,7 @@ export default function Toolbar({
     <div className="flex h-14 items-center justify-between border-b border-border bg-white px-4">
       <div className="flex items-center gap-3">
         <div className="flex items-center gap-1.5">
-          <Settings className="h-4 w-4 text-muted-foreground" />
+          <Pencil className="h-3.5 w-3.5 text-muted-foreground" aria-hidden="true" />
           {editingName ? (
             <input
               value={nameValue}
