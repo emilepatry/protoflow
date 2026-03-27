@@ -1,9 +1,6 @@
 import { cn } from "@/lib/utils";
 import type { ConnectionStatus as Status } from "@/sandbox/collaboration";
 
-const PARTYKIT_HOST: string | undefined =
-  import.meta.env.VITE_PARTYKIT_HOST || undefined;
-
 const statusConfig: Record<
   Status,
   { color: string; label: string; pulse: boolean }
@@ -18,7 +15,7 @@ interface ConnectionStatusProps {
 }
 
 export default function ConnectionStatus({ status }: ConnectionStatusProps) {
-  if (!PARTYKIT_HOST) return null;
+  if (!import.meta.env.VITE_PARTYKIT_HOST) return null;
 
   const { color, label, pulse } = statusConfig[status];
 
