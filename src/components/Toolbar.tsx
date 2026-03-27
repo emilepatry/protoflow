@@ -46,8 +46,8 @@ export default function Toolbar({
         setShowStickyPicker(false);
       }
     }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    document.addEventListener("pointerdown", handleClickOutside, true);
+    return () => document.removeEventListener("pointerdown", handleClickOutside, true);
   }, [showScreenPicker, showStickyPicker]);
 
   const availableScreens = getAvailableScreenIds();
@@ -60,7 +60,7 @@ export default function Toolbar({
   ];
 
   return (
-    <div className="flex h-14 items-center justify-between border-b border-border bg-white px-4 overflow-hidden">
+    <div className="flex h-14 items-center justify-between gap-4 overflow-hidden border-b border-border bg-white px-4">
       <div className="flex min-w-0 items-center gap-3">
         <div className="flex min-w-0 items-center gap-1.5">
           <Pencil className="h-3.5 w-3.5 shrink-0 text-muted-foreground" aria-hidden="true" />
@@ -106,7 +106,7 @@ export default function Toolbar({
                 className="flex items-center gap-1.5 rounded-md border border-border px-3 py-2 text-sm font-medium transition-colors hover:bg-muted"
               >
                 <Plus className="h-4 w-4" />
-                Screen
+                <span className="hidden sm:inline">Screen</span>
               </button>
               {showScreenPicker && (
                 <div role="menu" className="absolute right-0 top-full z-50 mt-1 min-w-[160px] rounded-lg border border-border bg-white py-1 shadow-lg">
@@ -147,7 +147,7 @@ export default function Toolbar({
                 className="flex items-center gap-1.5 rounded-md border border-border px-3 py-2 text-sm font-medium transition-colors hover:bg-muted"
               >
                 <StickyNote className="h-4 w-4" />
-                Sticky
+                <span className="hidden sm:inline">Sticky</span>
               </button>
               {showStickyPicker && (
                 <div role="menu" className="absolute right-0 top-full z-50 mt-1 min-w-[120px] rounded-lg border border-border bg-white py-1 shadow-lg">
@@ -182,7 +182,7 @@ export default function Toolbar({
             )}
           >
             <Layers className="h-4 w-4" />
-            Wireflow
+            <span className="hidden sm:inline">Wireflow</span>
           </button>
           <button
             onClick={() => onModeChange("prototype")}
@@ -194,7 +194,7 @@ export default function Toolbar({
             )}
           >
             <Play className="h-4 w-4" />
-            Prototype
+            <span className="hidden sm:inline">Prototype</span>
           </button>
         </div>
       </div>
