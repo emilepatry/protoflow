@@ -2,6 +2,35 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.1.0] - 2026-03-27
+
+### Added
+- Multi-project workspace architecture: projects live in `src/projects/<name>/screens/`, each discovered automatically via `import.meta.glob`
+- Collapsible sidebar (240px expanded, 48px icon rail) with Projects and Components tabs, deterministic emoji badges, and keyboard navigation (arrow keys, Enter, Cmd+B toggle)
+- Component library with shared component sandbox: `src/library/<name>/` with `component.tsx` + `variants.tsx` pattern, variant switching via arrow keys with crossfade transitions
+- Hash-based URL routing (`#/projects/...`, `#/components/...`) with one-way sync to store
+- Workspace store via React Context (`WorkspaceProvider` / `useWorkspace`) with per-project localStorage, view state persistence across project switches, and legacy migration from `protoflow-project` key
+- `ComponentSandbox.tsx` with dot-grid canvas, per-variant error boundary, and crossfade animation
+- Example Button component in library with 6 variants (Primary, Secondary, Destructive, Ghost, Disabled, Sizes)
+- Design tokens for sidebar dimensions, sandbox dot grid, and transition timing
+- Context indicator bar showing current view mode and project/component name
+
+### Changed
+- Toolbar removed; sticky picker moved to floating button on wireflow canvas (bottom-right), mode switching now implicit via sidebar clicks
+- Screen registry expanded from flat to nested (`project → screen`) with lazy loading via `React.lazy`
+- Collaboration rooms scoped per-project (`protoflow-${projectId}`), disconnects in sandbox mode
+- `getScreenComponent` now requires explicit `projectId` parameter to avoid cross-project collisions
+- Arrow key navigation removed from React Flow canvas (`disableKeyboardA11y`), sidebar owns keyboard nav
+- `ViewMode` type expanded to include `"component-sandbox"` with exhaustive 3-way branching in App
+
+### Fixed
+- Cascade-delete stickies when removing a screen (`removeScreen` now filters stickies by `screenId`)
+- Stale closure in hashchange handler (now uses ref for latest store)
+- Hash-based routing explicitly sets wireflow mode for project URLs (prevents persisted prototype state from overriding URL intent)
+- Source screen validation restored in `handleConnect` (prevents edges with non-existent source)
+- Global keyboard handlers skip when focus is in input/textarea/contentEditable
+- `updateSticky` guards against unknown sticky IDs
+
 ## [0.1.0.0] - 2026-03-27
 
 ### Added
