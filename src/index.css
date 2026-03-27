@@ -1,54 +1,128 @@
+@import "@fontsource/geist/400.css";
+@import "@fontsource/geist/500.css";
+@import "@fontsource/geist/600.css";
+@import "@fontsource/jetbrains-mono/400.css";
+@import "@fontsource/jetbrains-mono/500.css";
+
 @import "tailwindcss";
 @import "./heron-tokens.css";
 
 @theme {
-  --color-background: oklch(0.985 0.005 175);
-  --color-foreground: #0a0a0a;
-  --color-primary: #18181b;
-  --color-primary-foreground: #fafafa;
-  --color-muted: oklch(0.97 0.008 175);
-  --color-muted-foreground: oklch(0.70 0.015 175);
-  --color-border: oklch(0.90 0.01 175);
-  --color-surface: oklch(0.97 0.008 175);
+  /* ─── Semantic tokens: light mode (OKLCH, per DESIGN.md) ─── */
+  --color-background: oklch(1 0 0);
+  --color-foreground: oklch(0.27 0 0);
+  --color-surface: oklch(0.99 0 0);
+  --color-surface-foreground: oklch(0.27 0 0);
+  --color-muted: oklch(0.97 0 0);
+  --color-muted-foreground: oklch(0.56 0 0);
+  --color-primary: oklch(0.56 0.13 175);
+  --color-primary-foreground: oklch(1 0 0);
+  --color-secondary: oklch(0.97 0 0);
+  --color-secondary-foreground: oklch(0.36 0 0);
+  --color-destructive: oklch(0.56 0.18 25);
+  --color-destructive-foreground: oklch(1 0 0);
+  --color-border: oklch(0.93 0 0);
+  --color-input: oklch(0.93 0 0);
+  --color-ring: oklch(0.68 0.14 175);
 
-  --color-accent: oklch(0.55 0.12 175);
-  --color-accent-hover: oklch(0.50 0.13 175);
-  --color-accent-subtle: oklch(0.95 0.02 175);
-  --color-accent-muted: oklch(0.80 0.05 175);
-  --color-accent-foreground: #ffffff;
+  /* ─── Accent aliases (backward compat with existing components) ─── */
+  --color-accent: oklch(0.56 0.13 175);
+  --color-accent-hover: oklch(0.50 0.14 175);
+  --color-accent-subtle: oklch(0.97 0.02 175);
+  --color-accent-muted: oklch(0.78 0.12 175);
+  --color-accent-foreground: oklch(1 0 0);
+  --color-accent-border: oklch(0.87 0.06 175);
+  --color-accent-dim: oklch(0.97 0.02 175);
 
-  --color-destructive: #ef4444;
+  /* ─── Semantic status colors ─── */
+  --color-success: oklch(0.56 0.14 145);
+  --color-warning: oklch(0.56 0.14 85);
+  --color-error: oklch(0.56 0.18 25);
+  --color-info: oklch(0.56 0.14 250);
 
-  --color-sticky-yellow: #fef9c3;
-  --color-sticky-blue: #dbeafe;
-  --color-sticky-green: #dcfce7;
-  --color-sticky-pink: #fce7f3;
-  --color-sticky-yellow-border: #fde047;
-  --color-sticky-blue-border: #93c5fd;
-  --color-sticky-green-border: #86efac;
-  --color-sticky-pink-border: #f9a8d4;
+  /* ─── Status color tiers (for bg/text in error states) ─── */
+  --color-error-subtle: oklch(0.97 0.02 25);
+  --color-error-muted: oklch(0.93 0.04 25);
+  --color-error-foreground: oklch(0.40 0.14 25);
+  --color-info-subtle: oklch(0.97 0.02 250);
+  --color-info-muted: oklch(0.80 0.10 250);
 
-  --color-edge-navigation: #3b82f6;
-  --color-edge-conditional: #f59e0b;
-  --color-edge-back: #8b5cf6;
+  /* ─── Sticky notes (OKLCH) ─── */
+  --color-sticky-yellow: oklch(0.97 0.06 95);
+  --color-sticky-blue: oklch(0.93 0.04 250);
+  --color-sticky-green: oklch(0.96 0.04 150);
+  --color-sticky-pink: oklch(0.94 0.04 350);
+  --color-sticky-yellow-border: oklch(0.90 0.15 95);
+  --color-sticky-blue-border: oklch(0.80 0.10 250);
+  --color-sticky-green-border: oklch(0.88 0.12 155);
+  --color-sticky-pink-border: oklch(0.80 0.10 350);
 
-  --color-chrome-bg: #1a1a1a;
-  --color-chrome-surface: #111111;
-  --color-chrome-divider: rgba(255, 255, 255, 0.1);
+  /* ─── Edge types (OKLCH) ─── */
+  --color-edge-navigation: oklch(0.60 0.18 260);
+  --color-edge-conditional: oklch(0.75 0.15 80);
+  --color-edge-back: oklch(0.55 0.20 295);
 
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
-  --radius-sm: 0.25rem;
-  --radius-md: 0.5rem;
-  --radius-lg: 0.75rem;
+  /* ─── Chrome / device frames (OKLCH) ─── */
+  --color-chrome-bg: oklch(0.15 0 0);
+  --color-chrome-surface: oklch(0.11 0 0);
+  --color-chrome-divider: oklch(1 0 0 / 0.1);
+  --color-traffic-red: oklch(0.64 0.21 24);
+  --color-traffic-yellow: oklch(0.84 0.16 82);
+  --color-traffic-green: oklch(0.72 0.19 145);
 
+  /* ─── Avatar palette (sidebar collapsed icons) ─── */
+  --color-avatar-0: oklch(0.92 0.04 175);
+  --color-avatar-1: oklch(0.92 0.04 250);
+  --color-avatar-2: oklch(0.92 0.04 320);
+  --color-avatar-3: oklch(0.92 0.04 30);
+  --color-avatar-4: oklch(0.92 0.04 60);
+  --color-avatar-5: oklch(0.92 0.04 140);
+
+  /* ─── Canvas (dot grid, minimap) ─── */
+  --color-dot-grid: oklch(0.93 0 0);
+  --color-minimap-sticky: oklch(0.97 0.06 95);
+  --color-minimap-node: oklch(0.93 0 0);
+  --color-minimap-mask: oklch(0 0 0 / 0.08);
+
+  /* ─── Typography ─── */
+  --font-sans: "Geist", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "Menlo", monospace;
+
+  /* ─── Letter spacing (DESIGN.md type scale) ─── */
+  --tracking-display: -0.04em;
+  --tracking-title: -0.03em;
+  --tracking-subtitle: -0.02em;
+
+  /* ─── Radius (DESIGN.md: single base + calc) ─── */
+  --radius: 0.5rem;
+  --radius-sm: calc(var(--radius) * 0.5);
+  --radius-md: var(--radius);
+  --radius-lg: calc(var(--radius) * 1.5);
+  --radius-xl: calc(var(--radius) * 2);
+  --radius-2xl: calc(var(--radius) * 3);
+  --radius-full: 9999px;
+
+  /* ─── Shadows: layered composites (DESIGN.md) ─── */
+  --shadow-border-color: oklch(0 0 0 / 0.05);
+  --shadow-border: 0 0 0 1px var(--shadow-border-color);
+  --shadow-sm: var(--shadow-border), 0 2px 2px oklch(0 0 0 / 0.04);
+  --shadow-md: var(--shadow-border), 0 2px 2px oklch(0 0 0 / 0.04), 0 8px 8px -8px oklch(0 0 0 / 0.04);
+  --shadow-lg: var(--shadow-border), 0 2px 2px oklch(0 0 0 / 0.04), 0 8px 16px -4px oklch(0 0 0 / 0.04);
+  --shadow-menu: var(--shadow-border), 0 1px 1px oklch(0 0 0 / 0.02), 0 4px 8px -4px oklch(0 0 0 / 0.04), 0 16px 24px -8px oklch(0 0 0 / 0.06);
+
+  /* ─── Motion ─── */
+  --ease-swift: cubic-bezier(0.23, 0.88, 0.26, 0.92);
+  --ease-overlay: cubic-bezier(0.175, 0.885, 0.32, 1.1);
+
+  /* ─── Layout ─── */
   --sidebar-width: 240px;
   --sidebar-width-collapsed: 48px;
   --sidebar-item-height: 36px;
   --sandbox-dot-size: 1px;
   --sandbox-dot-gap: 16px;
   --sandbox-dot-color: oklch(0.92 0 0);
-  --transition-sidebar: 200ms ease-out;
-  --transition-crossfade: 150ms ease;
+  --transition-sidebar: 200ms var(--ease-swift);
+  --transition-crossfade: 150ms var(--ease-swift);
 }
 
 * {
@@ -58,7 +132,7 @@
 }
 
 :focus-visible {
-  outline: 2px solid var(--color-accent);
+  outline: 2px solid var(--color-ring);
   outline-offset: 2px;
   border-radius: var(--radius-sm);
 }
