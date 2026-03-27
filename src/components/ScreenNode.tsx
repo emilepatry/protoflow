@@ -30,16 +30,16 @@ class ScreenErrorBoundary extends Component<
     if (this.state.errorMessage) {
       return (
         <div
-          className="flex h-full flex-col items-center justify-center gap-2 bg-red-50 p-4 text-center"
+          className="flex h-full flex-col items-center justify-center gap-2 bg-error-subtle p-4 text-center"
           style={{ width: DEVICE_WIDTH, height: DEVICE_HEIGHT }}
         >
-          <div className="rounded-full bg-red-100 p-2">
-            <svg className="h-5 w-5 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+          <div className="rounded-full bg-error-muted p-2">
+            <svg className="h-5 w-5 text-error" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
           </div>
-          <p className="text-xs font-medium text-red-700">Render Error</p>
-          <p className="text-[10px] leading-tight text-red-500">
+          <p className="text-xs font-medium text-error-foreground">Render Error</p>
+          <p className="text-[10px] leading-tight text-error">
             {this.state.errorMessage.slice(0, 80)}
           </p>
         </div>
@@ -52,7 +52,7 @@ class ScreenErrorBoundary extends Component<
 function ScreenNodeSkeleton() {
   return (
     <div
-      className="flex flex-col gap-3 bg-white p-4"
+      className="flex flex-col gap-3 bg-background p-4"
       style={{ width: DEVICE_WIDTH, height: DEVICE_HEIGHT }}
     >
       <div className="h-3 w-24 animate-pulse rounded bg-muted" />
@@ -72,7 +72,7 @@ function ScreenNode({ data, selected }: NodeProps) {
   return (
     <div
       className={cn(
-        "screen-node rounded-lg border-2 bg-white shadow-md transition-shadow",
+        "screen-node rounded-lg border-2 bg-background shadow-md transition-shadow",
         selected ? "border-accent shadow-lg" : "border-border"
       )}
       style={{

@@ -198,13 +198,13 @@ export default function WireflowView({
         proOptions={{ hideAttribution: true }}
         disableKeyboardA11y
       >
-        <Background variant={BackgroundVariant.Dots} gap={20} size={1} color="#e4e4e7" />
-        <Controls position="bottom-right" className="!border-border !bg-white/90 !shadow-sm [&>button]:!border-border [&>button]:!bg-white [&>button:hover]:!bg-muted" />
+        <Background variant={BackgroundVariant.Dots} gap={20} size={1} color="var(--color-dot-grid)" />
+        <Controls position="bottom-right" className="!border-border !bg-background/90 !shadow-sm [&>button]:!border-border [&>button]:!bg-background [&>button:hover]:!bg-muted" />
         <MiniMap
           position="bottom-left"
-          nodeColor={(n) => (n.type === "sticky" ? "#fef9c3" : "#e4e4e7")}
-          maskColor="rgba(0,0,0,0.08)"
-          className="!bg-white !border-border"
+          nodeColor={(n) => (n.type === "sticky" ? "var(--color-minimap-sticky)" : "var(--color-minimap-node)")}
+          maskColor="var(--color-minimap-mask)"
+          className="!bg-background !border-border"
         />
       </ReactFlow>
 
@@ -216,13 +216,13 @@ export default function WireflowView({
             aria-haspopup="menu"
             aria-label="Add sticky note"
             title="Add sticky note"
-            className="flex items-center gap-1.5 rounded-md border border-border bg-white/90 px-3 py-2 text-sm font-medium shadow-sm transition-colors hover:bg-muted"
+            className="flex items-center gap-1.5 rounded-md border border-border bg-background/90 px-3 py-2 text-sm font-medium shadow-sm transition-colors hover:bg-muted"
           >
             <StickyNote className="h-4 w-4" />
             <span className="hidden sm:inline">Sticky</span>
           </button>
           {showStickyPicker && (
-            <div role="menu" className="absolute bottom-full right-0 z-50 mb-1 min-w-[120px] rounded-lg border border-border bg-white py-1 shadow-lg">
+            <div role="menu" className="absolute bottom-full right-0 z-50 mb-1 min-w-[120px] rounded-lg border border-border bg-background py-1 shadow-lg">
               {stickyColors.map(({ color, label, className }) => (
                 <button
                   key={color}

@@ -338,7 +338,7 @@ function WorkspaceApp() {
 
         <div className="flex flex-1 flex-col overflow-hidden">
           {contextLabel && (
-            <div className="border-b border-border px-4 py-1.5" aria-live="polite">
+            <div role="status" className="border-b border-border px-4 py-1.5" aria-live="polite">
               <span className="text-xs text-muted-foreground">{contextLabel}</span>
             </div>
           )}

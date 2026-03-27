@@ -27,15 +27,15 @@ const transitionForEdge: Record<EdgeType, TransitionDir> = {
 function PrototypeScreenSkeleton() {
   return (
     <div
-      className="flex flex-col gap-4 bg-white p-6"
+      className="flex flex-col gap-4 bg-background p-6"
       style={{ width: DEVICE_WIDTH, height: DEVICE_HEIGHT }}
     >
-      <div className="h-4 w-28 animate-pulse rounded bg-gray-100" />
-      <div className="h-4 w-40 animate-pulse rounded bg-gray-100" />
-      <div className="h-32 w-full animate-pulse rounded-lg bg-gray-100" />
-      <div className="h-4 w-32 animate-pulse rounded bg-gray-100" />
-      <div className="h-4 w-24 animate-pulse rounded bg-gray-100" />
-      <div className="h-20 w-full animate-pulse rounded-lg bg-gray-100" />
+      <div className="h-4 w-28 animate-pulse rounded bg-muted" />
+      <div className="h-4 w-40 animate-pulse rounded bg-muted" />
+      <div className="h-32 w-full animate-pulse rounded-lg bg-muted" />
+      <div className="h-4 w-32 animate-pulse rounded bg-muted" />
+      <div className="h-4 w-24 animate-pulse rounded bg-muted" />
+      <div className="h-20 w-full animate-pulse rounded-lg bg-muted" />
     </div>
   );
 }
@@ -171,7 +171,7 @@ export default function PrototypeView({
                 </div>
               </Suspense>
             ) : (
-              <div className="flex items-center justify-center bg-white text-muted-foreground" style={{ width: DEVICE_WIDTH, height: DEVICE_HEIGHT }}>
+              <div className="flex items-center justify-center bg-background text-muted-foreground" style={{ width: DEVICE_WIDTH, height: DEVICE_HEIGHT }}>
                 Component not found: {screen.componentId}
               </div>
             )}
@@ -224,13 +224,13 @@ export default function PrototypeView({
             className={cn(
               "ml-2 rounded-md px-2.5 py-1.5 text-xs font-medium transition-colors",
               commentMode
-                ? "bg-blue-500/30 text-blue-300"
+                ? "bg-info/30 text-info"
                 : "text-white/40 hover:bg-white/10 hover:text-white/70"
             )}
           >
             {commentMode ? "Exit Comments" : "Comments"}
             {screenComments.length > 0 && (
-              <span className="ml-1.5 rounded-full bg-blue-500 px-1.5 py-0.5 text-[9px] text-white">
+              <span className="ml-1.5 rounded-full bg-info px-1.5 py-0.5 text-[9px] text-white">
                 {screenComments.length}
               </span>
             )}
@@ -249,11 +249,11 @@ export default function PrototypeView({
                     className={cn(
                       "flex max-w-[160px] items-center gap-1 rounded-md px-2.5 py-1.5 text-xs font-medium transition-colors",
                       edge.type === "navigation" &&
-                        "bg-blue-500/20 text-blue-300 hover:bg-blue-500/30",
+                        "bg-edge-navigation/20 text-edge-navigation hover:bg-edge-navigation/30",
                       edge.type === "conditional" &&
-                        "bg-amber-500/20 text-amber-300 hover:bg-amber-500/30",
+                        "bg-edge-conditional/20 text-edge-conditional hover:bg-edge-conditional/30",
                       edge.type === "back" &&
-                        "bg-violet-500/20 text-violet-300 hover:bg-violet-500/30",
+                        "bg-edge-back/20 text-edge-back hover:bg-edge-back/30",
                       isTransitioning && "opacity-50"
                     )}
                   >

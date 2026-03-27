@@ -77,9 +77,9 @@ export default function EditableText({
       className={cn(
         className,
         "outline-none transition-shadow",
-        "hover:ring-2 hover:ring-blue-400/30 hover:ring-offset-1",
-        editing && "ring-2 ring-blue-500/50 ring-offset-1",
-        override !== undefined && "bg-blue-50/50"
+        "hover:ring-2 hover:ring-ring/30 hover:ring-offset-1",
+        editing && "ring-2 ring-ring/50 ring-offset-1",
+        override !== undefined && "bg-info-subtle/50"
       )}
     >
       {displayText}
