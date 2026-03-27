@@ -8,13 +8,20 @@ export default function ViewerNamePrompt({ onSubmit }: ViewerNamePromptProps) {
   const [name, setName] = useState("");
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="name-prompt-title"
+    >
       <div className="w-80 rounded-xl border border-border bg-white p-6 shadow-2xl">
-        <h2 className="text-base font-semibold">What's your name?</h2>
+        <h2 id="name-prompt-title" className="text-base font-semibold">What's your name?</h2>
         <p className="mt-1 text-sm text-muted-foreground">
           So others know who left comments.
         </p>
+        <label htmlFor="name-prompt-input" className="sr-only">Your name</label>
         <input
+          id="name-prompt-input"
           value={name}
           onChange={(e) => setName(e.target.value.slice(0, 30))}
           onKeyDown={(e) => {
