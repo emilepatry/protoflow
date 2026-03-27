@@ -1,0 +1,45 @@
+# Changelog
+
+All notable changes to this project will be documented in this file.
+
+## [0.1.0.0] - 2026-03-27
+
+### Added
+- Auto-layout engine using Dagre for arranging screen nodes left-to-right on the wireflow canvas
+- App-level error boundary with graceful fallback UI and reload button
+- Screen-level error boundary in ScreenNode preventing single-screen crashes from taking down the canvas
+- Sticky note deletion via keyboard (Delete/Backspace) in wireflow mode
+- Breadcrumb navigation history in prototype mode with clickable back-navigation
+- Loading skeleton for prototype screen Suspense fallback
+- Comment input character limit (500) and author name truncation for overflow safety
+- `safeGetItem` / `safeSetItem` wrappers for localStorage resilience in private browsing
+- Mobile viewport gate showing "Best experienced on desktop" message
+- Screen node hover overlay with "Double-click to preview" affordance
+- Edge badge `title` attributes for long trigger text truncation
+- `aria-label` attributes on comment close button, toolbar buttons, and breadcrumb nav
+- Focus trap and Escape key support in ViewerNamePrompt dialog
+- CSS `prefers-reduced-motion` support for screen node transitions
+- Consolidated `PREVIEW_SCALE` constant to prevent drift between ScreenNode and layout engine
+- Test coverage for store operations (removeScreen cascade, addScreen label generation, getEdgesFrom, malformed localStorage)
+- Test for non-Error throw handling in AppErrorBoundary
+
+### Changed
+- Edge paths switched from Bezier to SmoothStep with 8px border radius for cleaner routing
+- Edge markers now use React Flow's built-in `MarkerType.ArrowClosed` instead of custom SVG markers
+- Edge config (colors, badge styles) extracted to `src/lib/edge-config.ts` for testability
+- Toolbar refactored to use click-outside detection for sticky picker dropdown
+- Project name editing moved to inline input with Enter/Escape/blur handling
+- Comment dot visibility increased from `opacity-0` to `opacity-30` for discoverability
+- Focus-visible outline color changed from primary to accent
+- Theme colors migrated to OKLCH for perceptual uniformity
+- Prototype "Back to Wireflow" button styled with accent instead of primary color
+- Empty state messaging improved with icon and code example
+
+### Fixed
+- Layout not wiping user-positioned screens on every page reload (only relayouts on new screen registration)
+- Error boundaries now handle non-Error throws (strings, undefined) without crashing the fallback UI
+- `updateScreenPosition` guards against unknown screen IDs to prevent state corruption
+- Self-loop edge creation rejected at both App and store level
+- Duplicate edge creation between same source/target prevented
+- Edge badge styles use `color-mix()` consistently for all 3 edge types
+- Controls and MiniMap styled to match app theme instead of React Flow defaults
