@@ -110,7 +110,7 @@ export default function PrototypeView({
                   </div>
                 }
               >
-                <div className="relative">
+                <div className="relative" data-pf-screen-container>
                   <Component />
                   {commentMode && (
                     <CommentOverlay
@@ -210,7 +210,7 @@ function CommentOverlay({
       {Array.from(elements).map((el) => {
         const pfId = el.getAttribute("data-pf-id")!;
         const rect = el.getBoundingClientRect();
-        const parentRect = el.closest(".rounded-lg.shadow-2xl")?.getBoundingClientRect();
+        const parentRect = el.closest("[data-pf-screen-container]")?.getBoundingClientRect();
         if (!parentRect) return null;
 
         const top = rect.top - parentRect.top;
