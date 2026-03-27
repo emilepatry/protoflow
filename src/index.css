@@ -201,3 +201,61 @@ body,
   color: var(--color-foreground);
 }
 
+/* ─── Dark mode overrides (DESIGN.md spec) ─── */
+.dark {
+  color-scheme: dark;
+
+  --color-background: oklch(0.07 0 0);
+  --color-foreground: oklch(0.99 0 0);
+  --color-surface: oklch(0.11 0 0);
+  --color-surface-foreground: oklch(0.99 0 0);
+  --color-muted: oklch(0.36 0 0);
+  --color-muted-foreground: oklch(0.87 0 0);
+  --color-primary: oklch(0.68 0.14 175);
+  --color-primary-foreground: oklch(0.12 0 0);
+  --color-secondary: oklch(0.36 0 0);
+  --color-secondary-foreground: oklch(0.97 0 0);
+  --color-destructive: oklch(0.62 0.20 25);
+  --color-destructive-foreground: oklch(1 0 0);
+  --color-border: oklch(0.20 0 0);
+  --color-input: oklch(0.20 0 0);
+  --color-ring: oklch(0.68 0.14 175);
+
+  --color-accent: oklch(0.68 0.14 175);
+  --color-accent-hover: oklch(0.62 0.14 175);
+  --color-accent-subtle: oklch(0.15 0.02 175);
+  --color-accent-muted: oklch(0.45 0.11 175);
+  --color-accent-foreground: oklch(0.12 0 0);
+  --color-accent-border: oklch(0.27 0.07 175);
+  --color-accent-dim: oklch(0.15 0.02 175);
+
+  --color-success: oklch(0.62 0.16 145);
+  --color-warning: oklch(0.62 0.16 85);
+  --color-error: oklch(0.62 0.20 25);
+  --color-info: oklch(0.62 0.16 250);
+
+  --color-error-subtle: oklch(0.15 0.04 25);
+  --color-error-muted: oklch(0.20 0.06 25);
+  --color-error-foreground: oklch(0.75 0.14 25);
+  --color-info-subtle: oklch(0.15 0.04 250);
+  --color-info-muted: oklch(0.30 0.10 250);
+
+  --color-sticky-yellow: oklch(0.25 0.04 95);
+  --color-sticky-blue: oklch(0.20 0.04 250);
+  --color-sticky-green: oklch(0.22 0.04 150);
+  --color-sticky-pink: oklch(0.22 0.04 350);
+  --color-sticky-yellow-border: oklch(0.35 0.08 95);
+  --color-sticky-blue-border: oklch(0.30 0.08 250);
+  --color-sticky-green-border: oklch(0.32 0.08 155);
+  --color-sticky-pink-border: oklch(0.30 0.08 350);
+
+  --color-dot-grid: oklch(0.20 0 0);
+  --color-minimap-sticky: oklch(0.25 0.04 95);
+  --color-minimap-node: oklch(0.20 0 0);
+  --color-minimap-mask: oklch(1 0 0 / 0.06);
+
+  --shadow-border-color: oklch(1 0 0 / 0.06);
+
+  --sandbox-dot-color: oklch(0.18 0 0);
+}
+

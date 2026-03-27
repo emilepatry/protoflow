@@ -36,8 +36,8 @@ export default function ViewerNamePrompt({ onSubmit, onCancel }: ViewerNamePromp
       aria-labelledby="name-prompt-title"
       onKeyDown={handleKeyDown}
     >
-      <div className="w-80 rounded-xl border border-border bg-background p-6 shadow-lg">
-        <h2 id="name-prompt-title" className="text-base font-semibold">What's your name?</h2>
+        <div className="w-80 rounded-xl border border-border bg-background p-6" style={{ boxShadow: 'var(--shadow-lg)' }}>
+        <h2 id="name-prompt-title" className="text-base font-semibold tracking-[-0.02em]">What's your name?</h2>
         <p className="mt-1 text-sm text-muted-foreground">
           So others know who left comments.
         </p>

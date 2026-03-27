@@ -21,6 +21,7 @@ import { edgeColors } from "@/lib/edge-config";
 import { cn } from "@/lib/utils";
 import { StickyNote } from "lucide-react";
 import type { Project, ScreenId, StickyColor } from "@/types";
+import type { ViewerSticky } from "@/sandbox/collaboration";
 
 const nodeTypes = {
   screen: ScreenNode,
@@ -34,12 +35,18 @@ const edgeTypes = {
 interface WireflowViewProps {
   project: Project;
   projectId: string;
-  onNodeDragStop: (id: string, position: { x: number; y: number }) => void;
-  onConnect: (source: ScreenId, target: ScreenId) => void;
-  onStickyBodyChange: (id: string, body: string) => void;
+  onNodeDragStop?: (id: string, position: { x: number; y: number }) => void;
+  onConnect?: (source: ScreenId, target: ScreenId) => void;
+  onStickyBodyChange?: (id: string, body: string) => void;
   onScreenSelect: (id: ScreenId) => void;
   onDeleteSticky?: (id: string) => void;
   onAddSticky?: (color: StickyColor) => void;
+  isViewer?: boolean;
+  viewerStickies?: ViewerSticky[];
+  onViewerStickyBodyChange?: (id: string, body: string) => void;
+  onViewerStickyDragStop?: (id: string, position: { x: number; y: number }) => void;
+  onDeleteViewerSticky?: (id: string) => void;
+  onAddViewerSticky?: (color: StickyColor) => void;
 }
 
 export default function WireflowView({
@@ -51,6 +58,12 @@ export default function WireflowView({
   onScreenSelect,
   onDeleteSticky,
   onAddSticky,
+  isViewer = false,
+  viewerStickies = [],
+  onViewerStickyBodyChange,
+  onViewerStickyDragStop,
+  onDeleteViewerSticky,
+  onAddViewerSticky,
 }: WireflowViewProps) {
   const initialNodes: Node[] = useMemo(() => {
     const screenNodes: Node[] = Object.entries(project.screens).map(
@@ -59,6 +72,7 @@ export default function WireflowView({
         type: "screen",
         position: screen.position,
         deletable: false,
+        draggable: !isViewer,
         data: {
           label: screen.label,
           componentId: screen.componentId,
@@ -67,22 +81,37 @@ export default function WireflowView({
       })
     );
 
-    const stickyNodes: Node[] = Object.entries(project.stickies).map(
+    const builderStickyNodes: Node[] = Object.entries(project.stickies).map(
       ([id, sticky]) => ({
         id,
         type: "sticky",
         position: sticky.position,
-        deletable: true,
+        deletable: !isViewer,
+        draggable: !isViewer,
         data: {
           body: sticky.body,
           color: sticky.color,
-          onBodyChange: (body: string) => onStickyBodyChange(id, body),
+          onBodyChange: isViewer ? undefined : (body: string) => onStickyBodyChange?.(id, body),
         },
       })
     );
 
-    return [...screenNodes, ...stickyNodes];
-  }, [project.screens, project.stickies, onStickyBodyChange, projectId]);
+    const viewerStickyNodes: Node[] = viewerStickies.map((vs) => ({
+      id: vs.id,
+      type: "sticky",
+      position: vs.position,
+      deletable: true,
+      draggable: true,
+      data: {
+        body: vs.body,
+        color: vs.color,
+        createdBy: vs.createdBy,
+        onBodyChange: (body: string) => onViewerStickyBodyChange?.(vs.id, body),
+      },
+    }));
+
+    return [...screenNodes, ...builderStickyNodes, ...viewerStickyNodes];
+  }, [project.screens, project.stickies, onStickyBodyChange, projectId, isViewer, viewerStickies, onViewerStickyBodyChange]);
 
   const initialEdges: Edge[] = useMemo(
     () =>
@@ -112,7 +141,7 @@ export default function WireflowView({
 
   const handleConnect = useCallback(
     (params: Connection) => {
-      if (params.source && params.target) {
+      if (params.source && params.target && onConnect) {
         onConnect(params.source, params.target);
       }
     },
@@ -121,9 +150,13 @@ export default function WireflowView({
 
   const handleNodeDragStop = useCallback(
     (_: React.MouseEvent, node: Node) => {
-      onNodeDragStop(node.id, node.position);
+      if (node.id.startsWith("vsticky-")) {
+        onViewerStickyDragStop?.(node.id, node.position);
+      } else {
+        onNodeDragStop?.(node.id, node.position);
+      }
     },
-    [onNodeDragStop]
+    [onNodeDragStop, onViewerStickyDragStop]
   );
 
   const handleNodeDoubleClick = useCallback(
@@ -152,12 +185,14 @@ export default function WireflowView({
   const handleNodesDelete = useCallback(
     (deleted: Node[]) => {
       for (const node of deleted) {
-        if (node.id.startsWith("sticky-") && onDeleteSticky) {
+        if (node.id.startsWith("vsticky-") && onDeleteViewerSticky) {
+          onDeleteViewerSticky(node.id);
+        } else if (node.id.startsWith("sticky-") && onDeleteSticky) {
           onDeleteSticky(node.id);
         }
       }
     },
-    [onDeleteSticky]
+    [onDeleteSticky, onDeleteViewerSticky]
   );
 
   useEffect(() => {
@@ -199,11 +234,12 @@ export default function WireflowView({
         edges={edges}
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
-        onConnect={handleConnect}
-        onNodeDragStop={handleNodeDragStop}
+        onConnect={isViewer ? undefined : handleConnect}
+        onNodeDragStop={isViewer ? undefined : handleNodeDragStop}
         onNodeDoubleClick={handleNodeDoubleClick}
-        onNodesDelete={handleNodesDelete}
-        deleteKeyCode={["Delete", "Backspace"]}
+        onNodesDelete={isViewer ? undefined : handleNodesDelete}
+        deleteKeyCode={isViewer ? null : ["Delete", "Backspace"]}
+        nodesConnectable={!isViewer}
         nodeTypes={nodeTypes}
         edgeTypes={edgeTypes}
         fitView
@@ -213,7 +249,7 @@ export default function WireflowView({
         onKeyDown={handleKeyDown}
       >
         <Background variant={BackgroundVariant.Dots} gap={20} size={1} color="var(--color-dot-grid)" />
-        <Controls position="bottom-right" className="!border-border !bg-background/90 !shadow-sm [&>button]:!border-border [&>button]:!bg-background [&>button:hover]:!bg-muted" />
+        <Controls position="bottom-right" className="!border-border !bg-background/90 [&>button]:!border-border [&>button]:!bg-background [&>button:hover]:!bg-muted" style={{ boxShadow: 'var(--shadow-sm)' }} />
         <MiniMap
           position="bottom-left"
           nodeColor={(n) => (n.type === "sticky" ? "var(--color-minimap-sticky)" : "var(--color-minimap-node)")}
@@ -222,7 +258,7 @@ export default function WireflowView({
         />
       </ReactFlow>
 
-      {onAddSticky && (
+      {(onAddSticky || onAddViewerSticky) && (
         <div className="absolute bottom-4 right-24 z-10" ref={stickyPickerRef}>
           <button
             onClick={() => setShowStickyPicker(!showStickyPicker)}
@@ -230,19 +266,24 @@ export default function WireflowView({
             aria-haspopup="menu"
             aria-label="Add sticky note"
             title="Add sticky note"
-            className="flex items-center gap-1.5 rounded-md border border-border bg-background/90 px-3 py-2 text-sm font-medium shadow-sm transition-colors hover:bg-muted"
+            className="flex items-center gap-1.5 rounded-md border border-border bg-background/90 px-3 py-2 text-sm font-medium transition-colors hover:bg-muted"
+            style={{ boxShadow: 'var(--shadow-sm)' }}
           >
             <StickyNote className="h-4 w-4" />
             <span className="hidden sm:inline">Sticky</span>
           </button>
           {showStickyPicker && (
-            <div role="menu" className="absolute bottom-full right-0 z-50 mb-1 min-w-[120px] rounded-lg border border-border bg-background py-1 shadow-lg">
+            <div role="menu" className="absolute bottom-full right-0 z-50 mb-1 min-w-[120px] rounded-lg border border-border bg-background py-1" style={{ boxShadow: 'var(--shadow-menu)' }}>
               {stickyColors.map(({ color, label, className }) => (
                 <button
                   key={color}
                   role="menuitem"
                   onClick={() => {
-                    onAddSticky(color);
+                    if (isViewer) {
+                      onAddViewerSticky?.(color);
+                    } else {
+                      onAddSticky?.(color);
+                    }
                     setShowStickyPicker(false);
                   }}
                   className="flex w-full items-center gap-2 px-3 py-2.5 text-left text-sm hover:bg-muted"

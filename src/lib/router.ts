@@ -4,6 +4,10 @@ export type RouteState =
   | { type: "component"; componentId: string; variantName?: string }
   | { type: "none" };
 
+export function isViewerMode(): boolean {
+  return new URLSearchParams(window.location.search).has("viewer");
+}
+
 export function parseHash(hash: string): RouteState {
   const path = hash.replace(/^#\/?/, "");
   if (!path) return { type: "none" };
