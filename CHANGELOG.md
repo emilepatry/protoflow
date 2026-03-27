@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.1.1] - 2026-03-27
+
+### Fixed
+- `programmaticNavRef` no longer stays stuck when navigating to the current hash (caused the next real hashchange to be silently ignored)
+- Project view state (mode, active screen) is now persisted before switching projects, so returning to a project restores where you left off
+- `createDefaultProject` derives project name from its ID slug instead of hardcoding
+- `useMemo` for `initialNodes` in WireflowView now includes `projectId` in dependency array
+- Nonexistent project IDs in URL hash no longer persist a bad `activeProjectId` to localStorage
+
 ## [0.1.1.0] - 2026-03-27
 
 ### Added

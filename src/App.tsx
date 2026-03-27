@@ -4,7 +4,7 @@ import { WorkspaceProvider, useWorkspace } from "@/sandbox/store";
 import { useCollaboration } from "@/sandbox/useCollaboration";
 import { discoverProjects, getAvailableScreenIds } from "@/sandbox/registry";
 import { computeLayout } from "@/lib/layout";
-import { parseHash, navigateTo } from "@/lib/router";
+import { parseHash, navigateTo as rawNavigateTo } from "@/lib/router";
 import WireflowView from "@/components/WireflowView";
 import PrototypeView from "@/components/PrototypeView";
 import ComponentSandbox from "@/components/ComponentSandbox";
@@ -66,13 +66,32 @@ function WorkspaceApp() {
 
   const storeRef = useRef(store);
   storeRef.current = store;
+  const programmaticNavRef = useRef(false);
+
+  const navigateTo = useCallback(
+    (...args: Parameters<typeof rawNavigateTo>) => {
+      programmaticNavRef.current = true;
+      rawNavigateTo(...args);
+      // If hash didn't change, rawNavigateTo is a no-op and no hashchange fires.
+      // Reset after the event loop gives hashchange a chance to fire and clear the flag.
+      setTimeout(() => {
+        programmaticNavRef.current = false;
+      }, 0);
+    },
+    []
+  );
 
   useEffect(() => {
     function onHashChange() {
+      if (programmaticNavRef.current) {
+        programmaticNavRef.current = false;
+        return;
+      }
       const route = parseHash(window.location.hash);
       const s = storeRef.current;
       switch (route.type) {
         case "project":
+          if (!s.workspace.projects[route.projectId]) break;
           s.setActiveProject(route.projectId);
           if (route.mode === "prototype" && "screenId" in route) {
             s.setMode("prototype");

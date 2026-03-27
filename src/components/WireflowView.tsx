@@ -82,7 +82,7 @@ export default function WireflowView({
     );
 
     return [...screenNodes, ...stickyNodes];
-  }, [project.screens, project.stickies, onStickyBodyChange]);
+  }, [project.screens, project.stickies, onStickyBodyChange, projectId]);
 
   const initialEdges: Edge[] = useMemo(
     () =>

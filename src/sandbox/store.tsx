@@ -27,7 +27,14 @@ function projectStorageKey(projectId: string): string {
   return `protoflow-project-${projectId}`;
 }
 
-function createDefaultProject(screenIds: string[]): Project {
+function formatSlugAsName(slug: string): string {
+  return slug
+    .split("-")
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+    .join(" ");
+}
+
+function createDefaultProject(projectId: string, screenIds: string[]): Project {
   const screens: Record<ScreenId, ScreenConfig> = {};
   for (const componentId of screenIds) {
     const id: ScreenId = `screen-${componentId}`;
@@ -44,8 +51,8 @@ function createDefaultProject(screenIds: string[]): Project {
     edges: {},
     stickies: {},
     meta: {
-      name: "Fullscript Patient Flow",
-      description: "Core patient purchase journey",
+      name: formatSlugAsName(projectId),
+      description: "",
       defaultDeviceFrame: "iphone-15",
     },
   };
@@ -175,7 +182,7 @@ function useWorkspaceStoreInternal() {
       setProjects((prev) => {
         if (prev[projectId]) return prev;
         const existing = loadProject(projectId);
-        const project = existing ?? createDefaultProject(screenIds);
+        const project = existing ?? createDefaultProject(projectId, screenIds);
         saveProject(projectId, project);
         return { ...prev, [projectId]: project };
       });
@@ -185,11 +192,23 @@ function useWorkspaceStoreInternal() {
 
   const setActiveProject = useCallback(
     (projectId: string) => {
-      updateMeta((prev) => ({
-        ...prev,
-        activeProjectId: projectId,
-        activeComponentId: null,
-      }));
+      updateMeta((prev) => {
+        const next: WorkspaceMeta = {
+          ...prev,
+          activeProjectId: projectId,
+          activeComponentId: null,
+        };
+        if (prev.activeProjectId && prev.activeProjectId !== projectId) {
+          next.projectViewStates = {
+            ...prev.projectViewStates,
+            [prev.activeProjectId]: {
+              mode: mode === "component-sandbox" ? "wireflow" : (mode as "wireflow" | "prototype"),
+              activeScreenId,
+            },
+          };
+        }
+        return next;
+      });
       const viewState = workspaceMeta.projectViewStates[projectId];
       if (viewState) {
         setModeRaw(viewState.mode);
@@ -199,7 +218,7 @@ function useWorkspaceStoreInternal() {
         setActiveScreenId(null);
       }
     },
-    [updateMeta, workspaceMeta.projectViewStates]
+    [updateMeta, workspaceMeta.projectViewStates, mode, activeScreenId]
   );
 
   const setActiveComponent = useCallback(

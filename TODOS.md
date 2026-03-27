@@ -37,6 +37,32 @@ Six E2E-worthy flows to cover:
 - URL navigation (hash-based routing, deep links to projects/components/variants)
 - Keyboard flow (roving tabIndex in sidebar, arrow key navigation, Enter to open)
 
-## 7. DESIGN.md
+## 7. ~~DESIGN.md~~ ✅
 
-Document protoflow's design system tokens, colors, typography, and component patterns.
+Resolved — `DESIGN.md` authored via `/design-consultation` and reviewed via `/plan-design-review`. Covers typography, color (OKLCH), spacing, layout, shadows, motion, interaction states, responsive, accessibility, and component inventory.
+
+## 8. Design system migration (Inter → Geist, hex → OKLCH)
+
+The codebase (`index.css`) uses Inter font, hex colors, and `--color-*` Tailwind v4 token naming. `DESIGN.md` specifies Geist, full OKLCH, and documents the canonical token architecture. Until migrated, DESIGN.md is aspirational rather than enforced.
+
+Migration scope: `index.css` `@theme` block, all component color utilities, font loading, and shadow utilities. Font metrics differ between Inter and Geist — test layout shifts after swap.
+
+Depends on: nothing — this is the prerequisite for all other design system work.
+
+## 9. Connection handle touch targets
+
+Connection handles on screen nodes are 8×8px visual circles with no expanded hit area. WCAG requires 44px minimum for interactive elements. Fix by adding invisible padding or pseudo-element to expand the clickable area to 44×44px while keeping the visual at 8px.
+
+Depends on: nothing.
+
+## 10. Hotspot hover-proximity affordance
+
+Viewers in prototype mode have no way to know which elements are clickable (`data-pf-action`). Add a faint `--ring` outline (2px, 30% opacity) that appears when cursor is within 8px of an actionable element, using the Quick spring preset. Spec in DESIGN.md > Protoflow Components > Hotspot Affordance.
+
+Depends on: nothing.
+
+## 11. Variant reactions (thumbs up/down)
+
+Add binary reaction buttons (thumbs up / thumbs down) below each component variant in the sandbox. Reactions synced via collaboration layer. Spec in DESIGN.md > Protoflow Components > Variant Reactions.
+
+Depends on: #2 (Yjs graph sync) — reactions need a shared data store.
