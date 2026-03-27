@@ -69,8 +69,14 @@ export default function PrototypeView({
 
   if (!screen) {
     return (
-      <div className="flex h-full items-center justify-center">
+      <div className="flex h-full flex-col items-center justify-center gap-3">
         <p className="text-muted-foreground">Screen not found</p>
+        <button
+          onClick={onExitPrototype}
+          className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground"
+        >
+          Back to Wireflow
+        </button>
       </div>
     );
   }
