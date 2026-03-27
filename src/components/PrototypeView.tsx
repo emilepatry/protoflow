@@ -83,7 +83,7 @@ export default function PrototypeView({
   }
 
   return (
-    <div className="flex h-full flex-col bg-[#1a1a1a]">
+    <div className="flex h-full flex-col bg-chrome-bg">
       <div className="flex flex-1 items-center justify-center overflow-hidden">
         <div
           className={cn(
@@ -124,7 +124,7 @@ export default function PrototypeView({
         </div>
       </div>
 
-      <div className="border-t border-white/10 bg-[#111] px-4 py-3">
+      <div className="border-t border-chrome-divider bg-chrome-surface px-4 py-3">
         <div className="mx-auto flex max-w-2xl items-center gap-2">
           <button
             onClick={onExitPrototype}
@@ -134,7 +134,7 @@ export default function PrototypeView({
             Wireflow
           </button>
 
-          <div className="mx-2 h-4 w-px bg-white/10" />
+          <div className="mx-2 h-4 w-px bg-chrome-divider" />
 
           <p className="text-xs font-medium text-white/80">{screen.label}</p>
 
@@ -157,7 +157,7 @@ export default function PrototypeView({
 
           {deduped.length > 0 && (
             <>
-              <div className="mx-2 h-4 w-px bg-white/10" />
+              <div className="mx-2 h-4 w-px bg-chrome-divider" />
               <div className="flex flex-1 flex-wrap gap-1.5">
                 {deduped.map(([edgeId, edge]) => (
                   <button
