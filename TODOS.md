@@ -41,13 +41,9 @@ Six E2E-worthy flows to cover:
 
 Resolved — `DESIGN.md` authored via `/design-consultation` and reviewed via `/plan-design-review`. Covers typography, color (OKLCH), spacing, layout, shadows, motion, interaction states, responsive, accessibility, and component inventory.
 
-## 8. Design system migration (Inter → Geist, hex → OKLCH)
+## 8. ~~Design system migration (Inter → Geist, hex → OKLCH)~~ ✅
 
-The codebase (`index.css`) uses Inter font, hex colors, and `--color-*` Tailwind v4 token naming. `DESIGN.md` specifies Geist, full OKLCH, and documents the canonical token architecture. Until migrated, DESIGN.md is aspirational rather than enforced.
-
-Migration scope: `index.css` `@theme` block, all component color utilities, font loading, and shadow utilities. Font metrics differ between Inter and Geist — test layout shifts after swap.
-
-Depends on: nothing — this is the prerequisite for all other design system work.
+Resolved — sprint-0/font-and-tokens branch: `@fontsource/geist` + `@fontsource/jetbrains-mono` self-hosted, full OKLCH token rebuild in `index.css`, all component inline colors replaced with semantic tokens, layered shadow composites, spring easing, type scale tracking utilities. Node.js pinned to >= 22.12.0.
 
 ## 9. Connection handle touch targets
 

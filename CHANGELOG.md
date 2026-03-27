@@ -2,6 +2,30 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.2.0] - 2026-03-27
+
+### Changed
+- Typography migrated from Google Fonts CDN (Inter) to self-hosted `@fontsource/geist` and `@fontsource/jetbrains-mono` — eliminates external network dependency and FOUT
+- Every color token in the `@theme` block rebuilt from hex/named colors to OKLCH per DESIGN.md — semantic, status, sticky, edge, chrome, avatar, and canvas tokens
+- All component inline colors replaced with semantic token references (`bg-blue-500` → `bg-info`, `bg-red-50` → `bg-error-subtle`, `bg-white` → `bg-background`, etc.) across 9 components
+- Shadow system replaced with layered composites (`shadow-sm`, `shadow-md`, `shadow-lg`, `shadow-menu`)
+- Transition easings replaced with spring-derived `--ease-swift` and `--ease-overlay`
+- Focus-visible outline uses `--color-ring` instead of `--color-accent`
+- Radius tokens calculated from a single `--radius` base value
+
+### Added
+- Traffic light tokens (`--color-traffic-{red,yellow,green}`) for DeviceFrame
+- Avatar palette tokens (`--color-avatar-{0..5}`) for Sidebar
+- Canvas tokens (`--color-dot-grid`, `--color-minimap-{sticky,node,mask}`) for WireflowView
+- Status color tiers (`--color-{error,info}-{subtle,muted,foreground}`) for error boundaries
+- Type scale tracking utilities (`--tracking-{display,title,subtitle}`)
+- `.node-version` file pinning Node.js 22 for `fnm` auto-switching
+- `engines.node >= 22.12.0` in package.json (required by Vite 8 / Vitest 4)
+
+### Fixed
+- Context bar now has `role="status"` for screen reader announcements
+- AppErrorBoundary heading uses `tracking-subtitle` per DESIGN.md type scale
+
 ## [0.1.1.1] - 2026-03-27
 
 ### Fixed
