@@ -7,8 +7,12 @@ function ThrowingChild(): ReactNode {
   throw new Error("Test render error");
 }
 
+function ThrowingStringChild(): ReactNode {
+  throw "String error thrown";
+}
+
 describe("AppErrorBoundary", () => {
-  it("renders fallback UI when child throws", () => {
+  it("renders fallback UI when child throws an Error", () => {
     vi.spyOn(console, "error").mockImplementation(() => {});
 
     render(
@@ -20,6 +24,21 @@ describe("AppErrorBoundary", () => {
     expect(screen.getByText("Something went wrong")).toBeDefined();
     expect(screen.getByText("Reload")).toBeDefined();
     expect(screen.getByText(/Test render error/)).toBeDefined();
+
+    vi.restoreAllMocks();
+  });
+
+  it("renders fallback UI when child throws a non-Error value", () => {
+    vi.spyOn(console, "error").mockImplementation(() => {});
+
+    render(
+      <AppErrorBoundary>
+        <ThrowingStringChild />
+      </AppErrorBoundary>
+    );
+
+    expect(screen.getByText("Something went wrong")).toBeDefined();
+    expect(screen.getByText(/String error thrown/)).toBeDefined();
 
     vi.restoreAllMocks();
   });
