@@ -1,0 +1,49 @@
+{
+  "date": "2026-03-27",
+  "url": "http://localhost:5173",
+  "healthScore": 100,
+  "issues": [
+    {
+      "id": "ISSUE-001",
+      "title": "Comment dots invisible in iPhone 15 frame",
+      "severity": "high",
+      "category": "functional",
+      "status": "fixed",
+      "commit": "c1d59e6"
+    },
+    {
+      "id": "ISSUE-002",
+      "title": "WebSocket reconnection spam when PartyKit not running",
+      "severity": "high",
+      "category": "console",
+      "status": "fixed",
+      "commit": "b207ed8"
+    },
+    {
+      "id": "ISSUE-003",
+      "title": "Toolbar dropdowns don't close on outside click",
+      "severity": "medium",
+      "category": "ux",
+      "status": "fixed",
+      "commit": "65a026e"
+    },
+    {
+      "id": "ISSUE-004",
+      "title": "Toolbar content overflows at narrow viewports",
+      "severity": "medium",
+      "category": "responsive",
+      "status": "fixed",
+      "commit": "65a026e"
+    }
+  ],
+  "categoryScores": {
+    "console": 100,
+    "links": 100,
+    "visual": 100,
+    "functional": 100,
+    "ux": 100,
+    "performance": 100,
+    "content": 100,
+    "accessibility": 100
+  }
+}
