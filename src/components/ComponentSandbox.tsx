@@ -7,7 +7,9 @@ import {
   type ReactNode,
   type ErrorInfo,
 } from "react";
+import { motion } from "motion/react";
 import { useWorkspace } from "@/sandbox/store";
+import { SPRING_QUICK } from "@/lib/motion";
 import {
   getLibraryComponent,
   getLibraryVariants,
@@ -130,13 +132,13 @@ export default function ComponentSandbox() {
           backgroundSize: `var(--sandbox-dot-gap) var(--sandbox-dot-gap)`,
         }}
       >
-        <div
+        <motion.div
           className="max-w-4xl p-8"
           key={fadeKey}
           aria-live="polite"
-          style={{
-            animation: "sandboxFadeIn var(--transition-crossfade) both",
-          }}
+          initial={{ opacity: 0, scale: 0.98 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={SPRING_QUICK}
         >
           {activeVariant ? (
             <VariantErrorBoundary variantName={activeVariant.name}>
@@ -151,7 +153,7 @@ export default function ComponentSandbox() {
               Component not found: {componentId}
             </div>
           )}
-        </div>
+        </motion.div>
       </div>
 
       {activeVariant?.description && (

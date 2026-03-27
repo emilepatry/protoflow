@@ -1,6 +1,8 @@
 import { useState } from "react";
+import { motion } from "motion/react";
 import { MessageCircle, X } from "lucide-react";
 import type { Comment } from "@/sandbox/collaboration";
+import { SPRING_QUICK } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 
 interface CommentDotProps {
@@ -49,7 +51,10 @@ export default function CommentDot({
           {comments.length}
         </button>
       ) : (
-        <div
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9, y: -4 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          transition={SPRING_QUICK}
           className="w-64 rounded-lg border border-border bg-background shadow-lg"
           onClick={(e) => e.stopPropagation()}
         >
@@ -116,7 +121,7 @@ export default function CommentDot({
               </button>
             </div>
           </div>
-        </div>
+        </motion.div>
       )}
     </div>
   );

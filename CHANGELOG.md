@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.2.1.0] - 2026-03-27
+
+### Added
+- `motion/react` (framer-motion v12) for spring-based physics animations across the app
+- Spring preset library (`src/lib/motion.ts`): Quick (500/30/0.5), Default (350/34/1), Gentle (200/20/0.8) matching DESIGN.md spec
+- `MotionConfig reducedMotion="user"` wrapper — OS `prefers-reduced-motion` respected globally
+- Persistent wireflow: React Flow stays mounted behind prototype overlay, preserving viewport state and eliminating remount latency
+- Prototype enter/exit spring animation (Gentle preset, scale 0.85→1 + opacity)
+- Screen-to-screen spring transitions via `AnimatePresence mode="wait"` keyed on screen ID
+- Screen node entrance animation on mount (Quick preset, scale 0.95→1)
+- Comment popover spring entrance on open (Quick preset)
+
+### Removed
+- Manual `rAF + setTimeout(250)` transition state machine in PrototypeView (replaced by motion.div)
+- `isTransitioning` blocking state and associated refs (`rAfRef`, `timeoutRef`, `cancelPendingTransition`)
+- `.screen-node` CSS transition class (superseded by motion.div)
+- `@keyframes sandboxFadeIn` (superseded by motion/react)
+- `--transition-crossfade` token (no longer referenced)
+- Inline `animation` style in ComponentSandbox
+
 ## [0.2.0] - 2026-03-27
 
 ### Changed

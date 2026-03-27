@@ -1,7 +1,9 @@
 import { memo, Suspense, useState, Component, type ReactNode, type ErrorInfo } from "react";
 import { Handle, Position, type NodeProps } from "@xyflow/react";
+import { motion } from "motion/react";
 import { Play } from "lucide-react";
 import { getScreenComponent } from "@/sandbox/registry";
+import { SPRING_QUICK } from "@/lib/motion";
 import { cn, DEVICE_WIDTH, DEVICE_HEIGHT, PREVIEW_SCALE } from "@/lib/utils";
 
 export interface ScreenNodeData {
@@ -70,9 +72,12 @@ function ScreenNode({ data, selected }: NodeProps) {
   const [hovered, setHovered] = useState(false);
 
   return (
-    <div
+    <motion.div
+      initial={{ opacity: 0, scale: 0.95 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={SPRING_QUICK}
       className={cn(
-        "screen-node rounded-lg border-2 bg-background shadow-md transition-shadow",
+        "rounded-lg border-2 bg-background shadow-md transition-shadow",
         selected ? "border-accent shadow-lg" : "border-border"
       )}
       style={{
@@ -130,7 +135,7 @@ function ScreenNode({ data, selected }: NodeProps) {
       </div>
 
       <Handle type="source" position={Position.Right} className="!bg-accent !w-2 !h-2" />
-    </div>
+    </motion.div>
   );
 }
 
