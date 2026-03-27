@@ -140,7 +140,7 @@ export default function Sidebar() {
 
   const expandedContent = (
     <>
-      <div className="flex items-center justify-between border-b border-border px-3 py-2">
+      <div className="flex items-center justify-between border-b border-border px-4 py-3">
         <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
           Workspace
         </span>
@@ -155,42 +155,44 @@ export default function Sidebar() {
       </div>
 
       <div className="border-b border-border" role="tablist" aria-label="Sidebar tabs">
-        <div className="mx-3 my-2 flex rounded-md border border-border">
-          <button
-            role="tab"
-            aria-selected={tab === "projects"}
-            onClick={() => setTab("projects")}
-            className={cn(
-              "flex flex-1 items-center justify-center gap-1.5 px-3 py-1.5 text-xs font-medium transition-colors",
-              tab === "projects"
-                ? "bg-accent text-accent-foreground"
-                : "hover:bg-muted"
-            )}
-          >
-            <Layers className="h-3.5 w-3.5" />
-            Projects
-          </button>
-          <button
-            role="tab"
-            aria-selected={tab === "components"}
-            onClick={() => setTab("components")}
-            className={cn(
-              "flex flex-1 items-center justify-center gap-1.5 border-l border-border px-3 py-1.5 text-xs font-medium transition-colors",
-              tab === "components"
-                ? "bg-accent text-accent-foreground"
-                : "hover:bg-muted"
-            )}
-          >
-            <Puzzle className="h-3.5 w-3.5" />
-            Components
-          </button>
+        <div className="p-3">
+          <div className="flex rounded-md border border-border">
+            <button
+              role="tab"
+              aria-selected={tab === "projects"}
+              onClick={() => setTab("projects")}
+              className={cn(
+                "flex flex-1 items-center justify-center gap-1.5 px-3 py-2 text-[13px] font-medium transition-colors",
+                tab === "projects"
+                  ? "bg-accent text-accent-foreground"
+                  : "hover:bg-muted"
+              )}
+            >
+              <Layers className="h-3.5 w-3.5" />
+              Projects
+            </button>
+            <button
+              role="tab"
+              aria-selected={tab === "components"}
+              onClick={() => setTab("components")}
+              className={cn(
+                "flex flex-1 items-center justify-center gap-1.5 border-l border-border px-3 py-2 text-[13px] font-medium transition-colors",
+                tab === "components"
+                  ? "bg-accent text-accent-foreground"
+                  : "hover:bg-muted"
+              )}
+            >
+              <Puzzle className="h-3.5 w-3.5" />
+              Components
+            </button>
+          </div>
         </div>
       </div>
 
       <div
         role="listbox"
         aria-label={tab === "projects" ? "Projects" : "Components"}
-        className="flex-1 overflow-y-auto py-1"
+        className="flex-1 overflow-y-auto py-2"
         onKeyDown={handleListKeyDown}
         tabIndex={0}
       >
@@ -220,7 +222,7 @@ export default function Sidebar() {
                 id={`sidebar-item-${item.id}`}
                 onClick={() => handleItemClick(item)}
                 className={cn(
-                  "flex w-full items-center gap-2.5 px-3 text-left transition-colors",
+                  "flex w-full items-center gap-3 px-4 text-left transition-colors",
                   active
                     ? "border-l-2 border-accent bg-accent-subtle font-medium"
                     : "border-l-2 border-transparent hover:bg-muted",
@@ -231,7 +233,7 @@ export default function Sidebar() {
                 <span className="text-base leading-none" aria-hidden="true">
                   {getEmoji(item.id)}
                 </span>
-                <span className="min-w-0 flex-1 truncate text-sm" title={formatSlug(item.id)}>
+                <span className="min-w-0 flex-1 truncate text-[13px]" title={formatSlug(item.id)}>
                   {formatSlug(item.id)}
                 </span>
                 <span className="shrink-0 text-xs text-muted-foreground">
@@ -247,7 +249,7 @@ export default function Sidebar() {
 
   const collapsedContent = (
     <>
-      <div className="flex flex-col items-center border-b border-border py-2">
+      <div className="flex flex-col items-center border-b border-border py-3">
         <button
           onClick={toggleCollapse}
           aria-expanded={!collapsed}
@@ -258,7 +260,7 @@ export default function Sidebar() {
         </button>
       </div>
 
-      <div className="flex flex-col items-center gap-1 border-b border-border py-2">
+      <div className="flex flex-col items-center gap-1 border-b border-border py-3">
         <button
           onClick={() => { setTab("projects"); setCollapsed(false); }}
           title="Projects"
@@ -287,7 +289,7 @@ export default function Sidebar() {
         </button>
       </div>
 
-      <div className="flex flex-1 flex-col items-center gap-1 overflow-y-auto py-2">
+      <div className="flex flex-1 flex-col items-center gap-1 overflow-y-auto py-3">
         {items.slice(0, 8).map((item) => {
           const active = isActiveItem(item);
           return (

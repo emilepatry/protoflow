@@ -27,6 +27,7 @@ export interface StickyConfig {
   screenId?: ScreenId;
   body: string;
   color: StickyColor;
+  createdBy?: string;
 }
 
 export interface ProjectMeta {
@@ -50,6 +51,7 @@ export interface ProjectViewState {
 }
 
 export interface ComponentVariant {
+  id: string;
   name: string;
   render: () => React.ReactNode;
   description?: string;

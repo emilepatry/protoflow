@@ -3,26 +3,31 @@ import Button from "./component";
 
 export const variants: ComponentVariant[] = [
   {
+    id: "primary",
     name: "Primary",
     description: "Default primary action button",
     render: () => <Button variant="primary">Add to Cart</Button>,
   },
   {
+    id: "secondary",
     name: "Secondary",
     description: "Secondary action with border",
     render: () => <Button variant="secondary">View Details</Button>,
   },
   {
+    id: "destructive",
     name: "Destructive",
     description: "Destructive / danger action",
     render: () => <Button variant="destructive">Remove Item</Button>,
   },
   {
+    id: "ghost",
     name: "Ghost",
     description: "Minimal ghost button for tertiary actions",
     render: () => <Button variant="ghost">Cancel</Button>,
   },
   {
+    id: "disabled",
     name: "Disabled",
     description: "Disabled state across variants",
     render: () => (
@@ -33,6 +38,7 @@ export const variants: ComponentVariant[] = [
     ),
   },
   {
+    id: "sizes",
     name: "Sizes",
     description: "Small, medium, and large sizes",
     render: () => (

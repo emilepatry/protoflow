@@ -55,7 +55,8 @@ export default function CommentDot({
           initial={{ opacity: 0, scale: 0.9, y: -4 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           transition={SPRING_QUICK}
-          className="w-64 rounded-lg border border-border bg-background shadow-lg"
+          className="w-64 rounded-lg border border-border bg-background"
+          style={{ boxShadow: 'var(--shadow-lg)' }}
           onClick={(e) => e.stopPropagation()}
         >
           <div className="flex items-center justify-between border-b border-border px-3 py-2">
@@ -92,8 +93,8 @@ export default function CommentDot({
             ))}
           </div>
 
-          <div className="border-t border-border p-2">
-            <div className="flex gap-1.5">
+          <div className="border-t border-border p-3">
+            <div className="flex gap-2">
               <input
                 value={newComment}
                 onChange={(e) => setNewComment(e.target.value)}

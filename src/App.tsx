@@ -6,24 +6,29 @@ import { useCollaboration } from "@/sandbox/useCollaboration";
 import { discoverProjects, getAvailableScreenIds } from "@/sandbox/registry";
 import { computeLayout } from "@/lib/layout";
 import { SPRING_GENTLE } from "@/lib/motion";
-import { parseHash, navigateTo as rawNavigateTo } from "@/lib/router";
+import { parseHash, navigateTo as rawNavigateTo, isViewerMode } from "@/lib/router";
 import WireflowView from "@/components/WireflowView";
 import PrototypeView from "@/components/PrototypeView";
 import ComponentSandbox from "@/components/ComponentSandbox";
 import Sidebar from "@/components/Sidebar";
 import ViewerNamePrompt from "@/components/ViewerNamePrompt";
 import ConnectionStatus from "@/components/ConnectionStatus";
+import ThemeToggle from "@/components/ThemeToggle";
+import { Toaster } from "@/components/ui/sonner";
+import { useFeedbackToasts } from "@/hooks/useFeedbackToasts";
 import { Layers } from "lucide-react";
 import type { ScreenId, StickyColor } from "@/types";
 
 function WorkspaceApp() {
   const store = useWorkspace();
+  const [isViewer] = useState(isViewerMode);
   const activeProjectId = store.workspace.activeProjectId;
-  const collabProjectId =
-    activeProjectId && store.mode !== "component-sandbox"
-      ? `protoflow-${activeProjectId}`
-      : null;
+  const collabProjectId = activeProjectId
+    ? `protoflow-${activeProjectId}`
+    : null;
   const collab = useCollaboration(collabProjectId);
+
+  useFeedbackToasts(collab.provider, collab.viewerName);
 
   const [promptingName, setPromptingName] = useState(false);
   const [pendingAction, setPendingAction] = useState<(() => void) | null>(null);
@@ -251,6 +256,44 @@ function WorkspaceApp() {
     [collab, ensureName]
   );
 
+  const handleAddViewerSticky = useCallback(
+    (color: import("@/types").StickyColor) => {
+      ensureName(() => {
+        collab.addViewerSticky(color);
+      });
+    },
+    [collab, ensureName]
+  );
+
+  const dragTimerRef = useRef<ReturnType<typeof setTimeout>>(undefined);
+  const handleViewerStickyDragStop = useCallback(
+    (id: string, position: { x: number; y: number }) => {
+      clearTimeout(dragTimerRef.current);
+      dragTimerRef.current = setTimeout(() => {
+        collab.updateViewerSticky(id, { position });
+      }, 50);
+    },
+    [collab]
+  );
+
+  const handleViewerStickyBodyChange = useCallback(
+    (id: string, body: string) => {
+      collab.updateViewerSticky(id, { body });
+    },
+    [collab]
+  );
+
+  const handleDeleteViewerSticky = useCallback(
+    (id: string) => {
+      if (isViewer) {
+        collab.removeViewerSticky(id);
+      } else {
+        collab.removeViewerStickyAsBuilder(id);
+      }
+    },
+    [collab, isViewer]
+  );
+
   const activeProject = activeProjectId
     ? store.workspace.projects[activeProjectId] ?? null
     : null;
@@ -271,7 +314,15 @@ function WorkspaceApp() {
   const renderMainContent = (): React.ReactNode => {
     switch (store.mode) {
       case "component-sandbox":
-        return <ComponentSandbox />;
+        return (
+          <ComponentSandbox
+            reactions={collab.reactions}
+            onToggleReaction={(variantId, reaction) => {
+              ensureName(() => collab.toggleReaction(variantId, reaction));
+            }}
+            viewerName={collab.viewerName}
+          />
+        );
       case "wireflow":
       case "prototype":
         break;
@@ -316,12 +367,18 @@ function WorkspaceApp() {
               <WireflowView
                 project={activeProject}
                 projectId={activeProjectId}
-                onNodeDragStop={handleNodeDragStop}
-                onConnect={handleConnect}
-                onStickyBodyChange={handleStickyBodyChange}
+                onNodeDragStop={isViewer ? undefined : handleNodeDragStop}
+                onConnect={isViewer ? undefined : handleConnect}
+                onStickyBodyChange={isViewer ? undefined : handleStickyBodyChange}
                 onScreenSelect={handleScreenSelect}
-                onDeleteSticky={handleDeleteSticky}
-                onAddSticky={handleAddSticky}
+                onDeleteSticky={isViewer ? undefined : handleDeleteSticky}
+                onAddSticky={isViewer ? undefined : handleAddSticky}
+                isViewer={isViewer}
+                viewerStickies={collab.viewerStickies}
+                onViewerStickyBodyChange={handleViewerStickyBodyChange}
+                onViewerStickyDragStop={handleViewerStickyDragStop}
+                onDeleteViewerSticky={handleDeleteViewerSticky}
+                onAddViewerSticky={isViewer ? handleAddViewerSticky : undefined}
               />
             </ReactFlowProvider>
           </div>
@@ -366,6 +423,7 @@ function WorkspaceApp() {
         </p>
       </div>
 
+      <Toaster />
       <div className="hidden h-full md:flex">
         {promptingName && (
           <ViewerNamePrompt
@@ -378,9 +436,10 @@ function WorkspaceApp() {
 
         <div className="flex flex-1 flex-col overflow-hidden">
           {contextLabel && (
-            <div role="status" className="flex items-center gap-2 border-b border-border px-4 py-1.5" aria-live="polite">
-              <span className="text-xs text-muted-foreground">{contextLabel}</span>
+            <div role="status" className="flex items-center gap-2 border-b border-border px-4 py-2" aria-live="polite">
+              <span className="text-[11px] text-muted-foreground">{contextLabel}</span>
               <ConnectionStatus status={collab.connectionStatus} />
+              <ThemeToggle />
             </div>
           )}
           <main ref={mainRef} tabIndex={-1} className="relative flex-1 outline-none">{renderMainContent()}</main>

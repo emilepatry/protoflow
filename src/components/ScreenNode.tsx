@@ -77,19 +77,20 @@ function ScreenNode({ data, selected }: NodeProps) {
       animate={{ opacity: 1, scale: 1 }}
       transition={SPRING_QUICK}
       className={cn(
-        "rounded-lg border-2 bg-background shadow-md transition-shadow",
-        selected ? "border-accent shadow-lg" : "border-border"
+        "rounded-lg border-2 bg-background transition-shadow",
+        selected ? "border-accent" : "border-border"
       )}
       style={{
         width: DEVICE_WIDTH * PREVIEW_SCALE + 16,
         overflow: "hidden",
+        boxShadow: selected ? 'var(--shadow-lg)' : 'var(--shadow-md)',
       }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
       <Handle type="target" position={Position.Left} className="!bg-accent !w-2 !h-2" />
 
-      <div className="border-b border-border bg-muted/50 px-2 py-1.5">
+      <div className="border-b border-border bg-muted/50 px-3 py-2">
         <p className="text-[10px] font-medium truncate text-foreground">
           {nodeData.label}
         </p>

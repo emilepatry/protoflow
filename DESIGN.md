@@ -502,7 +502,6 @@ Collaboration sync state (when `VITE_PARTYKIT_HOST` is configured).
 
 | Decision | Status | Rationale |
 |----------|--------|-----------|
-| Dark mode for app | Deferred | Tokens defined in DESIGN.md, CSS-level switch when ready. Lower priority than Geist/OKLCH migration. |
 | Minimap on canvas | Deferred | React Flow supports minimap but no design spec yet. Add when flow complexity warrants it. |
 | Multi-user cursor presence | Deferred | Collaboration syncs comments but not cursor position. Would need Yjs awareness protocol. |
 
@@ -522,8 +521,9 @@ Collaboration sync state (when `VITE_PARTYKIT_HOST` is configured).
 | 2026-03-27 | Reduced header weights (600 max)  | User preference — semibold over bold/black for refined feel  |
 | 2026-03-27 | Migration gap acknowledged         | Codebase uses Inter + hex colors + `--color-*` Tailwind v4 tokens. Migration to Geist + full OKLCH pending. |
 | 2026-03-27 | Binary variant reactions            | Thumbs up/down per component variant, count displayed, synced via collaboration layer |
-| 2026-03-27 | Dark mode deferred                 | Tokens ready in DESIGN.md, implementation deferred — Geist/OKLCH migration is higher priority |
 | 2026-03-27 | Hotspot hover-proximity affordance | Faint `--ring` outline on `data-pf-action` elements when cursor is within 8px. Invisible otherwise. |
+| 2026-03-27 | Dark mode implemented              | `.dark` class on `<html>`, localStorage persistence (`protoflow-theme`), system preference fallback, inline script prevents FOUC |
+| 2026-03-27 | UI spacing/typography polish       | Aligned to DESIGN.md comfortable density + type scale (label=13px, caption=11px), replaced Tailwind shadows with layered composites |
 
 ## GSTACK REVIEW REPORT
 

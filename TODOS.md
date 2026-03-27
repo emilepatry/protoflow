@@ -4,9 +4,11 @@
 
 Resolved — `removeScreen` in `store.tsx` now filters stickies where `sticky.screenId === id`.
 
-## 2. Yjs graph sync
+## 2. Viewer sticky sync
 
-Collaboration currently only syncs comments — the project graph (screens, edges, stickies) is local-only via localStorage. `EditableText` and text override APIs are implemented but never wired up. Full graph sync requires moving the project state into a Yjs shared type.
+Sync viewer-created sticky notes via Yjs Y.Map (keyed by sticky ID). Builder stickies stay in localStorage — separate ownership model. Viewer stickies are collaborative (created, edited, dragged, deleted through the Yjs doc). Includes `createdBy` field for permission enforcement: viewers can delete their own stickies, builder can delete any. Debounce Yjs writes on drag position updates.
+
+Rescoped from "full Yjs graph sync" — CEO review determined the actual need is viewer feedback, not co-editing the project graph.
 
 ## 3. Cursor rules for screen creation
 
@@ -53,6 +55,18 @@ Resolved — `[data-pf-action]::after` pseudo-element creates 8px proximity zone
 
 ## 11. Variant reactions (thumbs up/down)
 
-Add binary reaction buttons (thumbs up / thumbs down) below each component variant in the sandbox. Reactions synced via collaboration layer. Spec in DESIGN.md > Protoflow Components > Variant Reactions.
+Add binary reaction buttons (thumbs up / thumbs down) below each component variant in the sandbox. Reactions stored as `Y.Map<variantId, Y.Map<viewerName, "up"|"down">>` — per-viewer, attributed, toggleable. Requires adding a stable `id` field to `ComponentVariant` (currently only has `name`). Also requires keeping collaboration alive in sandbox mode (fix `collabProjectId` logic in `App.tsx`). Spec in DESIGN.md > Protoflow Components > Variant Reactions.
 
-Depends on: #2 (Yjs graph sync) — reactions need a shared data store.
+Depends on: stable variant IDs (add `id` to `ComponentVariant`).
+
+## 12. Viewer presence indicators
+
+Show avatar dots on the canvas when viewers are actively viewing the project via shared link. Yjs awareness protocol already flows through `collaboration.ts` — needs UI rendering as React Flow overlay elements. Viewer names already captured via `ViewerNamePrompt`.
+
+Depends on: #2 (viewer sticky sync) — presence is most meaningful when viewers can leave stickies.
+
+## 13. Feedback summary panel
+
+A sidebar tab aggregating all viewer feedback across the project: sticky notes grouped by screen, reaction counts per variant, recent comment threads. Gives the builder a single "what did people think?" view. Would subscribe to the same Yjs observe events as the toast system.
+
+Depends on: #2 (viewer sticky sync), #11 (variant reactions).
