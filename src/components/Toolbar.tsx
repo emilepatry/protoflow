@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Layers, Play, Plus, StickyNote, Pencil } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { ViewMode, StickyColor } from "@/types";
@@ -25,6 +25,30 @@ export default function Toolbar({
   const [showStickyPicker, setShowStickyPicker] = useState(false);
   const [editingName, setEditingName] = useState(false);
   const [nameValue, setNameValue] = useState(projectName);
+
+  const screenPickerRef = useRef<HTMLDivElement>(null);
+  const stickyPickerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (
+        showScreenPicker &&
+        screenPickerRef.current &&
+        !screenPickerRef.current.contains(e.target as Node)
+      ) {
+        setShowScreenPicker(false);
+      }
+      if (
+        showStickyPicker &&
+        stickyPickerRef.current &&
+        !stickyPickerRef.current.contains(e.target as Node)
+      ) {
+        setShowStickyPicker(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [showScreenPicker, showStickyPicker]);
 
   const availableScreens = getAvailableScreenIds();
 
@@ -71,7 +95,7 @@ export default function Toolbar({
       <div className="flex items-center gap-2">
         {mode === "wireflow" && (
           <>
-            <div className="relative">
+            <div className="relative" ref={screenPickerRef}>
               <button
                 onClick={() => {
                   setShowScreenPicker(!showScreenPicker);
@@ -112,7 +136,7 @@ export default function Toolbar({
               )}
             </div>
 
-            <div className="relative">
+            <div className="relative" ref={stickyPickerRef}>
               <button
                 onClick={() => {
                   setShowStickyPicker(!showStickyPicker);
