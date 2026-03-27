@@ -6,8 +6,8 @@ import {
   type Comment,
 } from "./collaboration";
 
-const PARTYKIT_HOST =
-  import.meta.env.VITE_PARTYKIT_HOST ?? "localhost:1999";
+const PARTYKIT_HOST: string | undefined =
+  import.meta.env.VITE_PARTYKIT_HOST || undefined;
 
 export function useCollaboration(projectId: string) {
   const providerRef = useRef<CollaborationProvider | null>(null);
@@ -21,8 +21,10 @@ export function useCollaboration(projectId: string) {
     const collab = new CollaborationProvider(projectId);
     providerRef.current = collab;
 
-    collab.connect(PARTYKIT_HOST);
-    setConnected(true);
+    if (PARTYKIT_HOST) {
+      collab.connect(PARTYKIT_HOST);
+      setConnected(true);
+    }
 
     const refreshComments = () => {
       setComments(collab.getComments());
