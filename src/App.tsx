@@ -69,8 +69,11 @@ function WorkspaceApp() {
 
   const mainRef = useRef<HTMLElement>(null);
   const prototypeRef = useRef<HTMLDivElement>(null);
+  const prevModeRef = useRef(store.mode);
 
   useEffect(() => {
+    if (prevModeRef.current === store.mode) return;
+    prevModeRef.current = store.mode;
     requestAnimationFrame(() => {
       if (store.mode === "prototype") {
         prototypeRef.current?.focus();
