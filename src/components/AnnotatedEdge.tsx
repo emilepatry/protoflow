@@ -5,7 +5,6 @@ import {
   type EdgeProps,
 } from "@xyflow/react";
 import type { EdgeType } from "@/types";
-import { cn } from "@/lib/utils";
 
 const edgeColors: Record<EdgeType, string> = {
   navigation: "var(--color-edge-navigation)",
