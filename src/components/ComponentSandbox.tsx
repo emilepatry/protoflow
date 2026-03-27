@@ -34,9 +34,9 @@ class VariantErrorBoundary extends Component<
   render() {
     if (this.state.errorMessage) {
       return (
-        <div className="flex flex-col items-center gap-2 rounded-lg bg-red-50 p-6 text-center">
-          <p className="text-sm font-medium text-red-700">This variant has an error</p>
-          <p className="text-xs text-red-500">
+        <div className="flex flex-col items-center gap-2 rounded-lg bg-error-subtle p-6 text-center">
+          <p className="text-sm font-medium text-error-foreground">This variant has an error</p>
+          <p className="text-xs text-error">
             {this.state.errorMessage.slice(0, 120)}
           </p>
         </div>

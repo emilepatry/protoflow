@@ -24,12 +24,12 @@ const EMOJI_PALETTE = [
 ];
 
 const BG_PALETTE = [
-  "oklch(0.92 0.04 175)",
-  "oklch(0.92 0.04 250)",
-  "oklch(0.92 0.04 320)",
-  "oklch(0.92 0.04 30)",
-  "oklch(0.92 0.04 60)",
-  "oklch(0.92 0.04 140)",
+  "var(--color-avatar-0)",
+  "var(--color-avatar-1)",
+  "var(--color-avatar-2)",
+  "var(--color-avatar-3)",
+  "var(--color-avatar-4)",
+  "var(--color-avatar-5)",
 ];
 
 function hashString(s: string): number {

@@ -25,7 +25,7 @@ export default function CommentDot({
           setOpen(true);
         }}
         className={cn(
-          "group absolute -right-2 -top-2 z-10 flex h-7 w-7 items-center justify-center rounded-full bg-blue-500 opacity-30 shadow-sm transition-opacity hover:opacity-100 focus:opacity-100",
+          "group absolute -right-2 -top-2 z-10 flex h-7 w-7 items-center justify-center rounded-full bg-info opacity-30 shadow-sm transition-opacity hover:opacity-100 focus:opacity-100",
           className
         )}
         aria-label="Add comment"
@@ -43,14 +43,14 @@ export default function CommentDot({
             e.stopPropagation();
             setOpen(true);
           }}
-          className="flex h-7 w-7 items-center justify-center rounded-full bg-blue-500 text-xs font-bold text-white shadow-sm transition-transform hover:scale-110"
+          className="flex h-7 w-7 items-center justify-center rounded-full bg-info text-xs font-bold text-background shadow-sm transition-transform hover:scale-110"
           aria-label={`${comments.length} comment${comments.length !== 1 ? "s" : ""}`}
         >
           {comments.length}
         </button>
       ) : (
         <div
-          className="w-64 rounded-lg border border-border bg-white shadow-lg"
+          className="w-64 rounded-lg border border-border bg-background shadow-lg"
           onClick={(e) => e.stopPropagation()}
         >
           <div className="flex items-center justify-between border-b border-border px-3 py-2">
