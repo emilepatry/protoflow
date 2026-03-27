@@ -1,0 +1,36 @@
+{
+  "date": "2026-03-27",
+  "url": "http://localhost:5173",
+  "designScore": "B",
+  "aiSlopScore": "A",
+  "categoryGrades": {
+    "hierarchy": "B+",
+    "typography": "B",
+    "spacing": "B+",
+    "color": "B",
+    "interactionStates": "B",
+    "responsive": "C+",
+    "content": "B+",
+    "aiSlop": "A",
+    "motion": "B+",
+    "performance": "B+"
+  },
+  "previousScore": "C+",
+  "findings": [
+    { "id": "FINDING-001", "title": "Inter font declared but not loaded", "impact": "high", "category": "typography", "status": "fixed", "commit": "8e689a2" },
+    { "id": "FINDING-002", "title": "No focus-visible rings on interactive elements", "impact": "high", "category": "interactionStates", "status": "fixed", "commit": "ad01c93" },
+    { "id": "FINDING-003", "title": "No ARIA attributes anywhere in codebase", "impact": "high", "category": "accessibility", "status": "fixed", "commit": "d0b63ce" },
+    { "id": "FINDING-004", "title": "Touch targets under 44px", "impact": "medium", "category": "interactionStates", "status": "fixed", "commit": "327ac50" },
+    { "id": "FINDING-005", "title": "Edge colors duplicated as hex literals", "impact": "medium", "category": "color", "status": "fixed", "commit": "0cfa5a2" },
+    { "id": "FINDING-006", "title": "Prototype chrome uses literal color values", "impact": "medium", "category": "color", "status": "fixed", "commit": "55c7f06" },
+    { "id": "FINDING-007", "title": "No prefers-reduced-motion respect", "impact": "medium", "category": "motion", "status": "fixed", "commit": "ad01c93" },
+    { "id": "FINDING-008", "title": "ViewerNamePrompt missing dialog semantics", "impact": "medium", "category": "accessibility", "status": "fixed", "commit": "dc7c0e8" },
+    { "id": "FINDING-009", "title": "Toolbar dropdowns missing ARIA", "impact": "medium", "category": "accessibility", "status": "fixed", "commit": "d0b63ce" },
+    { "id": "FINDING-010", "title": "Besley font loaded but never used", "impact": "low", "category": "performance", "status": "fixed", "commit": "b5e131d" },
+    { "id": "FINDING-011", "title": "AnnotatedEdge badge uses third color dialect", "impact": "low", "category": "color", "status": "fixed", "commit": "395fdc6" },
+    { "id": "FINDING-012", "title": "Hardcoded 375x667 in multiple files", "impact": "low", "category": "spacing", "status": "fixed", "commit": "0b8600a" },
+    { "id": "FINDING-013", "title": "Settings icon appears decorative/non-functional", "impact": "low", "category": "content", "status": "fixed", "commit": "00e5b42" },
+    { "id": "FINDING-014", "title": "Error states lack recovery actions", "impact": "low", "category": "content", "status": "fixed", "commit": "772035d" },
+    { "id": "FINDING-015", "title": "No cursor:pointer on clickable elements", "impact": "low", "category": "interactionStates", "status": "fixed", "commit": "efb95c9" }
+  ]
+}
