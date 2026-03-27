@@ -1,0 +1,104 @@
+{
+  "findings": [
+    {
+      "id": "ISSUE-001",
+      "title": "18 console error(s) detected",
+      "severity": "high",
+      "category": "console",
+      "details": "WebSocket connection to 'ws://localhost:1999/parties/main/protoflow-default?_pk=b9dab0f7-6c93-4ad1-af04-fc4202c589a1' failed: Error in connection esta\nWebSocket connection to 'ws://localhost:1999/parties/main/protoflow-default?_pk=cfebfc4b-3437-4738-859e-c2d0bd55414f' failed: Error in connection esta\nWebSocket connection to 'ws://localhost:1999/parties/main/protoflow-default?_pk=9aa624f3-2830-453d-92d1-a032567f9dfd' failed: Error in connection esta\nWebSocket connection to 'ws://localhost:1999/parties/main/protoflow-default?_pk=bae47bd3-0d2b-4a42-8e16-305417c5a2c3' failed: Error in connection esta\nWebSocket connection to 'ws://localhost:1999/parties/main/protoflow-default?_pk=9aa624f3-2830-453d-92d1-a032567f9dfd' failed: Error in connection esta\nWebSocket connection to 'ws://localhost:1999/parties/main/protoflow-default?_pk=bae47bd3-0d2b-4a42-8e16-305417c5a2c3' failed: Error in connection esta\nWebSocket connection to 'ws://localhost:1999/parties/main/protoflow-default?_pk=9aa624f3-2830-453d-92d1-a032567f9dfd' failed: Error in connection esta\nWebSocket connection to 'ws://localhost:1999/parties/main/protoflow-default?_pk=bae47bd3-0d2b-4a42-8e16-305417c5a2c3' failed: Error in connection esta\nWebSocket connection to 'ws://localhost:1999/parties/main/protoflow-default?_pk=9aa624f3-2830-453d-92d1-a032567f9dfd' failed: Error in connection esta\nWebSocket connection to 'ws://localhost:1999/parties/main/protoflow-default?_pk=bae47bd3-0d2b-4a42-8e16-305417c5a2c3' failed: Error in connection esta\nWebSocket connection to 'ws://localhost:1999/parties/main/protoflow-default?_pk=9aa624f3-2830-453d-92d1-a032567f9dfd' failed: Error in connection esta\nWebSocket connection to 'ws://localhost:1999/parties/main/protoflow-default?_pk=bae47bd3-0d2b-4a42-8e16-305417c5a2c3' failed: Error in connection esta\nWebSocket connection to 'ws://localhost:1999/parties/main/protoflow-default?_pk=9aa624f3-2830-453d-92d1-a032567f9dfd' failed: Error in connection esta\nWebSocket connection to 'ws://localhost:1999/parties/main/protoflow-default?_pk=bae47bd3-0d2b-4a42-8e16-305417c5a2c3' failed: Error in connection esta\nWebSocket connection to 'ws://localhost:1999/parties/main/protoflow-default?_pk=9aa624f3-2830-453d-92d1-a032567f9dfd' failed: Error in connection esta\nWebSocket connection to 'ws://localhost:1999/parties/main/protoflow-default?_pk=bae47bd3-0d2b-4a42-8e16-305417c5a2c3' failed: Error in connection esta\nWebSocket connection to 'ws://localhost:1999/parties/main/protoflow-default?_pk=9aa624f3-2830-453d-92d1-a032567f9dfd' failed: Error in connection esta\nWebSocket connection to 'ws://localhost:1999/parties/main/protoflow-default?_pk=bae47bd3-0d2b-4a42-8e16-305417c5a2c3' failed: Error in connection esta"
+    }
+  ],
+  "consoleErrors": [
+    {
+      "text": "WebSocket connection to 'ws://localhost:1999/parties/main/protoflow-default?_pk=b9dab0f7-6c93-4ad1-af04-fc4202c589a1' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED",
+      "url": "http://localhost:5173/",
+      "timestamp": 1774580118249
+    },
+    {
+      "text": "WebSocket connection to 'ws://localhost:1999/parties/main/protoflow-default?_pk=cfebfc4b-3437-4738-859e-c2d0bd55414f' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED",
+      "url": "http://localhost:5173/",
+      "timestamp": 1774580118249
+    },
+    {
+      "text": "WebSocket connection to 'ws://localhost:1999/parties/main/protoflow-default?_pk=9aa624f3-2830-453d-92d1-a032567f9dfd' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED",
+      "url": "http://localhost:5173/",
+      "timestamp": 1774580118340
+    },
+    {
+      "text": "WebSocket connection to 'ws://localhost:1999/parties/main/protoflow-default?_pk=bae47bd3-0d2b-4a42-8e16-305417c5a2c3' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED",
+      "url": "http://localhost:5173/",
+      "timestamp": 1774580118351
+    },
+    {
+      "text": "WebSocket connection to 'ws://localhost:1999/parties/main/protoflow-default?_pk=9aa624f3-2830-453d-92d1-a032567f9dfd' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED",
+      "url": "http://localhost:5173/",
+      "timestamp": 1774580118542
+    },
+    {
+      "text": "WebSocket connection to 'ws://localhost:1999/parties/main/protoflow-default?_pk=bae47bd3-0d2b-4a42-8e16-305417c5a2c3' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED",
+      "url": "http://localhost:5173/",
+      "timestamp": 1774580118553
+    },
+    {
+      "text": "WebSocket connection to 'ws://localhost:1999/parties/main/protoflow-default?_pk=9aa624f3-2830-453d-92d1-a032567f9dfd' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED",
+      "url": "http://localhost:5173/",
+      "timestamp": 1774580118943
+    },
+    {
+      "text": "WebSocket connection to 'ws://localhost:1999/parties/main/protoflow-default?_pk=bae47bd3-0d2b-4a42-8e16-305417c5a2c3' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED",
+      "url": "http://localhost:5173/",
+      "timestamp": 1774580118956
+    },
+    {
+      "text": "WebSocket connection to 'ws://localhost:1999/parties/main/protoflow-default?_pk=9aa624f3-2830-453d-92d1-a032567f9dfd' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED",
+      "url": "http://localhost:5173/",
+      "timestamp": 1774580119747
+    },
+    {
+      "text": "WebSocket connection to 'ws://localhost:1999/parties/main/protoflow-default?_pk=bae47bd3-0d2b-4a42-8e16-305417c5a2c3' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED",
+      "url": "http://localhost:5173/",
+      "timestamp": 1774580119759
+    },
+    {
+      "text": "WebSocket connection to 'ws://localhost:1999/parties/main/protoflow-default?_pk=9aa624f3-2830-453d-92d1-a032567f9dfd' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED",
+      "url": "http://localhost:5173/",
+      "timestamp": 1774580121348
+    },
+    {
+      "text": "WebSocket connection to 'ws://localhost:1999/parties/main/protoflow-default?_pk=bae47bd3-0d2b-4a42-8e16-305417c5a2c3' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED",
+      "url": "http://localhost:5173/",
+      "timestamp": 1774580121362
+    },
+    {
+      "text": "WebSocket connection to 'ws://localhost:1999/parties/main/protoflow-default?_pk=9aa624f3-2830-453d-92d1-a032567f9dfd' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED",
+      "url": "http://localhost:5173/",
+      "timestamp": 1774580123853
+    },
+    {
+      "text": "WebSocket connection to 'ws://localhost:1999/parties/main/protoflow-default?_pk=bae47bd3-0d2b-4a42-8e16-305417c5a2c3' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED",
+      "url": "http://localhost:5173/",
+      "timestamp": 1774580123864
+    },
+    {
+      "text": "WebSocket connection to 'ws://localhost:1999/parties/main/protoflow-default?_pk=9aa624f3-2830-453d-92d1-a032567f9dfd' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED",
+      "url": "http://localhost:5173/",
+      "timestamp": 1774580126357
+    },
+    {
+      "text": "WebSocket connection to 'ws://localhost:1999/parties/main/protoflow-default?_pk=bae47bd3-0d2b-4a42-8e16-305417c5a2c3' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED",
+      "url": "http://localhost:5173/",
+      "timestamp": 1774580126370
+    },
+    {
+      "text": "WebSocket connection to 'ws://localhost:1999/parties/main/protoflow-default?_pk=9aa624f3-2830-453d-92d1-a032567f9dfd' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED",
+      "url": "http://localhost:5173/",
+      "timestamp": 1774580128864
+    },
+    {
+      "text": "WebSocket connection to 'ws://localhost:1999/parties/main/protoflow-default?_pk=bae47bd3-0d2b-4a42-8e16-305417c5a2c3' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED",
+      "url": "http://localhost:5173/",
+      "timestamp": 1774580128876
+    }
+  ],
+  "timestamp": "2026-03-27T02:55:30.023Z"
+}

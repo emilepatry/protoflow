@@ -1,4 +1,4 @@
-import { useState, useCallback, Suspense, useEffect } from "react";
+import { useState, useCallback, Suspense, useEffect, useRef } from "react";
 import { getScreenComponent } from "@/sandbox/registry";
 import type { Project, ScreenId, EdgeType, EdgeConfig } from "@/types";
 import type { useCollaboration } from "@/sandbox/useCollaboration";
@@ -23,6 +23,22 @@ const transitionForEdge: Record<EdgeType, TransitionDir> = {
   back: "right",
 };
 
+function PrototypeScreenSkeleton() {
+  return (
+    <div
+      className="flex flex-col gap-4 bg-white p-6"
+      style={{ width: DEVICE_WIDTH, height: DEVICE_HEIGHT }}
+    >
+      <div className="h-4 w-28 animate-pulse rounded bg-gray-100" />
+      <div className="h-4 w-40 animate-pulse rounded bg-gray-100" />
+      <div className="h-32 w-full animate-pulse rounded-lg bg-gray-100" />
+      <div className="h-4 w-32 animate-pulse rounded bg-gray-100" />
+      <div className="h-4 w-24 animate-pulse rounded bg-gray-100" />
+      <div className="h-20 w-full animate-pulse rounded-lg bg-gray-100" />
+    </div>
+  );
+}
+
 export default function PrototypeView({
   project,
   initialScreenId,
@@ -31,9 +47,17 @@ export default function PrototypeView({
   onAddComment,
 }: PrototypeViewProps) {
   const [currentScreenId, setCurrentScreenId] = useState(initialScreenId);
+  const [history, setHistory] = useState<ScreenId[]>([initialScreenId]);
   const [transition, setTransition] = useState<TransitionDir>(null);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [commentMode, setCommentMode] = useState(false);
+  const rAfRef = useRef<number>(0);
+  const timeoutRef = useRef<number>(0);
+
+  const cancelPendingTransition = useCallback(() => {
+    cancelAnimationFrame(rAfRef.current);
+    clearTimeout(timeoutRef.current);
+  }, []);
 
   const screen = project.screens[currentScreenId];
   const Component = screen ? getScreenComponent(screen.componentId) : undefined;
@@ -52,9 +76,10 @@ export default function PrototypeView({
       setTransition(dir);
       setIsTransitioning(true);
 
-      requestAnimationFrame(() => {
-        setTimeout(() => {
+      rAfRef.current = requestAnimationFrame(() => {
+        timeoutRef.current = window.setTimeout(() => {
           setCurrentScreenId(targetId);
+          setHistory((prev) => [...prev, targetId].slice(-50));
           setTransition(null);
           setIsTransitioning(false);
         }, 250);
@@ -63,9 +88,37 @@ export default function PrototypeView({
     [isTransitioning]
   );
 
+  const navigateToHistoryIndex = useCallback(
+    (index: number) => {
+      if (isTransitioning) return;
+      const targetId = history[index];
+      if (!targetId || targetId === currentScreenId) return;
+      setTransition("right");
+      setIsTransitioning(true);
+
+      rAfRef.current = requestAnimationFrame(() => {
+        timeoutRef.current = window.setTimeout(() => {
+          setCurrentScreenId(targetId);
+          setHistory((prev) => prev.slice(0, index + 1));
+          setTransition(null);
+          setIsTransitioning(false);
+        }, 250);
+      });
+    },
+    [isTransitioning, history, currentScreenId]
+  );
+
   useEffect(() => {
+    cancelPendingTransition();
     setCurrentScreenId(initialScreenId);
-  }, [initialScreenId]);
+    setHistory([initialScreenId]);
+    setTransition(null);
+    setIsTransitioning(false);
+  }, [initialScreenId, cancelPendingTransition]);
+
+  useEffect(() => {
+    return cancelPendingTransition;
+  }, [cancelPendingTransition]);
 
   if (!screen) {
     return (
@@ -73,7 +126,7 @@ export default function PrototypeView({
         <p className="text-muted-foreground">Screen not found</p>
         <button
           onClick={onExitPrototype}
-          className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground"
+          className="rounded-md bg-accent px-4 py-2 text-sm font-medium text-accent-foreground"
         >
           Back to Wireflow
         </button>
@@ -103,13 +156,7 @@ export default function PrototypeView({
             type={screen.deviceFrame ?? project.meta.defaultDeviceFrame}
           >
             {Component ? (
-              <Suspense
-                fallback={
-                  <div className="flex items-center justify-center bg-white text-muted-foreground" style={{ width: DEVICE_WIDTH, height: DEVICE_HEIGHT }}>
-                    Loading...
-                  </div>
-                }
-              >
+              <Suspense fallback={<PrototypeScreenSkeleton />}>
                 <div className="relative" data-pf-screen-container>
                   <Component />
                   {commentMode && (
@@ -134,6 +181,8 @@ export default function PrototypeView({
         <div className="mx-auto flex max-w-2xl items-center gap-2">
           <button
             onClick={onExitPrototype}
+            title="Back to wireflow"
+            aria-label="Back to wireflow"
             className="flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-xs text-white/60 transition-colors hover:bg-white/10 hover:text-white"
           >
             <ArrowLeft className="h-3.5 w-3.5" />
@@ -142,10 +191,34 @@ export default function PrototypeView({
 
           <div className="mx-2 h-4 w-px bg-chrome-divider" />
 
-          <p className="text-xs font-medium text-white/80">{screen.label}</p>
+          <nav className="flex min-w-0 items-center gap-1 text-xs" aria-label="Breadcrumb">
+            {history.map((screenId, i) => {
+              const s = project.screens[screenId];
+              if (!s) return null;
+              const isCurrent = i === history.length - 1;
+              return (
+                <span key={`${screenId}-${i}`} className="flex items-center gap-1">
+                  {i > 0 && <ChevronRight className="h-3 w-3 shrink-0 text-white/30" />}
+                  {isCurrent ? (
+                    <span className="max-w-[100px] truncate font-medium text-white/80" title={s.label}>{s.label}</span>
+                  ) : (
+                    <button
+                      onClick={() => navigateToHistoryIndex(i)}
+                      className="max-w-[100px] truncate text-white/40 transition-colors hover:text-white/70"
+                      title={s.label}
+                    >
+                      {s.label}
+                    </button>
+                  )}
+                </span>
+              );
+            })}
+          </nav>
 
           <button
             onClick={() => setCommentMode(!commentMode)}
+            title={commentMode ? "Exit comment mode" : "Enter comment mode"}
+            aria-label={commentMode ? "Exit comment mode" : "Enter comment mode"}
             className={cn(
               "ml-2 rounded-md px-2.5 py-1.5 text-xs font-medium transition-colors",
               commentMode
@@ -170,8 +243,9 @@ export default function PrototypeView({
                     key={edgeId}
                     onClick={() => navigateTo(edge.target, edge.type)}
                     disabled={isTransitioning}
+                    title={edge.trigger}
                     className={cn(
-                      "flex items-center gap-1 rounded-md px-2.5 py-1.5 text-xs font-medium transition-colors",
+                      "flex max-w-[160px] items-center gap-1 rounded-md px-2.5 py-1.5 text-xs font-medium transition-colors",
                       edge.type === "navigation" &&
                         "bg-blue-500/20 text-blue-300 hover:bg-blue-500/30",
                       edge.type === "conditional" &&
@@ -181,8 +255,8 @@ export default function PrototypeView({
                       isTransitioning && "opacity-50"
                     )}
                   >
-                    {edge.trigger}
-                    <ChevronRight className="h-3 w-3" />
+                    <span className="truncate">{edge.trigger}</span>
+                    <ChevronRight className="h-3 w-3 shrink-0" />
                   </button>
                 ))}
               </div>
@@ -194,6 +268,12 @@ export default function PrototypeView({
   );
 }
 
+interface AnchorPosition {
+  pfId: string;
+  top: number;
+  right: number;
+}
+
 function CommentOverlay({
   screenId,
   commentsByAnchor,
@@ -203,26 +283,37 @@ function CommentOverlay({
   commentsByAnchor: Map<string, import("@/sandbox/collaboration").Comment[]>;
   onAddComment: (screenId: string, anchorId: string, body: string) => void;
 }) {
-  const elements = document.querySelectorAll("[data-pf-id]");
+  const [anchors, setAnchors] = useState<AnchorPosition[]>([]);
+
+  useEffect(() => {
+    const elements = document.querySelectorAll("[data-pf-id]");
+    const positions: AnchorPosition[] = [];
+    for (const el of elements) {
+      const pfId = el.getAttribute("data-pf-id");
+      if (!pfId) continue;
+      const rect = el.getBoundingClientRect();
+      const parentRect = el
+        .closest("[data-pf-screen-container]")
+        ?.getBoundingClientRect();
+      if (!parentRect) continue;
+      positions.push({
+        pfId,
+        top: rect.top - parentRect.top,
+        right: parentRect.right - rect.right - 4,
+      });
+    }
+    setAnchors(positions);
+  }, [screenId]);
 
   return (
     <div className="pointer-events-none absolute inset-0">
-      {Array.from(elements).map((el) => {
-        const pfId = el.getAttribute("data-pf-id")!;
-        const rect = el.getBoundingClientRect();
-        const parentRect = el.closest("[data-pf-screen-container]")?.getBoundingClientRect();
-        if (!parentRect) return null;
-
-        const top = rect.top - parentRect.top;
-        const right = parentRect.right - rect.right;
-
+      {anchors.map(({ pfId, top, right }) => {
         const comments = commentsByAnchor.get(pfId) ?? [];
-
         return (
           <div
             key={pfId}
             className="pointer-events-auto absolute"
-            style={{ top, right: right - 4 }}
+            style={{ top, right }}
           >
             <CommentDot
               comments={comments}

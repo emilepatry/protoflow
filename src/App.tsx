@@ -1,11 +1,14 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { ReactFlowProvider } from "@xyflow/react";
 import { useProjectStore } from "@/sandbox/store";
 import { useCollaboration } from "@/sandbox/useCollaboration";
+import { getAvailableScreenIds } from "@/sandbox/registry";
+import { computeLayout } from "@/lib/layout";
 import WireflowView from "@/components/WireflowView";
 import PrototypeView from "@/components/PrototypeView";
 import Toolbar from "@/components/Toolbar";
 import ViewerNamePrompt from "@/components/ViewerNamePrompt";
+import { Layers } from "lucide-react";
 import type { ScreenId, StickyColor, ViewMode } from "@/types";
 
 export default function App() {
@@ -13,6 +16,26 @@ export default function App() {
   const collab = useCollaboration("protoflow-default");
   const [promptingName, setPromptingName] = useState(false);
   const [pendingAction, setPendingAction] = useState<(() => void) | null>(null);
+
+  useEffect(() => {
+    const registryIds = getAvailableScreenIds();
+    const existingComponentIds = new Set(
+      Object.values(store.project.screens).map((s) => s.componentId)
+    );
+    let added = false;
+    for (const componentId of registryIds) {
+      if (!existingComponentIds.has(componentId)) {
+        store.addScreen(componentId, { x: 0, y: 0 });
+        added = true;
+      }
+    }
+    if (added || Object.keys(store.project.screens).length > 0) {
+      const { positions } = computeLayout(store.project.screens, store.project.edges);
+      for (const [id, pos] of Object.entries(positions)) {
+        store.updateScreenPosition(id, pos);
+      }
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const ensureName = useCallback(
     (action: () => void) => {
@@ -38,6 +61,11 @@ export default function App() {
     [collab, pendingAction]
   );
 
+  const handleNameCancel = useCallback(() => {
+    setPromptingName(false);
+    setPendingAction(null);
+  }, []);
+
   const handleNodeDragStop = useCallback(
     (id: string, position: { x: number; y: number }) => {
       if (id.startsWith("screen-")) {
@@ -51,6 +79,7 @@ export default function App() {
 
   const handleConnect = useCallback(
     (source: ScreenId, target: ScreenId) => {
+      if (source === target) return;
       const sourceScreen = store.project.screens[source];
       const targetScreen = store.project.screens[target];
       if (!sourceScreen || !targetScreen) return;
@@ -93,13 +122,6 @@ export default function App() {
     [store]
   );
 
-  const handleAddScreen = useCallback(
-    (componentId: string, position: { x: number; y: number }) => {
-      store.addScreen(componentId, position);
-    },
-    [store]
-  );
-
   const handleAddSticky = useCallback(
     (color: StickyColor) => {
       store.addSticky({
@@ -107,6 +129,13 @@ export default function App() {
         body: "",
         color,
       });
+    },
+    [store]
+  );
+
+  const handleDeleteSticky = useCallback(
+    (id: string) => {
+      store.removeSticky(id);
     },
     [store]
   );
@@ -126,13 +155,21 @@ export default function App() {
 
   return (
     <div className="flex h-full flex-col" role="application" aria-label="Protoflow">
-      {promptingName && <ViewerNamePrompt onSubmit={handleNameSubmit} />}
+      <div className="flex h-full flex-col items-center justify-center gap-3 p-8 text-center md:hidden">
+        <Layers className="h-8 w-8 text-muted-foreground" aria-hidden="true" />
+        <p className="text-sm font-medium text-foreground">Best experienced on desktop</p>
+        <p className="text-xs text-muted-foreground">
+          Protoflow needs a wider viewport for the wireflow canvas.
+        </p>
+      </div>
+
+      <div className="hidden h-full flex-col md:flex">
+      {promptingName && <ViewerNamePrompt onSubmit={handleNameSubmit} onCancel={handleNameCancel} />}
 
       {store.mode === "wireflow" && (
         <Toolbar
           mode={store.mode}
           onModeChange={handleModeChange}
-          onAddScreen={handleAddScreen}
           onAddSticky={handleAddSticky}
           projectName={store.project.meta.name}
           onProjectNameChange={(name) => store.updateMeta({ name })}
@@ -148,6 +185,7 @@ export default function App() {
               onConnect={handleConnect}
               onStickyBodyChange={handleStickyBodyChange}
               onScreenSelect={handleScreenSelect}
+              onDeleteSticky={handleDeleteSticky}
             />
           </ReactFlowProvider>
         ) : store.activeScreenId ? (
@@ -159,13 +197,20 @@ export default function App() {
             onAddComment={handleAddComment}
           />
         ) : (
-          <div className="flex h-full items-center justify-center">
-            <p className="text-muted-foreground">
-              No screen selected. Add screens in wireflow mode first.
+          <div className="flex h-full flex-col items-center justify-center gap-3 text-center">
+            <div className="rounded-xl bg-accent-subtle p-3">
+              <Layers className="h-6 w-6 text-accent" />
+            </div>
+            <p className="text-sm font-medium text-foreground">
+              Create a screen component in <code className="rounded bg-muted px-1.5 py-0.5 text-xs font-mono">src/screens/</code> to get started
+            </p>
+            <p className="max-w-xs text-xs text-muted-foreground">
+              Export a default React component and it will appear automatically on the wireflow canvas.
             </p>
           </div>
         )}
       </main>
+      </div>
     </div>
   );
 }

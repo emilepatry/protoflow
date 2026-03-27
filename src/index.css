@@ -2,15 +2,21 @@
 @import "./heron-tokens.css";
 
 @theme {
-  --color-background: #fafafa;
+  --color-background: oklch(0.985 0.005 175);
   --color-foreground: #0a0a0a;
   --color-primary: #18181b;
   --color-primary-foreground: #fafafa;
-  --color-muted: #f4f4f5;
-  --color-muted-foreground: #71717a;
-  --color-border: #e4e4e7;
-  --color-accent: #f4f4f5;
-  --color-accent-foreground: #18181b;
+  --color-muted: oklch(0.97 0.008 175);
+  --color-muted-foreground: oklch(0.70 0.015 175);
+  --color-border: oklch(0.90 0.01 175);
+  --color-surface: oklch(0.97 0.008 175);
+
+  --color-accent: oklch(0.55 0.12 175);
+  --color-accent-hover: oklch(0.50 0.13 175);
+  --color-accent-subtle: oklch(0.95 0.02 175);
+  --color-accent-muted: oklch(0.80 0.05 175);
+  --color-accent-foreground: #ffffff;
+
   --color-destructive: #ef4444;
 
   --color-sticky-yellow: #fef9c3;
@@ -43,7 +49,7 @@
 }
 
 :focus-visible {
-  outline: 2px solid var(--color-primary);
+  outline: 2px solid var(--color-accent);
   outline-offset: 2px;
   border-radius: var(--radius-sm);
 }
@@ -68,4 +74,13 @@ body,
   font-family: var(--font-sans);
   background: var(--color-background);
   color: var(--color-foreground);
+}
+
+.screen-node {
+  transition: transform 150ms ease-in;
+}
+@media (prefers-reduced-motion: reduce) {
+  .screen-node {
+    transition: none;
+  }
 }

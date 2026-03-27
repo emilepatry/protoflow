@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import {
   ReactFlow,
   Background,
@@ -6,7 +6,6 @@ import {
   MiniMap,
   useNodesState,
   useEdgesState,
-  addEdge,
   type Connection,
   type Node,
   type Edge,
@@ -18,6 +17,7 @@ import "@xyflow/react/dist/style.css";
 import ScreenNode from "./ScreenNode";
 import StickyNode from "./StickyNode";
 import AnnotatedEdge from "./AnnotatedEdge";
+import { edgeColors } from "@/lib/edge-config";
 import type { Project, ScreenId } from "@/types";
 
 const nodeTypes = {
@@ -35,13 +35,8 @@ interface WireflowViewProps {
   onConnect: (source: ScreenId, target: ScreenId) => void;
   onStickyBodyChange: (id: string, body: string) => void;
   onScreenSelect: (id: ScreenId) => void;
+  onDeleteSticky?: (id: string) => void;
 }
-
-const edgeColors = {
-  navigation: "var(--color-edge-navigation)",
-  conditional: "var(--color-edge-conditional)",
-  back: "var(--color-edge-back)",
-};
 
 export default function WireflowView({
   project,
@@ -49,6 +44,7 @@ export default function WireflowView({
   onConnect,
   onStickyBodyChange,
   onScreenSelect,
+  onDeleteSticky,
 }: WireflowViewProps) {
   const initialNodes: Node[] = useMemo(() => {
     const screenNodes: Node[] = Object.entries(project.screens).map(
@@ -56,6 +52,7 @@ export default function WireflowView({
         id,
         type: "screen",
         position: screen.position,
+        deletable: false,
         data: {
           label: screen.label,
           componentId: screen.componentId,
@@ -68,6 +65,7 @@ export default function WireflowView({
         id,
         type: "sticky",
         position: sticky.position,
+        deletable: true,
         data: {
           body: sticky.body,
           color: sticky.color,
@@ -86,6 +84,7 @@ export default function WireflowView({
         source: edge.source,
         target: edge.target,
         type: "annotated",
+        deletable: false,
         data: {
           trigger: edge.trigger,
           logic: edge.logic,
@@ -108,10 +107,9 @@ export default function WireflowView({
     (params: Connection) => {
       if (params.source && params.target) {
         onConnect(params.source, params.target);
-        setEdges((eds) => addEdge({ ...params, type: "annotated" }, eds));
       }
     },
-    [onConnect, setEdges]
+    [onConnect]
   );
 
   const handleNodeDragStop = useCallback(
@@ -130,12 +128,22 @@ export default function WireflowView({
     [onScreenSelect]
   );
 
-  // Sync nodes when project changes
-  useMemo(() => {
+  const handleNodesDelete = useCallback(
+    (deleted: Node[]) => {
+      for (const node of deleted) {
+        if (node.id.startsWith("sticky-") && onDeleteSticky) {
+          onDeleteSticky(node.id);
+        }
+      }
+    },
+    [onDeleteSticky]
+  );
+
+  useEffect(() => {
     setNodes(initialNodes);
   }, [initialNodes, setNodes]);
 
-  useMemo(() => {
+  useEffect(() => {
     setEdges(initialEdges);
   }, [initialEdges, setEdges]);
 
@@ -149,6 +157,8 @@ export default function WireflowView({
         onConnect={handleConnect}
         onNodeDragStop={handleNodeDragStop}
         onNodeDoubleClick={handleNodeDoubleClick}
+        onNodesDelete={handleNodesDelete}
+        deleteKeyCode={["Delete", "Backspace"]}
         nodeTypes={nodeTypes}
         edgeTypes={edgeTypes}
         fitView
@@ -157,51 +167,13 @@ export default function WireflowView({
         proOptions={{ hideAttribution: true }}
       >
         <Background variant={BackgroundVariant.Dots} gap={20} size={1} color="#e4e4e7" />
-        <Controls position="bottom-right" />
+        <Controls position="bottom-right" className="!border-border !bg-white/90 !shadow-sm [&>button]:!border-border [&>button]:!bg-white [&>button:hover]:!bg-muted" />
         <MiniMap
           position="bottom-left"
           nodeColor={(n) => (n.type === "sticky" ? "#fef9c3" : "#e4e4e7")}
           maskColor="rgba(0,0,0,0.08)"
           className="!bg-white !border-border"
         />
-
-        <svg>
-          <defs>
-            <marker
-              id="marker-navigation"
-              viewBox="0 0 10 10"
-              refX="8"
-              refY="5"
-              markerWidth="6"
-              markerHeight="6"
-              orient="auto-start-reverse"
-            >
-              <path d="M 0 0 L 10 5 L 0 10 z" style={{ fill: "var(--color-edge-navigation)" }} />
-            </marker>
-            <marker
-              id="marker-conditional"
-              viewBox="0 0 10 10"
-              refX="8"
-              refY="5"
-              markerWidth="6"
-              markerHeight="6"
-              orient="auto-start-reverse"
-            >
-              <path d="M 0 0 L 10 5 L 0 10 z" style={{ fill: "var(--color-edge-conditional)" }} />
-            </marker>
-            <marker
-              id="marker-back"
-              viewBox="0 0 10 10"
-              refX="8"
-              refY="5"
-              markerWidth="6"
-              markerHeight="6"
-              orient="auto-start-reverse"
-            >
-              <path d="M 0 0 L 10 5 L 0 10 z" style={{ fill: "var(--color-edge-back)" }} />
-            </marker>
-          </defs>
-        </svg>
       </ReactFlow>
     </div>
   );

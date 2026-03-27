@@ -1,11 +1,32 @@
-import { useState } from "react";
+import { useState, useRef, useCallback } from "react";
 
 interface ViewerNamePromptProps {
   onSubmit: (name: string) => void;
+  onCancel?: () => void;
 }
 
-export default function ViewerNamePrompt({ onSubmit }: ViewerNamePromptProps) {
+export default function ViewerNamePrompt({ onSubmit, onCancel }: ViewerNamePromptProps) {
   const [name, setName] = useState("");
+  const inputRef = useRef<HTMLInputElement>(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
+
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent) => {
+      if (e.key === "Escape") {
+        onCancel?.();
+        return;
+      }
+      if (e.key === "Tab") {
+        e.preventDefault();
+        if (document.activeElement === inputRef.current) {
+          buttonRef.current?.focus();
+        } else {
+          inputRef.current?.focus();
+        }
+      }
+    },
+    [onCancel]
+  );
 
   return (
     <div
@@ -13,6 +34,7 @@ export default function ViewerNamePrompt({ onSubmit }: ViewerNamePromptProps) {
       role="dialog"
       aria-modal="true"
       aria-labelledby="name-prompt-title"
+      onKeyDown={handleKeyDown}
     >
       <div className="w-80 rounded-xl border border-border bg-white p-6 shadow-2xl">
         <h2 id="name-prompt-title" className="text-base font-semibold">What's your name?</h2>
@@ -21,6 +43,7 @@ export default function ViewerNamePrompt({ onSubmit }: ViewerNamePromptProps) {
         </p>
         <label htmlFor="name-prompt-input" className="sr-only">Your name</label>
         <input
+          ref={inputRef}
           id="name-prompt-input"
           value={name}
           onChange={(e) => setName(e.target.value.slice(0, 30))}
@@ -32,6 +55,7 @@ export default function ViewerNamePrompt({ onSubmit }: ViewerNamePromptProps) {
           autoFocus
         />
         <button
+          ref={buttonRef}
           onClick={() => name.trim() && onSubmit(name.trim())}
           disabled={!name.trim()}
           className="mt-3 w-full rounded-lg bg-primary py-2 text-sm font-medium text-primary-foreground disabled:opacity-50"

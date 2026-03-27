@@ -1,6 +1,7 @@
 import * as Y from "yjs";
 import YPartyKitProvider from "y-partykit/provider";
 import { nanoid } from "nanoid";
+import { safeGetItem, safeSetItem } from "@/lib/utils";
 
 export interface Comment {
   id: string;
@@ -14,12 +15,12 @@ export interface Comment {
 const VIEWER_NAME_KEY = "protoflow-viewer-name";
 
 export function getViewerName(): string | null {
-  return localStorage.getItem(VIEWER_NAME_KEY);
+  return safeGetItem(VIEWER_NAME_KEY);
 }
 
 export function setViewerName(name: string) {
   const trimmed = name.slice(0, 30);
-  localStorage.setItem(VIEWER_NAME_KEY, trimmed);
+  safeSetItem(VIEWER_NAME_KEY, trimmed);
 }
 
 export class CollaborationProvider {

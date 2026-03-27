@@ -25,7 +25,7 @@ export default function CommentDot({
           setOpen(true);
         }}
         className={cn(
-          "group absolute -right-2 -top-2 z-10 flex h-7 w-7 items-center justify-center rounded-full bg-blue-500 opacity-0 shadow-sm transition-opacity hover:opacity-100 focus:opacity-100",
+          "group absolute -right-2 -top-2 z-10 flex h-7 w-7 items-center justify-center rounded-full bg-blue-500 opacity-30 shadow-sm transition-opacity hover:opacity-100 focus:opacity-100",
           className
         )}
         aria-label="Add comment"
@@ -60,6 +60,7 @@ export default function CommentDot({
             <button
               onClick={() => setOpen(false)}
               className="text-muted-foreground hover:text-foreground"
+              aria-label="Close comments"
             >
               <X className="h-3.5 w-3.5" />
             </button>
@@ -72,14 +73,14 @@ export default function CommentDot({
                 className="border-b border-border/50 px-3 py-2 last:border-0"
               >
                 <div className="flex items-baseline gap-1.5">
-                  <p className="text-[10px] font-semibold text-foreground">
+                  <p className="max-w-[120px] truncate text-[10px] font-semibold text-foreground">
                     {comment.author}
                   </p>
                   <p className="text-[9px] text-muted-foreground">
                     {formatTime(comment.createdAt)}
                   </p>
                 </div>
-                <p className="mt-0.5 text-xs text-foreground/80">
+                <p className="mt-0.5 break-words text-xs text-foreground/80" style={{ overflowWrap: "anywhere" }}>
                   {comment.body}
                 </p>
               </div>
@@ -91,6 +92,7 @@ export default function CommentDot({
               <input
                 value={newComment}
                 onChange={(e) => setNewComment(e.target.value)}
+                maxLength={500}
                 onKeyDown={(e) => {
                   if (e.key === "Enter" && newComment.trim()) {
                     onAddComment(newComment.trim());

@@ -10,6 +10,7 @@ import type {
   StickyConfig,
   ViewMode,
 } from "@/types";
+import { safeGetItem, safeSetItem } from "@/lib/utils";
 
 const STORAGE_KEY = "protoflow-project";
 
@@ -82,16 +83,16 @@ function createDefaultProject(): Project {
 
 function loadProject(): Project {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
+    const raw = safeGetItem(STORAGE_KEY);
     if (raw) return JSON.parse(raw) as Project;
   } catch {
-    /* ignore */
+    /* corrupted data — fall back to default */
   }
   return createDefaultProject();
 }
 
 function saveProject(project: Project) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(project));
+  safeSetItem(STORAGE_KEY, JSON.stringify(project));
 }
 
 export function useProjectStore() {
@@ -157,14 +158,21 @@ export function useProjectStore() {
 
   const addEdge = useCallback(
     (config: Omit<EdgeConfig, "type"> & { type?: EdgeConfig["type"] }) => {
+      if (config.source === config.target) return undefined;
       const id: EdgeId = `edge-${nanoid(8)}`;
-      setProject((prev) => ({
-        ...prev,
-        edges: {
-          ...prev.edges,
-          [id]: { type: "navigation", ...config } as EdgeConfig,
-        },
-      }));
+      setProject((prev) => {
+        const duplicate = Object.values(prev.edges).some(
+          (e) => e.source === config.source && e.target === config.target
+        );
+        if (duplicate) return prev;
+        return {
+          ...prev,
+          edges: {
+            ...prev.edges,
+            [id]: { type: "navigation", ...config } as EdgeConfig,
+          },
+        };
+      });
       return id;
     },
     [setProject]
