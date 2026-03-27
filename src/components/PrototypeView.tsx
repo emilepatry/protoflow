@@ -1,7 +1,9 @@
-import { useState, useCallback, Suspense, useEffect, useRef } from "react";
+import { useState, useCallback, Suspense, useEffect } from "react";
+import { AnimatePresence, motion } from "motion/react";
 import { getScreenComponent } from "@/sandbox/registry";
 import type { Project, ScreenId, EdgeType, EdgeConfig } from "@/types";
 import type { useCollaboration } from "@/sandbox/useCollaboration";
+import { SPRING_QUICK } from "@/lib/motion";
 import { cn, DEVICE_WIDTH, DEVICE_HEIGHT } from "@/lib/utils";
 import { ArrowLeft, ChevronRight } from "lucide-react";
 import CommentDot from "./CommentDot";
@@ -50,16 +52,8 @@ export default function PrototypeView({
 }: PrototypeViewProps) {
   const [currentScreenId, setCurrentScreenId] = useState(initialScreenId);
   const [history, setHistory] = useState<ScreenId[]>([initialScreenId]);
-  const [transition, setTransition] = useState<TransitionDir>(null);
-  const [isTransitioning, setIsTransitioning] = useState(false);
+  const [transitionDir, setTransitionDir] = useState<TransitionDir>(null);
   const [commentMode, setCommentMode] = useState(false);
-  const rAfRef = useRef<number>(0);
-  const timeoutRef = useRef<number>(0);
-
-  const cancelPendingTransition = useCallback(() => {
-    cancelAnimationFrame(rAfRef.current);
-    clearTimeout(timeoutRef.current);
-  }, []);
 
   const screen = project.screens[currentScreenId];
   const Component = screen ? getScreenComponent(projectId, screen.componentId) : undefined;
@@ -71,56 +65,34 @@ export default function PrototypeView({
   const deduped = deduplicateEdges(outgoingEdges);
   const screenComments = collaboration.getCommentsForScreen(currentScreenId);
 
+  const xForDir = (dir: TransitionDir) =>
+    dir === "left" ? -60 : dir === "right" ? 60 : 0;
+
   const navigateTo = useCallback(
     (targetId: ScreenId, edgeType: EdgeType) => {
-      if (isTransitioning) return;
-      const dir = transitionForEdge[edgeType];
-      setTransition(dir);
-      setIsTransitioning(true);
-
-      rAfRef.current = requestAnimationFrame(() => {
-        timeoutRef.current = window.setTimeout(() => {
-          setCurrentScreenId(targetId);
-          setHistory((prev) => [...prev, targetId].slice(-50));
-          setTransition(null);
-          setIsTransitioning(false);
-        }, 250);
-      });
+      setTransitionDir(transitionForEdge[edgeType]);
+      setCurrentScreenId(targetId);
+      setHistory((prev) => [...prev, targetId].slice(-50));
     },
-    [isTransitioning]
+    []
   );
 
   const navigateToHistoryIndex = useCallback(
     (index: number) => {
-      if (isTransitioning) return;
       const targetId = history[index];
       if (!targetId || targetId === currentScreenId) return;
-      setTransition("right");
-      setIsTransitioning(true);
-
-      rAfRef.current = requestAnimationFrame(() => {
-        timeoutRef.current = window.setTimeout(() => {
-          setCurrentScreenId(targetId);
-          setHistory((prev) => prev.slice(0, index + 1));
-          setTransition(null);
-          setIsTransitioning(false);
-        }, 250);
-      });
+      setTransitionDir("right");
+      setCurrentScreenId(targetId);
+      setHistory((prev) => prev.slice(0, index + 1));
     },
-    [isTransitioning, history, currentScreenId]
+    [history, currentScreenId]
   );
 
   useEffect(() => {
-    cancelPendingTransition();
     setCurrentScreenId(initialScreenId);
     setHistory([initialScreenId]);
-    setTransition(null);
-    setIsTransitioning(false);
-  }, [initialScreenId, cancelPendingTransition]);
-
-  useEffect(() => {
-    return cancelPendingTransition;
-  }, [cancelPendingTransition]);
+    setTransitionDir(null);
+  }, [initialScreenId]);
 
   if (!screen) {
     return (
@@ -146,37 +118,50 @@ export default function PrototypeView({
   return (
     <div className="flex h-full flex-col bg-chrome-bg">
       <div className="flex flex-1 items-center justify-center overflow-hidden">
-        <div
-          className={cn(
-            "transition-all duration-250 ease-out",
-            transition === "left" && "translate-x-[-20px] opacity-0",
-            transition === "right" && "translate-x-[20px] opacity-0",
-            transition === "fade" && "opacity-0 scale-95"
-          )}
-        >
-          <DeviceFrame
-            type={screen.deviceFrame ?? project.meta.defaultDeviceFrame}
+        <AnimatePresence mode="wait" custom={transitionDir}>
+          <motion.div
+            key={currentScreenId}
+            custom={transitionDir}
+            variants={{
+              enter: (dir: TransitionDir) => ({
+                x: xForDir(dir),
+                opacity: 0,
+              }),
+              center: { x: 0, opacity: 1 },
+              exit: (dir: TransitionDir) => ({
+                x: -xForDir(dir),
+                opacity: 0,
+              }),
+            }}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            transition={SPRING_QUICK}
           >
-            {Component ? (
-              <Suspense fallback={<PrototypeScreenSkeleton />}>
-                <div className="relative" data-pf-screen-container>
-                  <Component />
-                  {commentMode && (
-                    <CommentOverlay
-                      screenId={currentScreenId}
-                      commentsByAnchor={commentsByAnchor}
-                      onAddComment={onAddComment}
-                    />
-                  )}
+            <DeviceFrame
+              type={screen.deviceFrame ?? project.meta.defaultDeviceFrame}
+            >
+              {Component ? (
+                <Suspense fallback={<PrototypeScreenSkeleton />}>
+                  <div className="relative" data-pf-screen-container>
+                    <Component />
+                    {commentMode && (
+                      <CommentOverlay
+                        screenId={currentScreenId}
+                        commentsByAnchor={commentsByAnchor}
+                        onAddComment={onAddComment}
+                      />
+                    )}
+                  </div>
+                </Suspense>
+              ) : (
+                <div className="flex items-center justify-center bg-background text-muted-foreground" style={{ width: DEVICE_WIDTH, height: DEVICE_HEIGHT }}>
+                  Component not found: {screen.componentId}
                 </div>
-              </Suspense>
-            ) : (
-              <div className="flex items-center justify-center bg-background text-muted-foreground" style={{ width: DEVICE_WIDTH, height: DEVICE_HEIGHT }}>
-                Component not found: {screen.componentId}
-              </div>
-            )}
-          </DeviceFrame>
-        </div>
+              )}
+            </DeviceFrame>
+          </motion.div>
+        </AnimatePresence>
       </div>
 
       <div className="border-t border-chrome-divider bg-chrome-surface px-4 py-3">
@@ -244,7 +229,6 @@ export default function PrototypeView({
                   <button
                     key={edgeId}
                     onClick={() => navigateTo(edge.target, edge.type)}
-                    disabled={isTransitioning}
                     title={edge.trigger}
                     className={cn(
                       "flex max-w-[160px] items-center gap-1 rounded-md px-2.5 py-1.5 text-xs font-medium transition-colors",
@@ -253,8 +237,7 @@ export default function PrototypeView({
                       edge.type === "conditional" &&
                         "bg-edge-conditional/20 text-edge-conditional hover:bg-edge-conditional/30",
                       edge.type === "back" &&
-                        "bg-edge-back/20 text-edge-back hover:bg-edge-back/30",
-                      isTransitioning && "opacity-50"
+                        "bg-edge-back/20 text-edge-back hover:bg-edge-back/30"
                     )}
                   >
                     <span className="truncate">{edge.trigger}</span>

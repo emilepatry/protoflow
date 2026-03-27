@@ -1,9 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { ReactFlowProvider } from "@xyflow/react";
+import { AnimatePresence, motion } from "motion/react";
 import { WorkspaceProvider, useWorkspace } from "@/sandbox/store";
 import { useCollaboration } from "@/sandbox/useCollaboration";
 import { discoverProjects, getAvailableScreenIds } from "@/sandbox/registry";
 import { computeLayout } from "@/lib/layout";
+import { SPRING_GENTLE } from "@/lib/motion";
 import { parseHash, navigateTo as rawNavigateTo } from "@/lib/router";
 import WireflowView from "@/components/WireflowView";
 import PrototypeView from "@/components/PrototypeView";
@@ -245,73 +247,92 @@ function WorkspaceApp() {
           ? `Wireflow: ${activeProject.meta.name}`
           : "";
 
+  const isPrototype = store.mode === "prototype";
+  const showWireflow = store.mode === "wireflow" || isPrototype;
+  const hasProject = !!(activeProject && activeProjectId);
+
   const renderMainContent = (): React.ReactNode => {
-    if (store.mode === "wireflow") {
-      if (!activeProject || !activeProjectId) {
-        return (
-          <div className="flex h-full flex-col items-center justify-center gap-3 text-center">
-            <div className="rounded-xl bg-accent-subtle p-3">
-              <Layers className="h-6 w-6 text-accent" />
-            </div>
-            <p className="text-sm font-medium text-foreground">
-              Select a project from the sidebar
-            </p>
+    switch (store.mode) {
+      case "component-sandbox":
+        return <ComponentSandbox />;
+      case "wireflow":
+      case "prototype":
+        break;
+      default: {
+        const _exhaustive: never = store.mode;
+        return _exhaustive;
+      }
+    }
+
+    if (!hasProject) {
+      return (
+        <div className="flex h-full flex-col items-center justify-center gap-3 text-center">
+          <div className="rounded-xl bg-accent-subtle p-3">
+            <Layers className="h-6 w-6 text-accent" />
+          </div>
+          <p className="text-sm font-medium text-foreground">
+            {isPrototype ? "No screen selected" : "Select a project from the sidebar"}
+          </p>
+          {!isPrototype && (
             <p className="max-w-xs text-xs text-muted-foreground">
               Or create a new project folder in{" "}
               <code className="rounded bg-muted px-1.5 py-0.5 text-xs font-mono">
                 src/projects/
               </code>
             </p>
-          </div>
-        );
-      }
-      return (
-        <ReactFlowProvider>
-          <WireflowView
-            project={activeProject}
-            projectId={activeProjectId}
-            onNodeDragStop={handleNodeDragStop}
-            onConnect={handleConnect}
-            onStickyBodyChange={handleStickyBodyChange}
-            onScreenSelect={handleScreenSelect}
-            onDeleteSticky={handleDeleteSticky}
-            onAddSticky={handleAddSticky}
-          />
-        </ReactFlowProvider>
+          )}
+        </div>
       );
     }
 
-    if (store.mode === "prototype") {
-      if (!activeProject || !activeProjectId || !store.activeScreenId) {
-        return (
-          <div className="flex h-full flex-col items-center justify-center gap-3 text-center">
-            <div className="rounded-xl bg-accent-subtle p-3">
-              <Layers className="h-6 w-6 text-accent" />
-            </div>
-            <p className="text-sm font-medium text-foreground">
-              No screen selected
-            </p>
+    return (
+      <>
+        {showWireflow && (
+          <div
+            className="absolute inset-0"
+            style={{
+              zIndex: 0,
+              pointerEvents: isPrototype ? "none" : "auto",
+            }}
+          >
+            <ReactFlowProvider>
+              <WireflowView
+                project={activeProject}
+                projectId={activeProjectId}
+                onNodeDragStop={handleNodeDragStop}
+                onConnect={handleConnect}
+                onStickyBodyChange={handleStickyBodyChange}
+                onScreenSelect={handleScreenSelect}
+                onDeleteSticky={handleDeleteSticky}
+                onAddSticky={handleAddSticky}
+              />
+            </ReactFlowProvider>
           </div>
-        );
-      }
-      return (
-        <PrototypeView
-          project={activeProject}
-          projectId={activeProjectId}
-          initialScreenId={store.activeScreenId}
-          onExitPrototype={handleExitPrototype}
-          collaboration={collab}
-          onAddComment={handleAddComment}
-        />
-      );
-    }
+        )}
 
-    if (store.mode === "component-sandbox") {
-      return <ComponentSandbox />;
-    }
-
-    const _exhaustive: never = store.mode;
-    return _exhaustive;
+        <AnimatePresence>
+          {isPrototype && store.activeScreenId && (
+            <motion.div
+              key="prototype-overlay"
+              className="absolute inset-0 z-10"
+              initial={{ scale: 0.85, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.85, opacity: 0 }}
+              transition={SPRING_GENTLE}
+            >
+              <PrototypeView
+                project={activeProject}
+                projectId={activeProjectId}
+                initialScreenId={store.activeScreenId}
+                onExitPrototype={handleExitPrototype}
+                collaboration={collab}
+                onAddComment={handleAddComment}
+              />
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </>
+    );
   };
 
   return (
