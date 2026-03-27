@@ -147,6 +147,49 @@
   }
 }
 
+/* ─── Touch target expansion: 44px minimum (WCAG) ─── */
+.react-flow__handle {
+  position: relative;
+}
+
+.react-flow__handle::after {
+  content: "";
+  position: absolute;
+  inset: -18px;
+  border-radius: 50%;
+}
+
+.comment-dot-trigger {
+  position: relative;
+}
+
+.comment-dot-trigger::after {
+  content: "";
+  position: absolute;
+  inset: -8px;
+  border-radius: 50%;
+}
+
+/* ─── Hotspot affordance: [data-pf-action] in prototype mode ─── */
+[data-pf-action] {
+  position: relative;
+  cursor: pointer;
+}
+
+[data-pf-action]::after {
+  content: "";
+  position: absolute;
+  inset: -8px;
+  border-radius: var(--radius);
+  border: 2px solid oklch(0.68 0.14 175 / 0);
+  pointer-events: none;
+  transition: border-color 200ms var(--ease-swift);
+}
+
+[data-pf-action]:hover::after {
+  border-color: oklch(0.68 0.14 175 / 0.6);
+}
+
 html,
 body,
 #app {

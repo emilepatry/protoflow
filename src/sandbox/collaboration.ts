@@ -3,6 +3,8 @@ import YPartyKitProvider from "y-partykit/provider";
 import { nanoid } from "nanoid";
 import { safeGetItem, safeSetItem } from "@/lib/utils";
 
+export type ConnectionStatus = "connected" | "disconnected" | "connecting";
+
 export interface Comment {
   id: string;
   screenId: string;
@@ -104,6 +106,15 @@ export class CollaborationProvider {
   onOverridesChange(callback: () => void) {
     this.#overrides.observe(callback);
     return () => this.#overrides.unobserve(callback);
+  }
+
+  onStatusChange(callback: (status: ConnectionStatus) => void): () => void {
+    if (!this.provider) return () => {};
+    const handler = ({ status }: { status: string }) => {
+      callback(status as ConnectionStatus);
+    };
+    this.provider.on("status", handler);
+    return () => this.provider?.off("status", handler);
   }
 
   destroy() {

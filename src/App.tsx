@@ -12,6 +12,7 @@ import PrototypeView from "@/components/PrototypeView";
 import ComponentSandbox from "@/components/ComponentSandbox";
 import Sidebar from "@/components/Sidebar";
 import ViewerNamePrompt from "@/components/ViewerNamePrompt";
+import ConnectionStatus from "@/components/ConnectionStatus";
 import { Layers } from "lucide-react";
 import type { ScreenId, StickyColor } from "@/types";
 
@@ -65,6 +66,19 @@ function WorkspaceApp() {
     }
     setNeedsLayout(false);
   }, [needsLayout, activeProjectId, store]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const mainRef = useRef<HTMLElement>(null);
+  const prototypeRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    requestAnimationFrame(() => {
+      if (store.mode === "prototype") {
+        prototypeRef.current?.focus();
+      } else {
+        mainRef.current?.focus();
+      }
+    });
+  }, [store.mode]);
 
   const storeRef = useRef(store);
   storeRef.current = store;
@@ -313,8 +327,10 @@ function WorkspaceApp() {
         <AnimatePresence>
           {isPrototype && store.activeScreenId && (
             <motion.div
+              ref={prototypeRef}
+              tabIndex={-1}
               key="prototype-overlay"
-              className="absolute inset-0 z-10"
+              className="absolute inset-0 z-10 outline-none"
               initial={{ scale: 0.85, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.85, opacity: 0 }}
@@ -359,11 +375,12 @@ function WorkspaceApp() {
 
         <div className="flex flex-1 flex-col overflow-hidden">
           {contextLabel && (
-            <div role="status" className="border-b border-border px-4 py-1.5" aria-live="polite">
+            <div role="status" className="flex items-center gap-2 border-b border-border px-4 py-1.5" aria-live="polite">
               <span className="text-xs text-muted-foreground">{contextLabel}</span>
+              <ConnectionStatus status={collab.connectionStatus} />
             </div>
           )}
-          <main className="relative flex-1">{renderMainContent()}</main>
+          <main ref={mainRef} tabIndex={-1} className="relative flex-1 outline-none">{renderMainContent()}</main>
         </div>
       </div>
     </div>

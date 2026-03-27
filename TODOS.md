@@ -17,15 +17,13 @@ Write `.cursor/rules/protoflow-screens.mdc` documenting:
 - Edge config format in `src/lib/edge-config.ts`
 - Auto-discovery: any `.tsx` in `src/projects/<project>/screens/` is auto-added to the canvas
 
-## 4. Keyboard shortcut for prototype mode
+## 4. ~~Keyboard shortcut for prototype mode~~ ✅
 
-Screen nodes can only be opened via double-click (`WireflowView.tsx` `handleNodeDoubleClick`). Keyboard-only users relying on ReactFlow's built-in keyboard navigation cannot enter prototype mode. Add Enter-to-open on a selected screen node via `onKeyDown` on the ReactFlow component — check if the selected node is a screen, then call `onScreenSelect`.
+Resolved — `disableKeyboardA11y` removed from ReactFlow; `handleKeyDown` on the wrapper checks for Enter on a selected screen node and calls `onScreenSelect`. React Flow's built-in Tab navigation handles cycling through nodes.
 
-Note: sidebar keyboard nav does NOT solve this — Enter-to-open on wireflow canvas screen nodes is a separate concern.
+## 5. ~~Connection status indicator~~ ✅
 
-## 5. Connection status indicator
-
-`useCollaboration` exposes a `connected` boolean but nothing in the UI shows it. Users have no way to know if their comments are being synced to peers. Add a small connection dot/indicator when `VITE_PARTYKIT_HOST` is configured, showing connected/disconnected state.
+Resolved — `CollaborationProvider.onStatusChange()` wired to real WebSocket status events; `useCollaboration` exposes tri-state `connectionStatus` (`connected` | `disconnected` | `connecting`); `ConnectionStatus` component renders a 6px dot with color/pulse in the context bar, gated on `VITE_PARTYKIT_HOST`.
 
 ## 6. E2E tests
 
@@ -45,17 +43,13 @@ Resolved — `DESIGN.md` authored via `/design-consultation` and reviewed via `/
 
 Resolved — sprint-0/font-and-tokens branch: `@fontsource/geist` + `@fontsource/jetbrains-mono` self-hosted, full OKLCH token rebuild in `index.css`, all component inline colors replaced with semantic tokens, layered shadow composites, spring easing, type scale tracking utilities. Node.js pinned to >= 22.12.0.
 
-## 9. Connection handle touch targets
+## 9. ~~Connection handle touch targets~~ ✅
 
-Connection handles on screen nodes are 8×8px visual circles with no expanded hit area. WCAG requires 44px minimum for interactive elements. Fix by adding invisible padding or pseudo-element to expand the clickable area to 44×44px while keeping the visual at 8px.
+Resolved — `.react-flow__handle::after` pseudo-element expands hit area to 44×44px (`inset: -18px`) while keeping 8px visual dot. `.comment-dot-trigger::after` extends CommentDot buttons similarly.
 
-Depends on: nothing.
+## 10. ~~Hotspot hover-proximity affordance~~ ✅
 
-## 10. Hotspot hover-proximity affordance
-
-Viewers in prototype mode have no way to know which elements are clickable (`data-pf-action`). Add a faint `--ring` outline (2px, 30% opacity) that appears when cursor is within 8px of an actionable element, using the Quick spring preset. Spec in DESIGN.md > Protoflow Components > Hotspot Affordance.
-
-Depends on: nothing.
+Resolved — `[data-pf-action]::after` pseudo-element creates 8px proximity zone with 2px ring border that transitions to `oklch(0.68 0.14 175 / 0.6)` on hover. Respects `prefers-reduced-motion` via global CSS rule.
 
 ## 11. Variant reactions (thumbs up/down)
 
