@@ -72,7 +72,12 @@ src/
 │   ├── EditableText.tsx    # contentEditable wrapper with Yjs binding
 │   ├── CommentDot.tsx      # Comment indicator + thread popover
 │   ├── ViewerNamePrompt.tsx # Name prompt for anonymous viewers
+│   ├── AppErrorBoundary.tsx # Top-level error boundary with fallback UI
 │   └── Toolbar.tsx         # Top toolbar with mode toggle
+├── lib/
+│   ├── utils.ts      # cn(), device constants, localStorage helpers
+│   ├── edge-config.ts # Edge type colors and badge styles
+│   └── layout.ts     # Dagre-based auto-layout for screen nodes
 ├── types.ts          # Data model types
 ├── heron-tokens.css  # Fullscript Heron design tokens
 └── index.css         # Global styles + Tailwind
