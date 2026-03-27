@@ -135,6 +135,20 @@ export default function WireflowView({
     [onScreenSelect]
   );
 
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent) => {
+      if (e.key === "Enter") {
+        const selectedScreen = nodes.find(
+          (n) => n.selected && n.type === "screen"
+        );
+        if (selectedScreen) {
+          onScreenSelect(selectedScreen.id);
+        }
+      }
+    },
+    [nodes, onScreenSelect]
+  );
+
   const handleNodesDelete = useCallback(
     (deleted: Node[]) => {
       for (const node of deleted) {
@@ -196,7 +210,7 @@ export default function WireflowView({
         fitViewOptions={{ padding: 0.2 }}
         defaultEdgeOptions={{ type: "annotated" }}
         proOptions={{ hideAttribution: true }}
-        disableKeyboardA11y
+        onKeyDown={handleKeyDown}
       >
         <Background variant={BackgroundVariant.Dots} gap={20} size={1} color="var(--color-dot-grid)" />
         <Controls position="bottom-right" className="!border-border !bg-background/90 !shadow-sm [&>button]:!border-border [&>button]:!bg-background [&>button:hover]:!bg-muted" />

@@ -4,6 +4,7 @@ import {
   getViewerName,
   setViewerName,
   type Comment,
+  type ConnectionStatus,
 } from "./collaboration";
 
 const PARTYKIT_HOST: string | undefined =
@@ -17,23 +18,26 @@ export function useCollaboration(projectId: string | null) {
   const [viewerName, setViewerNameState] = useState<string | null>(
     getViewerName()
   );
-  const [connected, setConnected] = useState(false);
+  const [connectionStatus, setConnectionStatus] =
+    useState<ConnectionStatus>("disconnected");
 
   useEffect(() => {
     if (!projectId) {
       providerRef.current?.destroy();
       providerRef.current = null;
       setComments(EMPTY_COMMENTS);
-      setConnected(false);
+      setConnectionStatus("disconnected");
       return;
     }
 
     const collab = new CollaborationProvider(projectId);
     providerRef.current = collab;
 
+    let unsubStatus: (() => void) | undefined;
     if (PARTYKIT_HOST) {
       collab.connect(PARTYKIT_HOST);
-      setConnected(true);
+      setConnectionStatus("connecting");
+      unsubStatus = collab.onStatusChange(setConnectionStatus);
     }
 
     const refreshComments = () => {
@@ -45,9 +49,10 @@ export function useCollaboration(projectId: string | null) {
 
     return () => {
       unsub();
+      unsubStatus?.();
       collab.destroy();
       providerRef.current = null;
-      setConnected(false);
+      setConnectionStatus("disconnected");
     };
   }, [projectId]);
 
@@ -89,7 +94,7 @@ export function useCollaboration(projectId: string | null) {
 
   return {
     comments,
-    connected,
+    connectionStatus,
     viewerName,
     needsName,
     addComment,

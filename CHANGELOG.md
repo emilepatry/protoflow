@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.2.2.0] - 2026-03-27
+
+### Added
+- Keyboard navigation on wireflow canvas: Tab cycles through nodes, Enter opens prototype mode on selected screen
+- Focus management on mode transitions: focus moves to prototype container on enter, back to main on exit (skips initial mount via prevModeRef guard)
+- Touch target expansion to 44×44px for connection handles (`::after` pseudo-element, `inset: -18px`) and comment dots (`comment-dot-trigger::after`)
+- Hotspot affordance ring on `[data-pf-action]` elements in prototype mode — 8px proximity zone with hover-activated border ring
+- `ConnectionStatus` component: 6px tri-state dot (connected/disconnected/connecting) with color, pulse animation, and tooltip, gated on `VITE_PARTYKIT_HOST`
+- `CollaborationProvider.onStatusChange()` method for real WebSocket status events with proper unsubscribe cleanup
+- Tri-state `connectionStatus` in `useCollaboration` hook (replaces boolean `connected`)
+- Regression tests for ConnectionStatus rendering, keyboard navigation, focus management, and collaboration status
+
+### Fixed
+- Focus no longer stolen from browser address bar on initial page load (prevModeRef guard)
+
 ## [0.2.1.0] - 2026-03-27
 
 ### Added
