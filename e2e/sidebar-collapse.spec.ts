@@ -7,34 +7,40 @@ test.describe("Sidebar collapse/expand", () => {
   });
 
   test("Cmd+B toggles sidebar collapsed state", async ({ page }) => {
-    const sidebar = page.locator('[aria-label="Workspace navigation"]');
-    const collapseBtn = page.getByRole("button", { name: "Collapse sidebar" });
-    await expect(collapseBtn).toBeVisible();
+    const sidebar = page.locator('[data-slot="sidebar"]');
+    await expect(sidebar).toHaveAttribute("data-state", "expanded");
 
     await page.keyboard.press("Meta+b");
-
-    const expandBtn = page.getByRole("button", { name: "Expand sidebar" });
-    await expect(expandBtn).toBeVisible();
+    await expect(sidebar).toHaveAttribute("data-state", "collapsed");
 
     await page.keyboard.press("Meta+b");
-    await expect(collapseBtn).toBeVisible();
+    await expect(sidebar).toHaveAttribute("data-state", "expanded");
   });
 
-  test("collapse button collapses sidebar", async ({ page }) => {
-    const collapseBtn = page.getByRole("button", { name: "Collapse sidebar" });
-    await collapseBtn.click();
+  test("trigger button toggles sidebar", async ({ page }) => {
+    const trigger = page.getByRole("button", { name: "Toggle sidebar" });
+    const sidebar = page.locator('[data-slot="sidebar"]');
 
-    const expandBtn = page.getByRole("button", { name: "Expand sidebar" });
-    await expect(expandBtn).toBeVisible();
+    await expect(sidebar).toHaveAttribute("data-state", "expanded");
+
+    await trigger.click();
+    await expect(sidebar).toHaveAttribute("data-state", "collapsed");
+
+    await trigger.click();
+    await expect(sidebar).toHaveAttribute("data-state", "expanded");
   });
 
-  test("expand button expands sidebar", async ({ page }) => {
-    const collapseBtn = page.getByRole("button", { name: "Collapse sidebar" });
-    await collapseBtn.click();
+  test("collapsed sidebar shows emoji avatars that expand on click", async ({ page }) => {
+    const sidebar = page.locator('[data-slot="sidebar"]');
 
-    const expandBtn = page.getByRole("button", { name: "Expand sidebar" });
-    await expandBtn.click();
+    await page.keyboard.press("Meta+b");
+    await expect(sidebar).toHaveAttribute("data-state", "collapsed");
 
-    await expect(page.getByRole("button", { name: "Collapse sidebar" })).toBeVisible();
+    const avatarButtons = sidebar.locator("button.rounded-full");
+    const count = await avatarButtons.count();
+    expect(count).toBeGreaterThan(0);
+
+    await avatarButtons.first().click();
+    await expect(sidebar).toHaveAttribute("data-state", "expanded");
   });
 });
