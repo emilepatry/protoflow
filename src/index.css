@@ -242,6 +242,18 @@ body,
   color: var(--color-foreground);
 }
 
+/* ─── Sidebar tokens (light base, dark override below) ─── */
+:root {
+  --sidebar: oklch(0.99 0 0);
+  --sidebar-foreground: oklch(0.27 0 0);
+  --sidebar-primary: oklch(0.56 0.13 175);
+  --sidebar-primary-foreground: oklch(1 0 0);
+  --sidebar-accent: oklch(0.97 0.02 175);
+  --sidebar-accent-foreground: oklch(0.27 0 0);
+  --sidebar-border: oklch(0.93 0 0);
+  --sidebar-ring: oklch(0.68 0.14 175);
+}
+
 /* ─── Dark mode overrides (DESIGN.md spec) ─── */
 .dark {
   color-scheme: dark;
@@ -306,17 +318,6 @@ body,
   --sidebar-accent: oklch(0.15 0.02 175);
   --sidebar-accent-foreground: oklch(0.99 0 0);
   --sidebar-border: oklch(0.20 0 0);
-  --sidebar-ring: oklch(0.68 0.14 175);
-}
-
-:root {
-  --sidebar: oklch(0.99 0 0);
-  --sidebar-foreground: oklch(0.27 0 0);
-  --sidebar-primary: oklch(0.56 0.13 175);
-  --sidebar-primary-foreground: oklch(1 0 0);
-  --sidebar-accent: oklch(0.97 0.02 175);
-  --sidebar-accent-foreground: oklch(0.27 0 0);
-  --sidebar-border: oklch(0.93 0 0);
   --sidebar-ring: oklch(0.68 0.14 175);
 }
 

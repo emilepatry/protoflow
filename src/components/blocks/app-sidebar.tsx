@@ -68,18 +68,18 @@ export function AppSidebar() {
 
   return (
     <Sidebar collapsible="icon" aria-label="Workspace navigation">
-      <SidebarHeader className="border-b border-sidebar-border px-4 py-3.5">
+      <SidebarHeader className="border-b border-sidebar-border px-3 py-4">
         {isCollapsed ? (
-          <div className="flex flex-col items-center gap-2">
+          <div className="flex flex-col items-center gap-1.5">
             <button
               onClick={() => { setTab("projects"); setOpen(true); }}
               title="Projects"
               aria-label="Projects"
               className={cn(
-                "rounded p-1.5 transition-colors",
+                "rounded-md p-2 transition-colors",
                 tab === "projects"
                   ? "bg-sidebar-accent text-sidebar-accent-foreground"
-                  : "text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
+                  : "text-sidebar-foreground/60 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
               )}
             >
               <Layers className="size-4" />
@@ -89,10 +89,10 @@ export function AppSidebar() {
               title="Components"
               aria-label="Components"
               className={cn(
-                "rounded p-1.5 transition-colors",
+                "rounded-md p-2 transition-colors",
                 tab === "components"
                   ? "bg-sidebar-accent text-sidebar-accent-foreground"
-                  : "text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
+                  : "text-sidebar-foreground/60 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
               )}
             >
               <Puzzle className="size-4" />
@@ -100,23 +100,23 @@ export function AppSidebar() {
           </div>
         ) : (
           <>
-            <span className="text-caption font-medium uppercase tracking-wider text-sidebar-foreground/70">
+            <span className="text-[11px] font-medium uppercase tracking-wider text-sidebar-foreground/50">
               Workspace
             </span>
-            <div role="tablist" aria-label="Sidebar tabs" className="mt-2">
+            <div role="tablist" aria-label="Sidebar tabs" className="mt-3">
               <div className="flex overflow-hidden rounded-md border border-sidebar-border">
                 <button
                   role="tab"
                   aria-selected={tab === "projects"}
                   onClick={() => setTab("projects")}
                   className={cn(
-                    "flex flex-1 items-center justify-center gap-1.5 px-3 py-2 text-label transition-colors",
+                    "flex flex-1 items-center justify-center gap-1.5 px-3 py-2 text-[13px] font-medium transition-colors",
                     tab === "projects"
                       ? "bg-sidebar-accent text-sidebar-accent-foreground"
-                      : "hover:bg-sidebar-accent/50",
+                      : "text-sidebar-foreground/60 hover:bg-sidebar-accent/50 hover:text-sidebar-foreground",
                   )}
                 >
-                  <Layers className="size-3.5" />
+                  <Layers className="size-3.5 shrink-0" />
                   Projects
                 </button>
                 <button
@@ -124,13 +124,13 @@ export function AppSidebar() {
                   aria-selected={tab === "components"}
                   onClick={() => setTab("components")}
                   className={cn(
-                    "flex flex-1 items-center justify-center gap-1.5 border-l border-sidebar-border px-3 py-2 text-label transition-colors",
+                    "flex flex-1 items-center justify-center gap-1.5 border-l border-sidebar-border px-3 py-2 text-[13px] font-medium transition-colors",
                     tab === "components"
                       ? "bg-sidebar-accent text-sidebar-accent-foreground"
-                      : "hover:bg-sidebar-accent/50",
+                      : "text-sidebar-foreground/60 hover:bg-sidebar-accent/50 hover:text-sidebar-foreground",
                   )}
                 >
-                  <Puzzle className="size-3.5" />
+                  <Puzzle className="size-3.5 shrink-0" />
                   Components
                 </button>
               </div>
@@ -140,13 +140,13 @@ export function AppSidebar() {
       </SidebarHeader>
 
       <SidebarContent>
-        <SidebarGroup className="p-0">
+        <SidebarGroup className="px-2 py-2">
           <SidebarGroupLabel className="sr-only">
             {tab === "projects" ? "Projects" : "Components"}
           </SidebarGroupLabel>
           <SidebarGroupContent>
             {items.length === 0 ? (
-              <p className="px-3 py-4 text-center text-caption text-sidebar-foreground/70">
+              <p className="px-4 py-8 text-center text-[11px] text-sidebar-foreground/50">
                 {tab === "projects"
                   ? "Create a folder in src/projects/"
                   : "Add a component in src/library/"}
@@ -162,7 +162,7 @@ export function AppSidebar() {
                       title={formatSlug(item.id)}
                       aria-label={formatSlug(item.id)}
                       className={cn(
-                        "flex size-7 items-center justify-center rounded-full text-caption transition-colors",
+                        "flex size-8 items-center justify-center rounded-full text-sm transition-colors",
                         active && "ring-2 ring-sidebar-ring",
                       )}
                       style={{ background: getBgColor(item.id) }}
@@ -172,7 +172,7 @@ export function AppSidebar() {
                   );
                 })}
                 {items.length > 8 && (
-                  <span className="text-micro font-medium text-sidebar-foreground/70">
+                  <span className="text-[10px] font-medium text-sidebar-foreground/50">
                     +{items.length - 8}
                   </span>
                 )}
@@ -196,16 +196,20 @@ export function AppSidebar() {
                         isActive={active}
                         onClick={() => handleItemClick(item)}
                         tooltip={formatSlug(item.id)}
-                        className="gap-3 px-4"
+                        className="h-9 gap-3 px-3 text-[13px] font-medium"
                       >
-                        <span className="text-base leading-none" aria-hidden="true">
+                        <span
+                          className="flex size-7 shrink-0 items-center justify-center rounded-md text-sm leading-none"
+                          style={{ background: getBgColor(item.id) }}
+                          aria-hidden="true"
+                        >
                           {getEmoji(item.id)}
                         </span>
-                        <span className="min-w-0 flex-1 truncate text-label" title={formatSlug(item.id)}>
+                        <span className="min-w-0 flex-1 truncate" title={formatSlug(item.id)}>
                           {formatSlug(item.id)}
                         </span>
                       </SidebarMenuButton>
-                      <SidebarMenuBadge className="text-caption text-sidebar-foreground/70">
+                      <SidebarMenuBadge className="font-mono text-[11px] tabular-nums text-sidebar-foreground/50">
                         {countLabel}
                       </SidebarMenuBadge>
                     </SidebarMenuItem>
