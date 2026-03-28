@@ -4,8 +4,14 @@ All notable changes to this project will be documented in this file.
 
 ## [0.2.4.0] - 2026-03-28
 
+### Fixed
+- Dark mode sidebar theming — CSS cascade bug where `:root` sidebar vars overrode `.dark` vars due to source order (same specificity, later rule won)
+- Tab text size instability — locked to explicit `text-[13px] font-medium` to prevent CVA conflicts causing visual jumps between tabs
+- Sidebar spacing too tight — restored group padding (`px-2 py-2`), increased item height to `h-9` (36px), generous empty state whitespace
+
 ### Changed
 - Sidebar migrated from custom implementation to shadcn/ui `Sidebar` component — gains accessible keyboard navigation, mobile off-canvas drawer, icon-collapsed mode, and tooltip support out of the box
+- Emoji icons in expanded sidebar items now wrapped in rounded-md containers with project-colored backgrounds, matching collapsed avatar style
 - Sidebar state management moved to controlled `SidebarProvider` with `localStorage` persistence and input guard (prevents Cmd+B from toggling while typing)
 - Context bar always renders `SidebarTrigger` regardless of whether a project is selected, ensuring sidebar is always accessible
 - Sidebar utility functions (`hashString`, `getEmoji`, `getBgColor`, `formatSlug`) extracted to `src/lib/sidebar-utils.ts` from inline definitions
