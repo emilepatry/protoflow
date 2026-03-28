@@ -14,7 +14,7 @@ import {
   getLibraryComponent,
   getLibraryVariants,
 } from "@/sandbox/registry";
-import { ThumbsUp, ThumbsDown } from "lucide-react";
+import { ThumbsUp, ThumbsDown, Puzzle } from "lucide-react";
 import type { ComponentVariant } from "@/types";
 import type { ReactionType, VariantReactions } from "@/sandbox/collaboration";
 
@@ -39,8 +39,8 @@ class VariantErrorBoundary extends Component<
     if (this.state.errorMessage) {
       return (
         <div className="flex flex-col items-center gap-2 rounded-lg bg-error-subtle p-6 text-center">
-          <p className="text-sm font-medium text-error-foreground">This variant has an error</p>
-          <p className="text-xs text-error">
+          <p className="text-label text-error-foreground">This variant has an error</p>
+          <p className="text-caption text-error">
             {this.state.errorMessage.slice(0, 120)}
           </p>
         </div>
@@ -53,7 +53,7 @@ class VariantErrorBoundary extends Component<
 function VariantSkeleton() {
   return (
     <div className="flex items-center justify-center p-8">
-      <div className="h-8 w-32 animate-pulse rounded bg-muted" />
+      <div className="h-8 w-32 skeleton-pulse rounded bg-muted" />
     </div>
   );
 }
@@ -75,7 +75,7 @@ function ReactionButtons({ variantId, reactions, viewerName, onToggle }: Reactio
       <motion.button
         type="button"
         onClick={() => onToggle(variantId, "up")}
-        className={`flex items-center gap-1 rounded-md px-2 py-1 text-xs transition-colors ${
+        className={`flex items-center gap-1 rounded-md px-2 py-1 text-caption transition-colors ${
           myReaction === "up"
             ? "text-success"
             : "text-muted-foreground hover:text-foreground"
@@ -85,14 +85,14 @@ function ReactionButtons({ variantId, reactions, viewerName, onToggle }: Reactio
         aria-label={`Thumbs up${myReaction === "up" ? " (active)" : ""}`}
         aria-pressed={myReaction === "up"}
       >
-        <ThumbsUp className="h-4 w-4" />
+        <ThumbsUp className="h-5 w-5" />
         {upCount > 0 && (
           <motion.span
             key={upCount}
             initial={{ opacity: 0, y: 4 }}
             animate={{ opacity: 1, y: 0 }}
             transition={SPRING_QUICK}
-            className="font-mono text-[11px]"
+            className="font-mono text-caption"
           >
             {upCount}
           </motion.span>
@@ -101,7 +101,7 @@ function ReactionButtons({ variantId, reactions, viewerName, onToggle }: Reactio
       <motion.button
         type="button"
         onClick={() => onToggle(variantId, "down")}
-        className={`flex items-center gap-1 rounded-md px-2 py-1 text-xs transition-colors ${
+        className={`flex items-center gap-1 rounded-md px-2 py-1 text-caption transition-colors ${
           myReaction === "down"
             ? "text-error"
             : "text-muted-foreground hover:text-foreground"
@@ -111,14 +111,14 @@ function ReactionButtons({ variantId, reactions, viewerName, onToggle }: Reactio
         aria-label={`Thumbs down${myReaction === "down" ? " (active)" : ""}`}
         aria-pressed={myReaction === "down"}
       >
-        <ThumbsDown className="h-4 w-4" />
+        <ThumbsDown className="h-5 w-5" />
         {downCount > 0 && (
           <motion.span
             key={downCount}
             initial={{ opacity: 0, y: 4 }}
             animate={{ opacity: 1, y: 0 }}
             transition={SPRING_QUICK}
-            className="font-mono text-[11px]"
+            className="font-mono text-caption"
           >
             {downCount}
           </motion.span>
@@ -186,8 +186,13 @@ export default function ComponentSandbox({
 
   if (!componentId) {
     return (
-      <div className="flex h-full flex-col items-center justify-center gap-3 text-center">
-        <p className="text-sm text-muted-foreground">No component selected</p>
+      <div className="flex h-full flex-col items-center justify-center gap-2 text-center">
+        <Puzzle className="h-5 w-5 text-muted-foreground" aria-hidden="true" />
+        <p className="text-label text-foreground">No component selected</p>
+        <p className="text-caption text-muted-foreground">
+          Add a component in{" "}
+          <code className="rounded bg-muted px-1.5 py-0.5 text-caption font-mono">src/library/</code>
+        </p>
       </div>
     );
   }
@@ -198,10 +203,10 @@ export default function ComponentSandbox({
     <div className="flex h-full flex-col">
       {variants.length > 0 && (
         <div className="flex h-11 items-center justify-between border-b border-border px-5">
-          <span className="text-sm font-medium">
+          <span className="text-label">
             {activeVariant?.name ?? "Default"}
           </span>
-          <span className="text-xs text-muted-foreground">
+          <span className="text-caption text-muted-foreground">
             {activeIndex + 1} / {variants.length}
           </span>
         </div>
@@ -231,7 +236,7 @@ export default function ComponentSandbox({
               <LibraryComponent />
             </Suspense>
           ) : (
-            <div className="rounded-lg bg-muted p-6 text-center text-sm text-muted-foreground">
+            <div className="rounded-lg bg-muted p-6 text-center text-label text-muted-foreground">
               Component not found: {componentId}
             </div>
           )}
@@ -240,7 +245,7 @@ export default function ComponentSandbox({
 
       {(activeVariant?.description || (activeVariant && onToggleReaction)) && (
         <div className="flex items-center justify-between border-t border-border px-5 py-3">
-          <p className="text-xs text-muted-foreground">{activeVariant?.description ?? ""}</p>
+          <p className="text-caption text-muted-foreground">{activeVariant?.description ?? ""}</p>
           {activeVariant && onToggleReaction && (
             <ReactionButtons
               variantId={activeVariant.id}

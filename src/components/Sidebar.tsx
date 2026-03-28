@@ -141,7 +141,7 @@ export default function Sidebar() {
   const expandedContent = (
     <>
       <div className="flex items-center justify-between border-b border-border px-4 py-3">
-        <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
+        <span className="text-caption font-medium text-muted-foreground uppercase tracking-wider">
           Workspace
         </span>
         <button
@@ -156,13 +156,13 @@ export default function Sidebar() {
 
       <div className="border-b border-border" role="tablist" aria-label="Sidebar tabs">
         <div className="p-3">
-          <div className="flex rounded-md border border-border">
+          <div className="flex overflow-hidden rounded-md border border-border">
             <button
               role="tab"
               aria-selected={tab === "projects"}
               onClick={() => setTab("projects")}
               className={cn(
-                "flex flex-1 items-center justify-center gap-1.5 px-3 py-2 text-[13px] font-medium transition-colors",
+                "flex flex-1 items-center justify-center gap-1.5 px-3 py-2 text-label transition-colors",
                 tab === "projects"
                   ? "bg-accent text-accent-foreground"
                   : "hover:bg-muted"
@@ -176,7 +176,7 @@ export default function Sidebar() {
               aria-selected={tab === "components"}
               onClick={() => setTab("components")}
               className={cn(
-                "flex flex-1 items-center justify-center gap-1.5 border-l border-border px-3 py-2 text-[13px] font-medium transition-colors",
+                "flex flex-1 items-center justify-center gap-1.5 border-l border-border px-3 py-2 text-label transition-colors",
                 tab === "components"
                   ? "bg-accent text-accent-foreground"
                   : "hover:bg-muted"
@@ -197,7 +197,7 @@ export default function Sidebar() {
         tabIndex={0}
       >
         {items.length === 0 ? (
-          <p className="px-3 py-4 text-center text-xs text-muted-foreground">
+          <p className="px-3 py-4 text-center text-caption text-muted-foreground">
             {tab === "projects"
               ? "Create a folder in src/projects/"
               : "Add a component in src/library/"}
@@ -224,7 +224,7 @@ export default function Sidebar() {
                 className={cn(
                   "flex w-full items-center gap-3 px-4 text-left transition-colors",
                   active
-                    ? "border-l-2 border-accent bg-accent-subtle font-medium"
+                    ? "border-l-2 border-accent bg-accent-subtle"
                     : "border-l-2 border-transparent hover:bg-muted",
                   focusIndex === index && "ring-2 ring-inset ring-accent"
                 )}
@@ -233,10 +233,10 @@ export default function Sidebar() {
                 <span className="text-base leading-none" aria-hidden="true">
                   {getEmoji(item.id)}
                 </span>
-                <span className="min-w-0 flex-1 truncate text-[13px]" title={formatSlug(item.id)}>
+                <span className="min-w-0 flex-1 truncate text-label" title={formatSlug(item.id)}>
                   {formatSlug(item.id)}
                 </span>
-                <span className="shrink-0 text-xs text-muted-foreground">
+                <span className="shrink-0 text-caption text-muted-foreground">
                   {countLabel}
                 </span>
               </button>
@@ -299,7 +299,7 @@ export default function Sidebar() {
               title={formatSlug(item.id)}
               aria-label={formatSlug(item.id)}
               className={cn(
-                "flex h-7 w-7 items-center justify-center rounded-full text-xs transition-colors",
+                "flex h-7 w-7 items-center justify-center rounded-full text-caption transition-colors",
                 active && "ring-2 ring-accent"
               )}
               style={{ background: getBgColor(item.id) }}
@@ -309,7 +309,7 @@ export default function Sidebar() {
           );
         })}
         {items.length > 8 && (
-          <span className="text-[10px] font-medium text-muted-foreground">
+          <span className="text-micro font-medium text-muted-foreground">
             +{items.length - 8}
           </span>
         )}

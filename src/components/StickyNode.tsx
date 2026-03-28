@@ -56,11 +56,11 @@ function StickyNode({ data, selected }: NodeProps) {
             if (e.key === "Escape") handleBlur();
           }}
           maxLength={1000}
-          className="w-full resize-none bg-transparent text-xs leading-relaxed outline-none"
+          className="w-full resize-none bg-transparent text-caption leading-relaxed outline-none"
           rows={3}
         />
       ) : (
-        <p className="max-h-[120px] overflow-y-auto whitespace-pre-wrap text-xs leading-relaxed text-foreground/80">
+        <p className="max-h-[120px] overflow-y-auto whitespace-pre-wrap text-caption leading-relaxed text-foreground/80">
           {nodeData.body || "Double-click to edit..."}
         </p>
       )}

@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.2.3.0] - 2026-03-27
+
+### Changed
+- Typography system now uses semantic type scale tokens (`text-hero`, `text-title`, `text-subtitle`, `text-body`, `text-label`, `text-caption`, `text-micro`) with bundled font-weight, line-height, and letter-spacing — replacing ad-hoc pixel values and generic Tailwind utilities across 17 files
+- Font-weight bundled into `@theme` tokens: hero/title=600, subtitle/label=500, body/caption/micro=400 — eliminates need for manual `font-medium` alongside size tokens
+- Sidebar active state no longer applies `font-medium` to parent button, preventing weight cascade to child elements like count badges
+- Empty state tiers in DESIGN.md updated to reference `text-label`/`text-caption` tokens instead of legacy 14px/12px values
+
+### Fixed
+- `font-bold` (700) replaced with `font-semibold` (600) on CommentDot badge to respect DESIGN.md max weight
+
 ## [0.2.2.0] - 2026-03-27
 
 ### Added

@@ -29,13 +29,13 @@ export default class AppErrorBoundary extends Component<
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
           </div>
-          <h1 className="text-lg font-semibold tracking-subtitle text-foreground">Something went wrong</h1>
-          <p className="max-w-sm text-sm text-muted-foreground">
+          <h1 className="text-subtitle font-semibold text-foreground">Something went wrong</h1>
+          <p className="max-w-sm text-label text-muted-foreground">
             {this.state.errorMessage.slice(0, 120)}
           </p>
           <button
             onClick={() => window.location.reload()}
-            className="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground"
+            className="rounded-lg bg-primary px-4 py-2 text-label text-primary-foreground"
           >
             Reload
           </button>

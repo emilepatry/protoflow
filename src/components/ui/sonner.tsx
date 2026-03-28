@@ -8,7 +8,7 @@ export function Toaster() {
       duration={3000}
       toastOptions={{
         className:
-          "!bg-background !text-foreground !border-border !shadow-sm !text-xs !rounded-lg",
+          "!bg-background !text-foreground !border-border !shadow-sm !text-caption !rounded-lg",
       }}
     />
   );

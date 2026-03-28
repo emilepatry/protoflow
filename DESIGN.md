@@ -278,11 +278,11 @@ Every feature specifies what the user **sees** in each state. Empty states inclu
 |------|------|-----------|
 | **Primary** | Full-screen empty (no project, no screen) | Icon in `rounded-xl` container with `--accent-subtle` bg + primary text + helper text + optional CTA |
 | **Secondary** | Panel-level empty (no search results, no variants) | Icon only (no container), 20×20px, `--muted-foreground` + primary text + helper text |
-| **Inline** | Row-level empty (no comments on element) | Text only — "No comments yet" in `--muted-foreground`, 12px |
+| **Inline** | Row-level empty (no comments on element) | Text only — "No comments yet" in `--muted-foreground`, `text-caption` |
 
 Common rules:
-- **Primary text** — 14px, weight 500, `--foreground`
-- **Helper text** — 12px, `--muted-foreground`, inline `code` for file paths
+- **Primary text** — `text-label` (13px, weight 500), `--foreground`
+- **Helper text** — `text-caption` (11px, weight 400), `--muted-foreground`, inline `code` for file paths
 - **Icon** — Contextual to the feature, never the same icon for every empty state
 
 ### Skeleton Pattern

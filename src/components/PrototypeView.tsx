@@ -5,7 +5,7 @@ import type { Project, ScreenId, EdgeType, EdgeConfig } from "@/types";
 import type { useCollaboration } from "@/sandbox/useCollaboration";
 import { SPRING_QUICK } from "@/lib/motion";
 import { cn, DEVICE_WIDTH, DEVICE_HEIGHT } from "@/lib/utils";
-import { ArrowLeft, ChevronRight } from "lucide-react";
+import { ArrowLeft, ChevronRight, Layers } from "lucide-react";
 import CommentDot from "./CommentDot";
 import DeviceFrame from "./DeviceFrame";
 
@@ -32,12 +32,12 @@ function PrototypeScreenSkeleton() {
       className="flex flex-col gap-4 bg-background p-6"
       style={{ width: DEVICE_WIDTH, height: DEVICE_HEIGHT }}
     >
-      <div className="h-4 w-28 animate-pulse rounded bg-muted" />
-      <div className="h-4 w-40 animate-pulse rounded bg-muted" />
-      <div className="h-32 w-full animate-pulse rounded-lg bg-muted" />
-      <div className="h-4 w-32 animate-pulse rounded bg-muted" />
-      <div className="h-4 w-24 animate-pulse rounded bg-muted" />
-      <div className="h-20 w-full animate-pulse rounded-lg bg-muted" />
+      <div className="h-4 w-28 skeleton-pulse rounded bg-muted" />
+      <div className="h-4 w-40 skeleton-pulse rounded bg-muted" />
+      <div className="h-32 w-full skeleton-pulse rounded-lg bg-muted" />
+      <div className="h-4 w-32 skeleton-pulse rounded bg-muted" />
+      <div className="h-4 w-24 skeleton-pulse rounded bg-muted" />
+      <div className="h-20 w-full skeleton-pulse rounded-lg bg-muted" />
     </div>
   );
 }
@@ -96,11 +96,14 @@ export default function PrototypeView({
 
   if (!screen) {
     return (
-      <div className="flex h-full flex-col items-center justify-center gap-3">
-        <p className="text-muted-foreground">Screen not found</p>
+      <div className="flex h-full flex-col items-center justify-center gap-3 text-center">
+        <div className="rounded-xl bg-accent-subtle p-3">
+          <Layers className="h-6 w-6 text-accent" aria-hidden="true" />
+        </div>
+        <p className="text-label text-foreground">Screen not found</p>
         <button
           onClick={onExitPrototype}
-          className="rounded-md bg-accent px-4 py-2 text-sm font-medium text-accent-foreground"
+          className="rounded-md bg-accent px-4 py-2 text-label text-accent-foreground"
         >
           Back to Wireflow
         </button>
@@ -170,7 +173,7 @@ export default function PrototypeView({
             onClick={onExitPrototype}
             title="Back to wireflow"
             aria-label="Back to wireflow"
-            className="flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-xs text-white/60 transition-colors hover:bg-white/10 hover:text-white"
+            className="flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-caption text-white/60 transition-colors hover:bg-white/10 hover:text-white"
           >
             <ArrowLeft className="h-3.5 w-3.5" />
             Wireflow
@@ -178,7 +181,7 @@ export default function PrototypeView({
 
           <div className="mx-2 h-4 w-px bg-chrome-divider" />
 
-          <nav className="flex min-w-0 items-center gap-1 text-xs" aria-label="Breadcrumb">
+          <nav className="flex min-w-0 items-center gap-1 text-caption" aria-label="Breadcrumb">
             {history.map((screenId, i) => {
               const s = project.screens[screenId];
               if (!s) return null;
@@ -207,7 +210,7 @@ export default function PrototypeView({
             title={commentMode ? "Exit comment mode" : "Enter comment mode"}
             aria-label={commentMode ? "Exit comment mode" : "Enter comment mode"}
             className={cn(
-              "ml-2 rounded-md px-2.5 py-1.5 text-xs font-medium transition-colors",
+              "ml-2 rounded-md px-2.5 py-1.5 text-caption font-medium transition-colors",
               commentMode
                 ? "bg-info/30 text-info"
                 : "text-white/40 hover:bg-white/10 hover:text-white/70"
@@ -215,7 +218,7 @@ export default function PrototypeView({
           >
             {commentMode ? "Exit Comments" : "Comments"}
             {screenComments.length > 0 && (
-              <span className="ml-1.5 rounded-full bg-info px-1.5 py-0.5 text-[9px] text-white">
+              <span className="ml-1.5 rounded-full bg-info px-1.5 py-0.5 text-micro text-white">
                 {screenComments.length}
               </span>
             )}
@@ -231,7 +234,7 @@ export default function PrototypeView({
                     onClick={() => navigateTo(edge.target, edge.type)}
                     title={edge.trigger}
                     className={cn(
-                      "flex max-w-[160px] items-center gap-1 rounded-md px-2.5 py-1.5 text-xs font-medium transition-colors",
+                      "flex max-w-[160px] items-center gap-1 rounded-md px-2.5 py-1.5 text-caption font-medium transition-colors",
                       edge.type === "navigation" &&
                         "bg-edge-navigation/20 text-edge-navigation hover:bg-edge-navigation/30",
                       edge.type === "conditional" &&

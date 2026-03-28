@@ -1,6 +1,6 @@
 import { memo, Suspense, useState, Component, type ReactNode, type ErrorInfo } from "react";
 import { Handle, Position, type NodeProps } from "@xyflow/react";
-import { motion } from "motion/react";
+import { AnimatePresence, motion } from "motion/react";
 import { Play } from "lucide-react";
 import { getScreenComponent } from "@/sandbox/registry";
 import { SPRING_QUICK } from "@/lib/motion";
@@ -40,8 +40,8 @@ class ScreenErrorBoundary extends Component<
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
           </div>
-          <p className="text-xs font-medium text-error-foreground">Render Error</p>
-          <p className="text-[10px] leading-tight text-error">
+          <p className="text-caption font-medium text-error-foreground">Render Error</p>
+          <p className="text-micro text-error">
             {this.state.errorMessage.slice(0, 80)}
           </p>
         </div>
@@ -57,11 +57,11 @@ function ScreenNodeSkeleton() {
       className="flex flex-col gap-3 bg-background p-4"
       style={{ width: DEVICE_WIDTH, height: DEVICE_HEIGHT }}
     >
-      <div className="h-3 w-24 animate-pulse rounded bg-muted" />
-      <div className="h-3 w-32 animate-pulse rounded bg-muted" />
-      <div className="h-20 w-full animate-pulse rounded-lg bg-muted" />
-      <div className="h-3 w-28 animate-pulse rounded bg-muted" />
-      <div className="h-3 w-20 animate-pulse rounded bg-muted" />
+      <div className="h-3 w-24 skeleton-pulse rounded bg-muted" />
+      <div className="h-3 w-32 skeleton-pulse rounded bg-muted" />
+      <div className="h-20 w-full skeleton-pulse rounded-lg bg-muted" />
+      <div className="h-3 w-28 skeleton-pulse rounded bg-muted" />
+      <div className="h-3 w-20 skeleton-pulse rounded bg-muted" />
     </div>
   );
 }
@@ -78,7 +78,7 @@ function ScreenNode({ data, selected }: NodeProps) {
       transition={SPRING_QUICK}
       className={cn(
         "rounded-lg border-2 bg-background transition-shadow",
-        selected ? "border-accent" : "border-border"
+        selected ? "border-primary" : "border-border"
       )}
       style={{
         width: DEVICE_WIDTH * PREVIEW_SCALE + 16,
@@ -88,10 +88,10 @@ function ScreenNode({ data, selected }: NodeProps) {
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
-      <Handle type="target" position={Position.Left} className="!bg-accent !w-2 !h-2" />
+      <Handle type="target" position={Position.Left} className="!bg-primary !w-2 !h-2" />
 
       <div className="border-b border-border bg-muted/50 px-3 py-2">
-        <p className="text-[10px] font-medium truncate text-foreground">
+        <p className="text-micro font-mono font-medium truncate text-foreground">
           {nodeData.label}
         </p>
       </div>
@@ -119,23 +119,32 @@ function ScreenNode({ data, selected }: NodeProps) {
               </ScreenErrorBoundary>
             </Suspense>
           ) : (
-            <div className="flex h-full items-center justify-center bg-muted text-sm text-muted-foreground">
+            <div className="flex h-full items-center justify-center bg-muted text-label text-muted-foreground">
               Component not found: {nodeData.componentId}
             </div>
           )}
         </div>
 
-        {hovered && (
-          <div className="absolute inset-0 flex items-center justify-center bg-black/30 transition-opacity">
-            <div className="flex flex-col items-center gap-1 text-white">
-              <Play className="h-6 w-6 drop-shadow" />
-              <span className="text-[10px] font-medium drop-shadow">Double-click to preview</span>
-            </div>
-          </div>
-        )}
+        <AnimatePresence>
+          {hovered && (
+            <motion.div
+              key="hover-overlay"
+              className="absolute inset-0 flex items-center justify-center bg-black/30"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={SPRING_QUICK}
+            >
+              <div className="flex flex-col items-center gap-1 text-white">
+                <Play className="h-6 w-6 drop-shadow" />
+                <span className="text-micro font-medium drop-shadow">Double-click to preview</span>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
 
-      <Handle type="source" position={Position.Right} className="!bg-accent !w-2 !h-2" />
+      <Handle type="source" position={Position.Right} className="!bg-primary !w-2 !h-2" />
     </motion.div>
   );
 }
