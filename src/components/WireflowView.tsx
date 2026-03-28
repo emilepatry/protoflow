@@ -266,7 +266,7 @@ export default function WireflowView({
             aria-haspopup="menu"
             aria-label="Add sticky note"
             title="Add sticky note"
-            className="flex items-center gap-1.5 rounded-md border border-border bg-background/90 px-3 py-2 text-sm font-medium transition-colors hover:bg-muted"
+            className="flex items-center gap-1.5 rounded-md border border-border bg-background/90 px-3 py-2 text-label transition-colors hover:bg-muted"
             style={{ boxShadow: 'var(--shadow-sm)' }}
           >
             <StickyNote className="h-4 w-4" />
@@ -286,7 +286,7 @@ export default function WireflowView({
                     }
                     setShowStickyPicker(false);
                   }}
-                  className="flex w-full items-center gap-2 px-3 py-2.5 text-left text-sm hover:bg-muted"
+                  className="flex w-full items-center gap-2 px-3 py-2.5 text-left text-label hover:bg-muted"
                 >
                   <div className={cn("h-3 w-3 rounded-sm border", className)} aria-hidden="true" />
                   {label}

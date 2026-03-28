@@ -338,13 +338,13 @@ function WorkspaceApp() {
           <div className="rounded-xl bg-accent-subtle p-3">
             <Layers className="h-6 w-6 text-accent" />
           </div>
-          <p className="text-sm font-medium text-foreground">
+          <p className="text-label text-foreground">
             {isPrototype ? "No screen selected" : "Select a project from the sidebar"}
           </p>
           {!isPrototype && (
-            <p className="max-w-xs text-xs text-muted-foreground">
+            <p className="max-w-xs text-caption text-muted-foreground">
               Or create a new project folder in{" "}
-              <code className="rounded bg-muted px-1.5 py-0.5 text-xs font-mono">
+              <code className="rounded bg-muted px-1.5 py-0.5 text-caption font-mono">
                 src/projects/
               </code>
             </p>
@@ -415,10 +415,10 @@ function WorkspaceApp() {
     <div className="flex h-full flex-col" role="application" aria-label="Protoflow">
       <div className="flex h-full flex-col items-center justify-center gap-3 p-8 text-center md:hidden">
         <Layers className="h-8 w-8 text-muted-foreground" aria-hidden="true" />
-        <p className="text-sm font-medium text-foreground">
+        <p className="text-label text-foreground">
           Best experienced on desktop
         </p>
-        <p className="text-xs text-muted-foreground">
+        <p className="text-caption text-muted-foreground">
           Protoflow needs a wider viewport for the wireflow canvas.
         </p>
       </div>
@@ -437,7 +437,7 @@ function WorkspaceApp() {
         <div className="flex flex-1 flex-col overflow-hidden">
           {contextLabel && (
             <div role="status" className="flex items-center gap-2 border-b border-border px-4 py-2" aria-live="polite">
-              <span className="text-[11px] text-muted-foreground">{contextLabel}</span>
+              <span className="text-caption text-muted-foreground">{contextLabel}</span>
               <ConnectionStatus status={collab.connectionStatus} />
               <ThemeToggle />
             </div>

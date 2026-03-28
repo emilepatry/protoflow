@@ -45,7 +45,7 @@ export default function CommentDot({
             e.stopPropagation();
             setOpen(true);
           }}
-          className="comment-dot-trigger flex h-7 w-7 items-center justify-center rounded-full bg-info text-xs font-bold text-background shadow-sm transition-transform hover:scale-110"
+          className="comment-dot-trigger flex h-7 w-7 items-center justify-center rounded-full bg-info text-caption font-semibold text-background shadow-sm transition-transform hover:scale-110"
           aria-label={`${comments.length} comment${comments.length !== 1 ? "s" : ""}`}
         >
           {comments.length}
@@ -60,7 +60,7 @@ export default function CommentDot({
           onClick={(e) => e.stopPropagation()}
         >
           <div className="flex items-center justify-between border-b border-border px-3 py-2">
-            <p className="text-xs font-medium">
+            <p className="text-caption font-medium">
               {comments.length} comment{comments.length !== 1 && "s"}
             </p>
             <button
@@ -79,14 +79,14 @@ export default function CommentDot({
                 className="border-b border-border/50 px-3 py-2 last:border-0"
               >
                 <div className="flex items-baseline gap-1.5">
-                  <p className="max-w-[120px] truncate text-[10px] font-semibold text-foreground">
+                  <p className="max-w-[120px] truncate text-micro font-semibold text-foreground">
                     {comment.author}
                   </p>
-                  <p className="text-[9px] text-muted-foreground">
+                  <p className="text-micro text-muted-foreground">
                     {formatTime(comment.createdAt)}
                   </p>
                 </div>
-                <p className="mt-0.5 break-words text-xs text-foreground/80" style={{ overflowWrap: "anywhere" }}>
+                <p className="mt-0.5 break-words text-caption text-foreground/80" style={{ overflowWrap: "anywhere" }}>
                   {comment.body}
                 </p>
               </div>
@@ -106,7 +106,7 @@ export default function CommentDot({
                   }
                 }}
                 placeholder="Add a comment..."
-                className="flex-1 rounded-md border border-border px-2 py-1 text-xs outline-none focus:border-primary"
+                className="flex-1 rounded-md border border-input bg-background px-2 py-1 text-caption outline-none focus:border-primary"
               />
               <button
                 onClick={() => {
@@ -116,7 +116,7 @@ export default function CommentDot({
                   }
                 }}
                 disabled={!newComment.trim()}
-                className="rounded-md bg-primary px-2 py-1 text-xs text-primary-foreground disabled:opacity-50"
+                className="rounded-md bg-primary px-2 py-1 text-caption text-primary-foreground disabled:opacity-50"
               >
                 Send
               </button>

@@ -53,14 +53,14 @@ export default function AnnotatedEdge({
             }}
           >
             <div
-              className="max-w-[160px] truncate rounded-md border px-2 py-0.5 text-[11px] font-medium leading-tight shadow-sm"
+              className="max-w-[160px] truncate rounded-md border px-2 py-0.5 text-caption font-medium shadow-sm"
               style={edgeBadgeStyles[edgeType]}
               title={edgeData.trigger}
             >
               {edgeData.trigger}
             </div>
             {edgeData.logic && (
-              <div className="mt-0.5 max-w-[160px] truncate rounded bg-foreground/5 px-1.5 py-0.5 text-[9px] italic text-muted-foreground" title={edgeData.logic}>
+              <div className="mt-0.5 max-w-[160px] truncate rounded bg-foreground/5 px-1.5 py-0.5 text-micro italic text-muted-foreground" title={edgeData.logic}>
                 {edgeData.logic}
               </div>
             )}
