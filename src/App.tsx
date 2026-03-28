@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { ReactFlowProvider } from "@xyflow/react";
 import { AnimatePresence, motion } from "motion/react";
 import { WorkspaceProvider, useWorkspace } from "@/sandbox/store";
@@ -7,14 +7,16 @@ import { discoverProjects, getAvailableScreenIds } from "@/sandbox/registry";
 import { computeLayout } from "@/lib/layout";
 import { SPRING_GENTLE } from "@/lib/motion";
 import { parseHash, navigateTo as rawNavigateTo, isViewerMode } from "@/lib/router";
+import { safeGetItem, safeSetItem } from "@/lib/utils";
 import WireflowView from "@/components/WireflowView";
 import PrototypeView from "@/components/PrototypeView";
 import ComponentSandbox from "@/components/ComponentSandbox";
-import Sidebar from "@/components/Sidebar";
+import { AppSidebar } from "@/components/blocks/app-sidebar";
 import ViewerNamePrompt from "@/components/ViewerNamePrompt";
 import ConnectionStatus from "@/components/ConnectionStatus";
 import ThemeToggle from "@/components/ThemeToggle";
 import { Toaster } from "@/components/ui/sonner";
+import { SidebarProvider, SidebarInset, SidebarTrigger } from "@/components/ui/sidebar";
 import { useFeedbackToasts } from "@/hooks/useFeedbackToasts";
 import { Layers } from "lucide-react";
 import type { ScreenId, StickyColor } from "@/types";
@@ -29,6 +31,20 @@ function WorkspaceApp() {
   const collab = useCollaboration(collabProjectId);
 
   useFeedbackToasts(collab.provider, collab.viewerName);
+
+  const [sidebarOpen, setSidebarOpen] = useState(() => {
+    const stored = safeGetItem("protoflow-sidebar-open");
+    return stored !== null ? stored === "true" : true;
+  });
+
+  const handleSidebarOpenChange = useCallback((open: boolean) => {
+    const target = document.activeElement as HTMLElement | null;
+    if (target?.tagName === "INPUT" || target?.tagName === "TEXTAREA" || target?.isContentEditable) {
+      return;
+    }
+    setSidebarOpen(open);
+    safeSetItem("protoflow-sidebar-open", String(open));
+  }, []);
 
   const [promptingName, setPromptingName] = useState(false);
   const [pendingAction, setPendingAction] = useState<(() => void) | null>(null);
@@ -72,7 +88,7 @@ function WorkspaceApp() {
     setNeedsLayout(false);
   }, [needsLayout, activeProjectId, store]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const mainRef = useRef<HTMLElement>(null);
+  const mainRef = useRef<HTMLDivElement>(null);
   const prototypeRef = useRef<HTMLDivElement>(null);
   const prevModeRef = useRef(store.mode);
 
@@ -424,7 +440,12 @@ function WorkspaceApp() {
       </div>
 
       <Toaster />
-      <div className="hidden h-full md:flex">
+      <SidebarProvider
+        open={sidebarOpen}
+        onOpenChange={handleSidebarOpenChange}
+        className="hidden h-full md:flex"
+        style={{ "--sidebar-width": "240px", "--sidebar-width-icon": "48px" } as React.CSSProperties}
+      >
         {promptingName && (
           <ViewerNamePrompt
             onSubmit={handleNameSubmit}
@@ -432,19 +453,22 @@ function WorkspaceApp() {
           />
         )}
 
-        <Sidebar />
+        <AppSidebar />
 
-        <div className="flex flex-1 flex-col overflow-hidden">
-          {contextLabel && (
-            <div role="status" className="flex items-center gap-2 border-b border-border px-4 py-2" aria-live="polite">
-              <span className="text-caption text-muted-foreground">{contextLabel}</span>
+        <SidebarInset className="overflow-hidden">
+          <div role="status" className="flex items-center gap-2 border-b border-border px-4 py-2.5" aria-live="polite">
+            <SidebarTrigger className="-ml-1" aria-label="Toggle sidebar" />
+            {contextLabel && (
+              <span className="text-label text-muted-foreground">{contextLabel}</span>
+            )}
+            <div className="ml-auto flex items-center gap-2">
               <ConnectionStatus status={collab.connectionStatus} />
               <ThemeToggle />
             </div>
-          )}
-          <main ref={mainRef} tabIndex={-1} className="relative flex-1 outline-none">{renderMainContent()}</main>
-        </div>
-      </div>
+          </div>
+          <div ref={mainRef} tabIndex={-1} className="relative flex-1 outline-none">{renderMainContent()}</div>
+        </SidebarInset>
+      </SidebarProvider>
     </div>
   );
 }

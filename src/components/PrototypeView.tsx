@@ -173,7 +173,7 @@ export default function PrototypeView({
             onClick={onExitPrototype}
             title="Back to wireflow"
             aria-label="Back to wireflow"
-            className="flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-caption text-white/60 transition-colors hover:bg-white/10 hover:text-white"
+            className="flex items-center gap-1.5 rounded-md px-3 py-1.5 text-label text-white/60 transition-colors hover:bg-white/10 hover:text-white"
           >
             <ArrowLeft className="h-3.5 w-3.5" />
             Wireflow

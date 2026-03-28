@@ -62,7 +62,7 @@ export default function ThemeToggle() {
   return (
     <motion.button
       onClick={toggle}
-      className="ml-auto rounded-md p-1.5 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+      className="rounded-md p-1.5 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
       aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
       title={isDark ? "Switch to light mode" : "Switch to dark mode"}
       whileTap={{ scale: 0.9 }}
