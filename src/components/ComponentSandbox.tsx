@@ -202,7 +202,7 @@ export default function ComponentSandbox({
   return (
     <div className="flex h-full flex-col">
       {variants.length > 0 && (
-        <div className="flex h-11 items-center justify-between border-b border-border px-5">
+        <div className="flex items-center justify-between border-b border-border px-5 py-3">
           <span className="text-label">
             {activeVariant?.name ?? "Default"}
           </span>

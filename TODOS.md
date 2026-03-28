@@ -35,7 +35,7 @@ Six E2E-worthy flows to cover:
 - Sidebar collapse/expand (Cmd+B toggle, prototype auto-collapse)
 - localStorage migration (legacy `protoflow-project` key converted to workspace format)
 - URL navigation (hash-based routing, deep links to projects/components/variants)
-- Keyboard flow (roving tabIndex in sidebar, arrow key navigation, Enter to open)
+- Keyboard flow (Tab navigation between sidebar items, Enter to open)
 
 ## 7. ~~DESIGN.md~~ ✅
 

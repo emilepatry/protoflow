@@ -2,6 +2,35 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.2.4.0] - 2026-03-28
+
+### Fixed
+- Dark mode sidebar theming — CSS cascade bug where `:root` sidebar vars overrode `.dark` vars due to source order (same specificity, later rule won)
+- Tab text size instability — locked to explicit `text-[13px] font-medium` to prevent CVA conflicts causing visual jumps between tabs
+- Sidebar spacing too tight — restored group padding (`px-2 py-2`), increased item height to `h-9` (36px), generous empty state whitespace
+
+### Changed
+- Sidebar migrated from custom implementation to shadcn/ui `Sidebar` component — gains accessible keyboard navigation, mobile off-canvas drawer, icon-collapsed mode, and tooltip support out of the box
+- Emoji icons in expanded sidebar items now wrapped in rounded-md containers with project-colored backgrounds, matching collapsed avatar style
+- Sidebar state management moved to controlled `SidebarProvider` with `localStorage` persistence and input guard (prevents Cmd+B from toggling while typing)
+- Context bar always renders `SidebarTrigger` regardless of whether a project is selected, ensuring sidebar is always accessible
+- Sidebar utility functions (`hashString`, `getEmoji`, `getBgColor`, `formatSlug`) extracted to `src/lib/sidebar-utils.ts` from inline definitions
+- Keyboard navigation updated from custom roving tabIndex (arrow keys) to shadcn's standard Tab-based focus order
+- DESIGN.md keyboard navigation spec updated to reflect Tab-based sidebar navigation
+
+### Added
+- shadcn/ui components: `Sidebar`, `Button`, `Input`, `Separator`, `Sheet`, `Skeleton`, `Tooltip` — installed via CLI, unmodified in `src/components/ui/`
+- `AppSidebar` block component (`src/components/blocks/app-sidebar.tsx`) wrapping shadcn primitives with product-specific tab switching, project/component listing, emoji avatars, and prototype auto-collapse
+- `use-mobile` hook for responsive sidebar behavior (mobile off-canvas drawer)
+- Unit tests for sidebar utility functions (hashString, getEmoji, getBgColor, formatSlug)
+- E2E tests for sidebar tab switching, prototype auto-collapse, and collapsed emoji avatar expansion
+- `.gitignore` entries for `.cursor/`, `.claude/`, `.agents/`, `skills-lock.json`
+- CLAUDE.md updated with shadcn/ui component library guidance
+
+### Removed
+- Custom `Sidebar.tsx` component (337 lines) — replaced by shadcn sidebar + AppSidebar block
+- Custom roving tabIndex keyboard navigation (replaced by standard shadcn accessibility)
+
 ## [0.2.3.0] - 2026-03-27
 
 ### Changed

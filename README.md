@@ -98,7 +98,9 @@ src/
 │   ├── collaboration.ts  # Yjs CRDT collaboration provider
 │   └── useCollaboration.ts # React hook for per-project collaboration
 ├── components/
-│   ├── Sidebar.tsx           # Collapsible workspace sidebar with tabs
+│   ├── blocks/
+│   │   └── app-sidebar.tsx   # Workspace sidebar (shadcn/ui, Projects + Components tabs)
+│   ├── ui/                   # shadcn/ui primitives (sidebar, button, sheet, etc.)
 │   ├── ComponentSandbox.tsx  # Component variant preview canvas
 │   ├── WireflowView.tsx      # React Flow canvas (wireflow mode)
 │   ├── PrototypeView.tsx     # Fullscreen prototype renderer
@@ -111,10 +113,11 @@ src/
 │   ├── ViewerNamePrompt.tsx  # Name prompt for anonymous viewers
 │   └── AppErrorBoundary.tsx  # Top-level error boundary with fallback UI
 ├── lib/
-│   ├── router.ts     # Hash-based URL routing
-│   ├── utils.ts      # cn(), device constants, localStorage helpers
-│   ├── edge-config.ts # Edge type colors and badge styles
-│   └── layout.ts     # Dagre-based auto-layout for screen nodes
+│   ├── router.ts        # Hash-based URL routing
+│   ├── utils.ts         # cn(), device constants, localStorage helpers
+│   ├── sidebar-utils.ts # Emoji palette, avatar colors, slug formatting
+│   ├── edge-config.ts   # Edge type colors and badge styles
+│   └── layout.ts        # Dagre-based auto-layout for screen nodes
 ├── types.ts          # Data model types (Workspace, Project, ViewMode)
 ├── heron-tokens.css  # Fullscript Heron design tokens
 └── index.css         # Global styles + Tailwind + design tokens
