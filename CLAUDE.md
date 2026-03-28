@@ -15,3 +15,10 @@ Key constraints:
 - `prefers-reduced-motion` must be respected everywhere.
 
 In QA mode, flag any code that doesn't match `DESIGN.md`.
+
+## Component Library
+
+- **shadcn/ui** is the default component library. Check if a shadcn primitive exists before building custom.
+- Install new primitives with `pnpm dlx shadcn@latest add <component>`.
+- Custom components compose shadcn primitives — never reimplement collapse logic, keyboard shortcuts, mobile drawers, or focus management that shadcn already handles.
+- shadcn components live in `src/components/ui/`. App components import from there.

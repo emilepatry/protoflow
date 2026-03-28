@@ -367,8 +367,7 @@ Canvas-based builder tool — mobile is gated ("Best experienced on desktop"). R
 
 | Context | Key | Action |
 |---------|-----|--------|
-| **Sidebar** | Tab | Enter sidebar, first item focused |
-| | Arrow Up/Down | Move between items (roving tabIndex) |
+| **Sidebar** | Tab | Move between sidebar items (standard focus order) |
 | | Enter | Select project/component, switch mode |
 | | Cmd+B | Toggle sidebar collapse/expand |
 | **Canvas (wireflow)** | Tab | Cycle through screen nodes |
@@ -524,6 +523,7 @@ Collaboration sync state (when `VITE_PARTYKIT_HOST` is configured).
 | 2026-03-27 | Hotspot hover-proximity affordance | Faint `--ring` outline on `data-pf-action` elements when cursor is within 8px. Invisible otherwise. |
 | 2026-03-27 | Dark mode implemented              | `.dark` class on `<html>`, localStorage persistence (`protoflow-theme`), system preference fallback, inline script prevents FOUC |
 | 2026-03-27 | UI spacing/typography polish       | Aligned to DESIGN.md comfortable density + type scale (label=13px, caption=11px), replaced Tailwind shadows with layered composites |
+| 2026-03-28 | shadcn/ui as component primitive layer | Composable, accessible, token-driven. Matches existing CVA + tailwind-merge stack. Avoids reimplementing sidebar collapse/keyboard/mobile patterns. |
 
 ## GSTACK REVIEW REPORT
 
